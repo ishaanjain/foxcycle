@@ -17,8 +17,4 @@ export class ToDo {
   @OneToOne((type) => User, { cascade: true })
   @JoinColumn()
   public user!: User;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 741e3335db43397093bd5c5fd609569345cb4687
