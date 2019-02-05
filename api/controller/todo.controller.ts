@@ -25,9 +25,22 @@ export class ToDoController extends DefaultController {
           res.status(200).send({ todo });
         });
       });
+<<<<<<< HEAD
 
+=======
+      router.route("/todos/:id").put((req: Request, res: Response) => {
+        const todoRepo = getRepository(ToDo);
+        todo.findOne(req.params.id).then((foundToDo: ToDo) => {
+          // save updates here
+        });
+      });
+>>>>>>> 741e3335db43397093bd5c5fd609569345cb4687
     });
 
     return router;
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 741e3335db43397093bd5c5fd609569345cb4687

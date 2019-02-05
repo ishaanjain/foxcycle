@@ -2,6 +2,10 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
 import ToDos from "./views/ToDos.vue";
+<<<<<<< HEAD
+=======
+import MyProfile from "./views/MyProfile.vue";
+>>>>>>> 741e3335db43397093bd5c5fd609569345cb4687
 
 Vue.use(Router);
 
@@ -14,6 +18,14 @@ Vue.use(Router);
       path: "/todos",
       name: "todos",
       component: ToDos
+<<<<<<< HEAD
+=======
+    },
+    {
+      path: "/my-profile",
+      name: "myProfile",
+      component: MyProfile
+>>>>>>> 741e3335db43397093bd5c5fd609569345cb4687
     }
   ]
 });
