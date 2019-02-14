@@ -47,7 +47,8 @@ import { Component, Vue } from "vue-property-decorator";
 //   }
 // })
 
-export default class services extends Vue {}
+@Component
+export default class Services extends Vue {}
 </script>
 
 <style scoped lang="scss">
