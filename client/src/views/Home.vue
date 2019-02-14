@@ -3,10 +3,11 @@
     <div class="tile is-ancestor">
       <div class="hours tile is-vertical is-parent is-3">
         <div class="tile is-child box">
-          <p class="title">OPEN</p>
+          <p class="title" >OPEN</p>
         </div>
         <div class="tile is-child box">
           <p class="title">Hours</p>
+            <a class="button is-light" v-if="isLoggedIn" >Edit</a>
             <table style="width:100%">
               <tr>
                 <th>Weekdays</th>
@@ -19,19 +20,23 @@
                 <td></td>
               </tr>
             </table>
-        </div>
-        <div class="location tile is-child box">
-          <a href="https://maps.calpoly.edu/place/bldg-014-0/@35.3084197,-120.6805840,14.1z">
-            14256 Frank Pilling Road, San Luis Obispo, 93407
-          </a>
-        </div>
+            <br>
+            <br>
+            <div class="location tile">
+              
+              <a href="https://maps.calpoly.edu/place/bldg-014-0/@35.3084197,-120.6805840,14.1z">
+                14256 Frank Pilling Road, San Luis Obispo, 93407
+              </a>
+              </div>
+          </div>
       </div>
 
       <div class="announcement tile is-parent is-vertical">
         <div class="tile is-child box">
           <p class="title">Announcement</p>
+          <a class="button is-light" v-if="isLoggedIn" >Edit</a>
         </div>
-        <div class="tile is-child box">
+        <div class="tile is-child">
           <p class="title">Featured</p>
         </div>
       </div>
@@ -57,7 +62,12 @@ import { Component, Vue } from "vue-property-decorator";
 //   }
 // })
 
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  get isLoggedIn(): boolean {
+    return !!this.$store.state.user;
+  }
+
+}
 </script>
 
 <style scoped lang="scss">
