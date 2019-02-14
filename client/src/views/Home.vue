@@ -7,6 +7,7 @@
         </div>
         <div class="tile is-child box">
           <p class="title">Hours</p>
+            <a class="button is-light" v-if="isLoggedIn" >Edit</a>
             <table style="width:100%">
               <tr>
                 <th>Weekdays</th>
@@ -33,6 +34,7 @@
       <div class="announcement tile is-parent is-vertical">
         <div class="tile is-child box">
           <p class="title">Announcement</p>
+          <a class="button is-light" v-if="isLoggedIn" >Edit</a>
         </div>
         <div class="tile is-child">
           <p class="title">Featured</p>
@@ -60,7 +62,12 @@ import { Component, Vue } from "vue-property-decorator";
 //   }
 // })
 
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  get isLoggedIn(): boolean {
+    return !!this.$store.state.user;
+  }
+
+}
 </script>
 
 <style scoped lang="scss">
