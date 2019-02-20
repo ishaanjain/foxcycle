@@ -58,7 +58,7 @@ import Modal from "./Modal.vue";
   }
 })
 export default class Announcement extends Vue {
-  words: Descript = {
+  words: descript = {
     description: "",
   };
   error: string | boolean = false;

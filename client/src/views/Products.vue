@@ -1,36 +1,63 @@
 <template>
   <div class="products">
+    {{this.getItems()}}
     <h1>This is a products page</h1>
-    <!-- <a class="button is-light" v-if="isLoggedIn" v-on:click="startAddNewProduct()">Add a New Product</a> -->
-    <router-link
-                class="button is-text"
-                v-if="isLoggedIn"
-                to="/products/newproduct"
-                exact-active-class="is-active"
-              >Add a New Product</router-link>
+    <a class="button is-light" v-if="isLoggedIn" v-on:click="showAddProductModal()">Add a New Product</a>
+    <AddNewProduct v-bind:is-showing="showAddProduct" v-on:success="successAddProduct()" v-on:cancel="cancelAddProduct()"/>
   </div>
 </template>
 
 <script lang="ts">
-import axios from "axios";
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import App from "@/App.vue";
+import AddNewProduct from "@/components/AddNewProduct.vue";
+import axios, { AxiosResponse } from "axios";
+import { APIConfig } from "../utils/api.utils";
+import { Product } from "../../../api/entity";
 
 @Component({
   components: {
-    App
+    App, AddNewProduct
   }
 })
 export default class Products extends Vue {
-    get isLoggedIn(): boolean {
-        return !!this.$store.state.user;
+  public showAddProduct: boolean = false;
+  public items: Product[] = [];
+
+  get isLoggedIn(): boolean {
+    return !!this.$store.state.user;
+  }
+
+  getItems() {
+    if (this.$store.state.userToken) {
+      axios.get(APIConfig.buildUrl("/products"), {
+        headers: {
+          token: this.$store.state.userToken
+        }
+      })
+      .then((response) => {
+          this.items = response.data;
+      });
     }
+  }
 
-    startAddNewProduct() {
+  showAddProductModal() {
+      this.showAddProduct = true;
+  }
 
-    }
+  successAddProduct() {
+    this.showAddProduct = false;
+    // this.getItems();
+  }
+  cancelAddProduct() {
+    this.showAddProduct = false;
+    // this.getItems();
+  }
 
+  mounted() {
+    this.getItems();
+  }
 }
 
 </script>

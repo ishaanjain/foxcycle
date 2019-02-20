@@ -6,18 +6,21 @@ export class User {
   public id!: number;
 
   @Column()
+  @Index({ unique: true })
+  public emailAddress!: string;
+
+  @Column()
+  public password!: string;
+
+  @Column()
   public firstName!: string;
 
   @Column()
   public lastName!: string;
 
   @Column()
-  public password!: string;
+  public isAdmin!: boolean;
 
   @Column({default: null})
   public profileUrl!: string;
-
-  @Column()
-  @Index({ unique: true })
-  public emailAddress!: string;
 }
