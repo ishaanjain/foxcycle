@@ -5,7 +5,7 @@
       <div class="navbar-menu">
         <div class="navbar-logo">
           <router-link to="/" exact-active-class="is-active">
-            <img class="foxcycle-logo-img" src="./assets/foxcyclelogo.png">
+            <img class="foxcycle-logo-img" src="foxcyclelogo.png">
             <p class="foxcycle-logo-text">FoxCycle</p>
           </router-link>
             <p class="foxcycle-logo-city">San Luis Obispo, CA</p>
