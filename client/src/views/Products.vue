@@ -1,10 +1,21 @@
 <template>
-  <div class="products">
-    {{this.getItems()}}
-    <h1>This is a products page</h1>
-    <a class="button is-light" v-if="isLoggedIn" v-on:click="showAddProductModal()">Add a New Product</a>
-    <AddNewProduct v-bind:is-showing="showAddProduct" v-on:success="successAddProduct()" v-on:cancel="cancelAddProduct()"/>
-  </div>
+   <div class="products">
+      {{this.getItems()}}
+      <a class="button is-light" v-if="isLoggedIn" v-on:click="showAddProductModal()">Add a New Product</a>
+      <AddNewProduct v-bind:is-showing="showAddProduct" v-on:success="successAddProduct()" v-on:cancel="cancelAddProduct()"/>
+      <div class="container products-container">
+         <div class="tile is-ancestor">
+            <div v-for="(item, index) in items" v-bind:key="index">
+               <router-link :to="{name: 'product detail', params: { id: item.id.toString() }}">
+                  <div class="tile is-child box product">
+                     <h2>{{item.name}}</h2>
+                     <img class="product" :src=item.imageUrls>
+                  </div>
+               </router-link>
+            </div>
+         </div>
+      </div>
+   </div>
 </template>
 
 <script lang="ts">
@@ -30,16 +41,15 @@ export default class Products extends Vue {
   }
 
   getItems() {
-    if (this.$store.state.userToken) {
-      axios.get(APIConfig.buildUrl("/products"), {
-        headers: {
-          token: this.$store.state.userToken
-        }
-      })
-      .then((response) => {
-          this.items = response.data;
-      });
-    }
+    axios.get(APIConfig.buildUrl("/products"), {
+      headers: {
+        token: this.$store.state.userToken
+      }
+    })
+    .then((response) => {
+        this.items = response.data.products;
+    });
+    
   }
 
   showAddProductModal() {
@@ -48,16 +58,32 @@ export default class Products extends Vue {
 
   successAddProduct() {
     this.showAddProduct = false;
-    // this.getItems();
+    this.getItems();
   }
   cancelAddProduct() {
     this.showAddProduct = false;
-    // this.getItems();
   }
 
   mounted() {
     this.getItems();
   }
+
+  // goToItemDetail(id: string) {
+  //   this.$router.push({ path: `/products/${id}` });
+  // }
+
 }
 
 </script>
+
+<style lang="scss">
+
+img.product {
+  height: 200px;
+}
+
+.product:hover {
+  cursor: pointer
+}
+
+</style>

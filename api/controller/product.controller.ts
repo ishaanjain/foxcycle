@@ -4,6 +4,7 @@ import { NextFunction, Request, Response, Router } from "express";
 
 import { getRepository } from "typeorm";
 import { Session, Product } from "../entity";
+import { request } from "http";
 
 export class ProductController extends DefaultController {
   protected initializeRoutes(): Router {
@@ -37,7 +38,8 @@ export class ProductController extends DefaultController {
         );
       });
     
-    router.route("/products/:id").get((req: Request, res: Response) => {
+    router.route("/products/:id")
+    .get((req: Request, res: Response) => {
       const productRepo = getRepository(Product);
       productRepo.findOne(req.params.id).then(
         (product: Product | undefined) => {
