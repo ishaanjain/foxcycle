@@ -25,6 +25,7 @@ export class UserController extends DefaultController {
       user.password = req.body.password;
       user.firstName = req.body.firstName;
       user.lastName = req.body.lastName;
+      user.isAdmin = req.body.isAdmin;
       userRepo.save(user).then(
         createdUser => {
           res.status(200).send({ createdUser });

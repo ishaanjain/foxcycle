@@ -5,7 +5,7 @@
       <div class="navbar-menu">
         <div class="navbar-logo">
           <router-link to="/" exact-active-class="is-active">
-            <img class="foxcycle-logo-img" src="./assets/foxcyclelogo.png">
+            <img class="foxcycle-logo-img" src="foxcyclelogo.png">
             <p class="foxcycle-logo-text">FoxCycle</p>
           </router-link>
             <p class="foxcycle-logo-city">San Luis Obispo, CA</p>
@@ -25,8 +25,8 @@
               </router-link>
             </span>
             <div class="buttons">
-              <a class="button is-primary" v-if="!isLoggedIn" v-on:click="showSignupModal()">
-                <strong>Sign up</strong>
+              <a class="button is-primary" v-if="isAdmin" v-on:click="showSignupModal()">
+                <strong>Add user</strong>
               </a>
               <router-link
                 class="button is-text"
@@ -95,6 +95,10 @@ export default class App extends Vue {
 
   get isLoggedIn(): boolean {
     return !!this.$store.state.user;
+  }
+
+  get isAdmin(): boolean {
+    return !!this.$store.state.isAdmin;
   }
 
   logout() {
