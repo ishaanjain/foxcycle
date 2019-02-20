@@ -10,55 +10,33 @@ import { Session, User } from "../entity";
 export class UserController extends DefaultController {
   protected initializeRoutes(): Router {
     const router = Router();
-    router
-      .route("/users")
-      .get((req: Request, res: Response) => {
-        const userRepo = getRepository(User);
-        userRepo.find().then((users: User[]) => {
-          res.status(200).send({ users });
-        });
-      })
-      .post((req: Request, res: Response) => {
-        const userRepo = getRepository(User);
-        const { firstName, lastName, emailAddress, password } = req.body;
-        const user = new User();
-        user.firstName = firstName;
-        user.lastName = lastName;
-        user.emailAddress = emailAddress;
-        user.password = password;
-        userRepo.save(user).then(
-          createdUser => {
-            res.status(200).send({ createdUser });
-          },
-          (reason: any) => {
-            res.status(500).send({ reason: "The email was not unique" });
-          }
-        );
+
+    router.route("/users")
+    .get((req: Request, res: Response) => {
+      const userRepo = getRepository(User);
+      userRepo.find().then((users: User[]) => {
+        res.status(200).send({ users });
       });
-    router.route("/users/:id").post(
-      this.isAuthenticated(true),
-      multer({
-        dest: Path.join(__dirname, "..", "public", "profilePhotos")
-      }).single("profilePhoto"),
-      (req: Request, res: Response) => {
-        const userRepo = getRepository(User);
-        userRepo.findOne(req.params.id).then((user: User | undefined) => {
-          if (user) {
-            if (req.file) {
-              user.profileUrl = `profilePhotos/${req.file.filename}`;
-              userRepo.save(user).then((savedUser: User) => {
-                res.send({ user: savedUser });
-              });
-            } else {
-              res.sendStatus(500);
-            }
-          } else {
-            res.sendStatus(500);
-          }
-        });
-      }
-    );
-    router.route("/users/:id").get((req: Request, res: Response) => {
+    })
+    .post((req: Request, res: Response) => {
+      const userRepo = getRepository(User);
+      const user = new User();
+      user.emailAddress = req.body.emailAddress;
+      user.password = req.body.password;
+      user.firstName = req.body.firstName;
+      user.lastName = req.body.lastName;
+      userRepo.save(user).then(
+        createdUser => {
+          res.status(200).send({ createdUser });
+        },
+        (reason: any) => {
+          res.status(500).send({ reason: "The email was not unique" });
+        }
+      );
+    });
+
+    router.route("/users/:id")
+    .get((req: Request, res: Response) => {
       const userRepo = getRepository(User);
       userRepo.findOne(req.params.id).then(
         (user: User | undefined) => {
@@ -72,33 +50,54 @@ export class UserController extends DefaultController {
           res.sendStatus(404);
         }
       );
+    })
+    .post(this.isAuthenticated(true, false), multer({
+      dest: Path.join(__dirname, "..", "public", "profilePhotos")
+    }).single("profilePhoto"), (req: Request, res: Response) => {
+      const userRepo = getRepository(User);
+      userRepo.findOne(req.params.id).then((user: User | undefined) => {
+        if (!user) {
+          res.sendStatus(500);
+          return;
+        }
+        if (!req.file) {
+          res.sendStatus(500);
+          return;
+        }
+        user.profileUrl = `profilePhotos/${req.file.filename}`;
+        userRepo.save(user).then((savedUser: User) => {
+          res.send({ user: savedUser });
+        });
+      });
     });
+
     return router;
   }
 
-  protected isAuthenticated(checkSameUser: boolean = false) {
+  protected isAuthenticated(checkSameUser: boolean, checkAdmin: boolean) {
     return (req: Request, res: Response, next: NextFunction) => {
       const token: string | undefined = req.get("token");
-      if (token) {
-        const sessionRepo = getRepository(Session);
-        sessionRepo
-          .findOne(token, { relations: ["user"] })
-          .then((foundSession: Session | undefined) => {
-            if (
-              foundSession &&
-              ((checkSameUser &&
-                foundSession.user.id === parseInt(req.params.id, 10)) ||
-                !checkSameUser) &&
-              foundSession.expiresAt.getTime() > new Date().getTime()
-            ) {
-              next();
-            } else {
-              res.sendStatus(403);
-            }
-          });
-      } else {
+      if (!token) {
         res.sendStatus(401);
+        return;
       }
+      const sessionRepo = getRepository(Session);
+      sessionRepo.findOne(token, { relations: ["user"] })
+      .then((foundSession: Session | undefined) => {
+        if (
+          foundSession &&
+          (
+            !checkSameUser || 
+            foundSession.user.id === parseInt(req.params.id, 10)
+          ) &&
+          (!checkAdmin || foundSession.user.isAdmin) &&
+          (foundSession.expiresAt.getTime() > new Date().getTime())
+        ) {
+          next();
+        } else {
+          res.sendStatus(403);
+        }
+      });
     };
   }
 }
