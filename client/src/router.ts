@@ -1,10 +1,9 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
-import ToDos from "./views/ToDos.vue";
 import MyProfile from "./views/MyProfile.vue";
 import NewProduct from "./views/NewProduct.vue";
-
+import Services from "./views/Services.vue";
 Vue.use(Router);
 
 export default new Router({
@@ -27,9 +26,9 @@ export default new Router({
     },
     {
       path: "/services",
-      name: "service",
+      name: "services",
       component: () =>
-      import(/* webpackChunkName: "about" */ "./views/Services.vue")
+        import(/* webpackChunkName: "about" */ "./views/Services.vue")
     },
     {
       path: "/my-profile",

@@ -34,14 +34,17 @@
       <div class="announcement tile is-parent is-vertical">
         <div class="tile is-child box">
           <p class="title">Announcement</p>
-          <a class="button is-light" v-if="isLoggedIn" >Edit</a>
+          <a class="button is-light" v-if="isLoggedIn" v-on:click="showLoginModal()">Edit</a>
         </div>
         <div class="tile is-child">
           <p class="title">Featured</p>
         </div>
       </div>
+      
     </div>
+    
     <footer class="footer">
+
     <div class="content has-text-centered">
       <p>
         <strong>WhiteSky</strong> 2019<a href="https://jgthms.com"></a>. The source code is licensed
@@ -49,26 +52,42 @@
       </p>
     </div>
 </footer>
+<Announcement v-bind:is-showing="showAnnounce" v-on:success="successLogin()" v-on:cancel="cancelLogin()"/>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-// import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
-
-// @Component({
-//   components: {
-//     HelloWorld
-//   }
-// })
+import Announcement from "../components/Announcement.vue"
+import { APIConfig } from "../utils/api.utils";
+@Component({
+  components:{
+    Announcement
+  }
+})
 
 export default class Home extends Vue {
+  public showAnnounce: boolean = false;
   get isLoggedIn(): boolean {
     return !!this.$store.state.user;
   }
 
+  showLoginModal() {
+    this.showAnnounce = true;
+  }
+
+  successLogin() {
+    this.showAnnounce = false;
+  }
+
+  cancelLogin() {
+    this.showAnnounce = false;
+  }
+
 }
+
 </script>
+
 
 <style scoped lang="scss">
   .home {
