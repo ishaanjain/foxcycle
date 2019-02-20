@@ -3,7 +3,6 @@ import Router from "vue-router";
 import About from "./views/About.vue";
 import Home from "./views/Home.vue";
 import MyProfile from "./views/MyProfile.vue";
-import NewProduct from "./views/NewProduct.vue";
 import Products from "./views/Products.vue";
 import Services from "./views/Services.vue";
 
@@ -41,10 +40,5 @@ export default new Router({
       name: "products",
       component: Products
     },
-    {
-      path: "/products/newproduct",
-      name: "newProduct",
-      component: NewProduct
-    }
   ]
 });
