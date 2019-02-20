@@ -24,8 +24,8 @@
               </router-link>
             </span>
             <div class="buttons">
-              <a class="button is-primary" v-if="!isLoggedIn" v-on:click="showSignupModal()">
-                <strong>Sign up</strong>
+              <a class="button is-primary" v-if="isAdmin" v-on:click="showSignupModal()">
+                <strong>Add user</strong>
               </a>
               <router-link
                 class="button is-text"
@@ -94,6 +94,10 @@ export default class App extends Vue {
 
   get isLoggedIn(): boolean {
     return !!this.$store.state.user;
+  }
+
+  get isAdmin(): boolean {
+    return !!this.$store.state.isAdmin;
   }
 
   logout() {

@@ -1,5 +1,5 @@
 <template>
-  <modal v-bind:is-showing="isShowing" title="Signup" success-button="Signup" v-on:success="success" v-on:cancel="cancel">
+  <modal v-bind:is-showing="isShowing" title="Add user" success-button="Signup" v-on:success="success" v-on:cancel="cancel">
     <form v-on:submit.prevent="onSubmit">
       <p v-if="error" class="is-danger">
         {{ error }}
@@ -28,6 +28,12 @@
           <input class="input" type="password" placeholder="password" v-model="signup.password"/>
         </div>
       </div>
+      <div class="field">
+        <label class="label">Admin</label>
+        <div class="control">
+          <input type="checkbox" v-model="signup.isAdmin"/>
+        </div>
+      </div>
     </form>
   </modal>
 </template>
@@ -50,7 +56,8 @@ export default class Signup extends Vue {
     firstName: "",
     lastName: "",
     emailAddress: "",
-    password: ""
+    password: "",
+    isAdmin: false
   };
   error: string | boolean = false;
 
@@ -80,5 +87,6 @@ export interface SignupForm {
   lastName: string;
   emailAddress: string;
   password: string;
+  isAdmin: boolean;
 }
 </script>

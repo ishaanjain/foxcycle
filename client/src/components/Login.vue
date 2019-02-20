@@ -68,7 +68,8 @@ export default class Signup extends Vue {
       .then((response: AxiosResponse<LoginResponse>) => {
         this.$store.dispatch("login", {
           token: response.data.token,
-          userid: response.data.userId
+          userid: response.data.userId,
+          isAdmin: response.data.isAdmin
         });
         this.$emit("success");
       })
@@ -85,6 +86,7 @@ export default class Signup extends Vue {
 interface LoginResponse {
   token: string;
   userId: number;
+  isAdmin: boolean;
 }
 
 export interface LoginForm {

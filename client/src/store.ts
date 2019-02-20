@@ -11,6 +11,7 @@ Vue.use(Vuex);
 interface iRootState {
   userToken: string | null;
   user: iUser | null;
+  isAdmin: boolean;
 }
 
 interface iLoginPayload {
@@ -20,7 +21,8 @@ interface iLoginPayload {
 
 const state: iRootState = {
   userToken: null,
-  user: null
+  user: null,
+  isAdmin: false
 };
 
 const mutations: MutationTree<iRootState> = {
@@ -28,13 +30,14 @@ const mutations: MutationTree<iRootState> = {
     state.user = payload.user;
   },
   login(state, payload) {
-    const { token, user } = payload;
-    state.userToken = token;
-    state.user = user;
+    state.userToken = payload.token;
+    state.user = payload.user;
+    state.isAdmin = payload.isAdmin;
   },
   logout(state) {
     state.userToken = null;
     state.user = null;
+    state.isAdmin = false;
   }
 };
 
@@ -49,9 +52,9 @@ const actions: ActionTree<iRootState, iRootState> = {
       });
   },
   login({ commit, dispatch }, payload) {
-    const { userid, token } = payload;
+    const { userid, token, isAdmin } = payload;
     dispatch("fetchUser", { userid }).then(user => {
-      commit("login", { user, token });
+      commit("login", { user, token, isAdmin });
     });
   }
 };

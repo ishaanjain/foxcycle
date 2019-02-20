@@ -13,34 +13,32 @@ export class LoginController extends DefaultController {
       const { emailAddress, password } = req.body;
       const userRepo = getRepository(User);
       const sessionRepo = getRepository(Session);
-      userRepo
-        .findOne({ emailAddress })
-        .then((user: User | undefined) => {
-          console.log("found user:", user);
-          if (user && user.password === password) {
-            sessionRepo
-              .findOne({ user })
-              .then((session: Session | undefined) => {
-                const expiry = new Date(new Date().getTime() + 60000 * 30);
-                if (!session) {
-                  session = new Session();
-                  session.user = user;
-                }
-                session.expiresAt = expiry;
-                sessionRepo.save(session).then(updatedSession => {
-                  res
-                    .status(200)
-                    .send({ token: updatedSession.id, userId: user.id });
-                });
-              });
-          } else {
-            res
-              .status(401)
-              .send({
-                error: "can't find user with that username or password"
-              });
+      userRepo.findOne({ emailAddress }).then((user: User | undefined) => {
+        console.log("found user:", user);
+        if (!user) {
+          res.status(401).send({ error: "no user with that username" });
+          return;
+        }
+        if (user.password !== password) {
+          res.status(401).send({ error: "wrong password" });
+          return;
+        }
+        sessionRepo.findOne({ user }).then((session: Session | undefined) => {
+          const expiry = new Date(new Date().getTime() + 60000 * 30);
+          if (!session) {
+            session = new Session();
+            session.user = user;
           }
+          session.expiresAt = expiry;
+          sessionRepo.save(session).then(updatedSession => {
+            res.status(200).send({ 
+              token: updatedSession.id, 
+              userId: user.id,
+              isAdmin: user.isAdmin
+            });
+          });
         });
+      });
     });
     router.route("/logout").post((req: Request, res: Response) => {
       const token = req.get("token");
