@@ -54,6 +54,8 @@
 <script lang="ts">
 import axios from "axios";
 import Vue from "vue";
+import Buefy from 'buefy'
+import 'buefy/dist/buefy.css'
 import { Component } from "vue-property-decorator";
 import Signup from "@/components/Signup.vue";
 import Login from "@/components/Login.vue";
