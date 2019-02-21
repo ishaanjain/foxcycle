@@ -5,6 +5,9 @@ export class Announce {
   @PrimaryGeneratedColumn()
   public id!: number;
 
-  @Column()
+  @Column({default: null})
   public description!: string;
+
+  @Column({default: null})
+  public imageurl!: string;
 }
