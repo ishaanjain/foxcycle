@@ -20,6 +20,7 @@
             <a class="button is-light">Reset</a>
          </div>
          <div class="column">
+            <h4 class="title is-4">Products:</h4>
             <div class="container products-container">
                <div class="tile is-ancestor">
                   <div v-for="(item, index) in items" v-bind:key="index">
