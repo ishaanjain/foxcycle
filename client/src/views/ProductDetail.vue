@@ -4,12 +4,11 @@
     <!-- <a class="button is-light" v-if="isLoggedIn" v-on:click="showAddProductModal()">Add a New Product</a> -->
     <!-- <AddNewProduct v-bind:is-showing="showAddProduct" v-on:success="successAddProduct()" v-on:cancel="cancelAddProduct()"/> -->
 
-    <p>Item Detail page</p>
     <div class="container products-container">
       <div class="tile is-ancestor">
           
           <div class="tile is-child box product">
-            <!-- <h2 v-bind="this.item.name"></h2> -->
+            <h2>{{this.item.name}}</h2>
             <img class="product" :src="this.item.imageUrls">
           </div>
 
