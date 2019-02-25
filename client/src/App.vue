@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" 
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" 
+      crossorigin="anonymous" />
     <div class="navbar">
       <div class="navbar-menu">
         <div class="navbar-logo">
@@ -11,11 +13,25 @@
             <p class="foxcycle-logo-city">San Luis Obispo, CA</p>
         </div>
         <div class="navbar-start">
-          <router-link class="navbar-item is-tab" to="/" exact-active-class="is-active">Home</router-link> 
-          
-          <router-link class="navbar-item is-tab" to="/products" exact-active-class="is-active">Products</router-link>
-          <router-link class="navbar-item is-tab" to="/services" exact-active-class="is-active">Services</router-link>
-          <router-link class="navbar-item is-tab" to="/about" exact-active-class="is-active">About</router-link>
+          <router-link class="navbar-item is-tab" to="/" exact-active-class="is-active">
+            Home
+          </router-link> 
+          <router-link class="navbar-item is-tab" to="/products" exact-active-class="is-active">
+            Products
+          </router-link>
+          <router-link class="navbar-item is-tab" to="/services" exact-active-class="is-active">
+            Services
+          </router-link>
+          <router-link 
+            class="navbar-item is-tab" 
+            v-if="isAdmin"
+            to="/employees" 
+            exact-active-class="is-active">
+            Employees
+          </router-link>
+          <router-link class="navbar-item is-tab" to="/about" exact-active-class="is-active">
+            About
+          </router-link>
         </div>
         <div class="navbar-end">
           <div class="navbar-item">
@@ -25,16 +41,15 @@
               </router-link>
             </span>
             <div class="buttons">
-              <a class="button is-primary" v-if="isAdmin" v-on:click="showSignupModal()">
-                <strong>Add user</strong>
-              </a>
               <router-link
                 class="button is-text"
                 v-if="isLoggedIn"
                 to="/my-profile"
                 exact-active-class="is-active"
               >My Profile</router-link>
-              <a class="button is-light" v-if="!isLoggedIn" v-on:click="showLoginModal()">Log in</a>
+              <a class="button is-light" v-if="!isLoggedIn" v-on:click="showLoginModal()">
+                Log in
+              </a>
               <a class="button is-light" v-if="isLoggedIn" v-on:click="logout">Log out</a>
             </div>
           </div>
@@ -42,12 +57,11 @@
       </div>
     </div>
     <router-view class="container"/>
-    <Signup
-      v-bind:is-showing="showSignup"
-      v-on:success="successSignup()"
-      v-on:cancel="cancelSignup()"
+    <Login 
+      v-bind:is-showing="showLogin" 
+      v-on:success="successLogin()" 
+      v-on:cancel="cancelLogin()"
     />
-    <Login v-bind:is-showing="showLogin" v-on:success="successLogin()" v-on:cancel="cancelLogin()"/>
   </div>
 </template>
 
@@ -61,25 +75,11 @@ import { APIConfig } from "@/utils/api.utils";
 
 @Component({
   components: {
-    Signup,
     Login
   }
 })
 export default class App extends Vue {
-  public showSignup: boolean = false;
   public showLogin: boolean = false;
-
-  showSignupModal() {
-    this.showSignup = true;
-  }
-
-  successSignup() {
-    this.showSignup = false;
-  }
-
-  cancelSignup() {
-    this.showSignup = false;
-  }
 
   showLoginModal() {
     this.showLogin = true;
@@ -102,14 +102,12 @@ export default class App extends Vue {
   }
 
   logout() {
-    axios
-      .post(APIConfig.buildUrl("/logout"), null, {
-        headers: { token: this.$store.state.userToken }
-      })
-      .then(() => {
-        this.$store.commit("logout");
-        this.$router.push({ name: "home" });
-      });
+    axios.post(APIConfig.buildUrl("/logout"), null, {
+      headers: { token: this.$store.state.userToken }
+    }).then(() => {
+      this.$store.commit("logout");
+      this.$router.push({ name: "home" });
+    });
   }
 }
 </script>

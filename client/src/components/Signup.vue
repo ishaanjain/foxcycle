@@ -1,5 +1,5 @@
 <template>
-  <modal v-bind:is-showing="isShowing" title="Add user" success-button="Signup" v-on:success="success" v-on:cancel="cancel">
+  <modal v-bind:is-showing="true" title="Add user" success-button="Signup" v-on:success="success" v-on:cancel="cancel">
     <form v-on:submit.prevent="onSubmit">
       <p v-if="error" class="is-danger">
         {{ error }}
@@ -38,8 +38,6 @@
   </modal>
 </template>
 
-
-
 <script lang="ts">
 import axios, { AxiosResponse } from "axios";
 import { APIConfig } from "../utils/api.utils";
@@ -51,7 +49,6 @@ import { iUser } from "../models/user.interface";
   components: { Modal }
 })
 export default class Signup extends Vue {
-  @Prop(Boolean) isShowing: boolean = false;
   signup: SignupForm = {
     firstName: "",
     lastName: "",
@@ -63,18 +60,13 @@ export default class Signup extends Vue {
 
   success() {
     this.error = false;
-    // this.signup.firstName = "done";
-    console.log("hello");
-    axios
-      .post(APIConfig.buildUrl("/users"), {
-        ...this.signup
-      })
-      .then((response: AxiosResponse<iUser>) => {
-        this.$emit("success");
-      })
-      .catch((errorResponse: any) => {
-        this.error = errorResponse.response.data.reason;
-      });
+    axios.post(APIConfig.buildUrl("/users"), this.signup, {
+      headers: { token: this.$store.state.userToken }
+    }).then((response: AxiosResponse<iUser>) => {
+      this.$emit("success");
+    }).catch((errorResponse: any) => {
+      this.error = errorResponse.response.data.reason;
+    });
   }
 
   cancel() {
