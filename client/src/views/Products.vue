@@ -9,17 +9,18 @@
             <div class="product-filters">
               <div v-for="(tag, index) in tags" v-bind:key="index">
                 <h4 class="subtitle">{{tag.name}}:</h4>
-                <div v-for="(name, index) in tag.t" v-bind:key="index">
+                <div v-for="(t, index) in tag.t" v-bind:key="index">
                   <label class="checkbox">
-                    <input type="checkbox">{{name}}
+                    <input type="checkbox" v-on:change="applyTag(t)" v-bind:checked="t.applied">{{t.s}}
                   </label>
                 </div>
               </div>
             </div>
-            <a class="button is-primary">Apply</a>
-            <a class="button is-light">Reset</a>
+            <a class="button is-primary" v-on:click="applyFilters()">Apply</a>
+            <a class="button is-light" v-on:click="clearAllFilters()">Reset</a>
          </div>
          <div class="column">
+           <h4 class="title is-4">Products:</h4>
             <div class="container products-container">
                <div class="tile is-ancestor">
                   <div v-for="(item, index) in items" v-bind:key="index">
@@ -57,6 +58,7 @@ export default class Products extends Vue {
   public tags: TagType[] = [];
   public tagList: String[] = [];
   public tagNameList: String[] = [];
+  public filters: String[] = [];
 
   get isLoggedIn(): boolean {
     return !!this.$store.state.user;
@@ -65,12 +67,13 @@ export default class Products extends Vue {
   getItems() {
     axios.get(APIConfig.buildUrl("/products"), {
       headers: {
-        token: this.$store.state.userToken
+        token: this.$store.state.userToken,
+        filters: this.filters
       }
     })
     .then((response) => {
         this.items = response.data.products;
-        this.generateTagList();
+        //this.generateTagList();
     });
   }
 
@@ -91,6 +94,9 @@ export default class Products extends Vue {
   }
 
   generateTagList() {
+    this.tags = [];
+    this.tagList = [];
+    this.tagNameList = [];
     for (var i = 0; i < this.items.length; i++) {
       var tags: String[] = this.items[i].tags.split(";");
       for (var j = 0; j < tags.length; j++) {
@@ -117,8 +123,34 @@ export default class Products extends Vue {
         this.tags.push({name : name, t: []});
         index++;
       }
-      if (this.tags[index] != undefined && !this.tags[index].t.includes(tagVal)) {
-        this.tags[index].t.push(tagVal);
+      if (this.tags[index] != undefined && !this.tags[index].t.includes({s : tagVal, applied : false})) {
+        this.tags[index].t.push({s : tagVal, applied : false});
+      }
+    }
+  }
+
+  applyTag(t : TagApplied) {
+    if (t.applied)
+      t.applied = false;
+    else
+      t.applied = true;
+  }
+
+  clearAllFilters() {
+    for (var i = 0; i < this.tags.length; i++) {
+      for (var j = 0; j < this.tags[i].t.length; j++) {
+        this.tags[i].t[j].applied = false;
+      }
+    }
+    this.filters = [];
+  }
+
+  applyFilters() {
+    for (var i = 0; i < this.tags.length; i++) {
+      for (var j = 0; j < this.tags[i].t.length; j++) {
+        if (this.tags[i].t[j].applied) {
+          this.filters.push(this.tags[i].name + ":" + this.tags[i].t[j].s);
+        }
       }
     }
   }
@@ -126,8 +158,13 @@ export default class Products extends Vue {
 }
 
 export interface TagType {
-  name: string;
-  t: string[];
+  name : string;
+  t : TagApplied[];
+}
+
+export interface TagApplied {
+  s : string;
+  applied: boolean;
 }
 
 </script>
