@@ -60,6 +60,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import Announcement from "../components/Announcement.vue"
 import { APIConfig } from "../utils/api.utils";
+
 @Component({
   components:{
     Announcement
