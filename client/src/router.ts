@@ -11,7 +11,6 @@ import Services from "./views/Services.vue";
 Vue.use(Router);
 
 export default new Router({
-<<<<<<< HEAD
   mode: "history",
   base: process.env.BASE_URL,
   routes: [
@@ -46,8 +45,6 @@ export default new Router({
       name: "about",
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
-=======
->>>>>>> master
       // which is lazy-loaded when the route is visited.
       component: About
     },
