@@ -1,7 +1,11 @@
 <template>
   <div class="services tile is-ancestor">
+    <div class="title is-vertical">
+      <p class="subtitle"> All Services are performed in store</p>
+    
+    <div class="tile is-parent">
     <div class="tile is-parent is-vertical">
-      <p > All Services are performed in store</p>
+      
       <div class="tile is-child box">
         <p class="title">Install</p>
           <body>
@@ -33,7 +37,8 @@
         </div>
       </div>
   
-  
+    </div>
+    </div>
     </div>
 </template>
 

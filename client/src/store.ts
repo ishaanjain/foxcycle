@@ -43,17 +43,17 @@ const mutations: MutationTree<iRootState> = {
 
 const actions: ActionTree<iRootState, iRootState> = {
   fetchUser({ commit }, payload) {
-    const { userid } = payload;
-    return axios
-      .get(APIConfig.buildUrl(`/users/${userid}`))
-      .then((res: AxiosResponse<{ user: iUser }>) => {
-        commit("setUser", { user: res.data.user });
-        return res.data.user;
-      });
+    const { userid, token } = payload;
+    return axios.get(APIConfig.buildUrl(`/users/${userid}`), {
+      headers: { token }
+    }).then((res: AxiosResponse<{ user: iUser }>) => {
+      commit("setUser", { user: res.data.user });
+      return res.data.user;
+    });
   },
   login({ commit, dispatch }, payload) {
     const { userid, token, isAdmin } = payload;
-    dispatch("fetchUser", { userid }).then(user => {
+    dispatch("fetchUser", { userid, token }).then(user => {
       commit("login", { user, token, isAdmin });
     });
   }

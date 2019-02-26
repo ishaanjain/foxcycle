@@ -71,6 +71,7 @@ export default class Signup extends Vue {
           userid: response.data.userId,
           isAdmin: response.data.isAdmin
         });
+        this.$router.push({ name: "home" });
         this.$emit("success");
       })
       .catch((res: AxiosError) => {
