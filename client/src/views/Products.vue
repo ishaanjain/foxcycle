@@ -45,7 +45,7 @@ import App from "@/App.vue";
 import AddNewProduct from "@/components/AddNewProduct.vue";
 import axios, { AxiosResponse } from "axios";
 import { APIConfig } from "../utils/api.utils";
-import { Product } from "../../../api/entity";
+import { Product, Tag } from "../../../api/entity";
 
 @Component({
   components: {
@@ -72,8 +72,9 @@ export default class Products extends Vue {
       }
     })
     .then((response) => {
+      // debugger;
         this.items = response.data.products;
-        //this.generateTagList();
+        this.generateTagList();
     });
   }
 
@@ -94,14 +95,15 @@ export default class Products extends Vue {
   }
 
   generateTagList() {
+    // debugger;
     this.tags = [];
     this.tagList = [];
     this.tagNameList = [];
     for (var i = 0; i < this.items.length; i++) {
-      var tags: String[] = this.items[i].tags.split(";");
+      var tags: Tag[] = this.items[i].tags;
       for (var j = 0; j < tags.length; j++) {
-        if (!this.tagList.includes(tags[j])) {
-          this.tagList.push(tags[j]);
+        if (!this.tagList.includes(tags[j].name)) {
+          this.tagList.push(tags[j].name);
         }
       }
     }

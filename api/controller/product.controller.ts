@@ -13,20 +13,22 @@ export class ProductController extends DefaultController {
       .route("/products")
       .get((req: Request, res: Response) => {
         var filters = req.headers.filters;
-        var query = createQueryBuilder(Product);
-        query.innerJoin("products.tags", "tag")
+        var query = getRepository(Product).createQueryBuilder("product");
+        query.leftJoinAndSelect("product.tags", "tag");
         if (filters && filters.length > 0) {
           query.where("tag.name = :name", {name: filters[0]});
           for (var i = 1; i < filters.length; i++) {
             query.andWhere("tag.name = :name", {name: filters[i]});
           }
         }
-        query.getMany().then()
-        
-        const productRepo = getRepository(Product);
-        productRepo.find().then((products: Product[]) => {
+        query.getMany().then((products: Product[]) => {
           res.status(200).send({ products });
         });
+        
+        // const productRepo = getRepository(Product);
+        // productRepo.find().then((products: Product[]) => {
+        //   res.status(200).send({ products });
+        // });
       })
       .post((req: Request, res: Response) => {
         const productRepo = getRepository(Product);
@@ -42,7 +44,7 @@ export class ProductController extends DefaultController {
           var t = new Tag();
           t.name = tag;
           product.tags.push(t);
-        })
+        });
         product.inStoreOnly = inStoreOnly;
         productRepo.save(product).then(
           createdProduct => {
