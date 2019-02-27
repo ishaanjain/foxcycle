@@ -2,8 +2,8 @@ import DefaultController from "./default.controller";
 
 import { NextFunction, Request, Response, Router } from "express";
 
-import { getRepository } from "typeorm";
-import { Session, Product } from "../entity";
+import { getRepository, createQueryBuilder } from "typeorm";
+import { Session, Product, Tag } from "../entity";
 import { request } from "http";
 
 export class ProductController extends DefaultController {
@@ -12,10 +12,23 @@ export class ProductController extends DefaultController {
     router
       .route("/products")
       .get((req: Request, res: Response) => {
-        const productRepo = getRepository(Product);
-        productRepo.find().then((products: Product[]) => {
+        var filters = req.headers.filters;
+        var query = getRepository(Product).createQueryBuilder("product");
+        query.leftJoinAndSelect("product.tags", "tag");
+        if (filters && filters.length > 0) {
+          query.where("tag.name = :name", {name: filters[0]});
+          for (var i = 1; i < filters.length; i++) {
+            query.andWhere("tag.name = :name", {name: filters[i]});
+          }
+        }
+        query.getMany().then((products: Product[]) => {
           res.status(200).send({ products });
         });
+        
+        // const productRepo = getRepository(Product);
+        // productRepo.find().then((products: Product[]) => {
+        //   res.status(200).send({ products });
+        // });
       })
       .post((req: Request, res: Response) => {
         const productRepo = getRepository(Product);
@@ -26,7 +39,12 @@ export class ProductController extends DefaultController {
         product.price = price;
         product.imageUrls = imageUrls;
         product.stockCount = stockCount;
-        product.tags = tags;
+        product.tags = [];
+        tags.split(";").forEach(function (tag: string) {
+          var t = new Tag();
+          t.name = tag;
+          product.tags.push(t);
+        });
         product.inStoreOnly = inStoreOnly;
         productRepo.save(product).then(
           createdProduct => {

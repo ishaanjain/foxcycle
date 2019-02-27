@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable, Index } from "typeorm";
+import { Tag } from "./tag.entity";
 
 @Entity()
 export class Product {
@@ -20,8 +21,12 @@ export class Product {
   @Column({default: 0})
   public stockCount!: number;
 
-  @Column({default: null})
-  public tags!: string;
+  // @Column({default: null})
+  // public tags!: string;
+
+  @ManyToMany(type => Tag, tag => tag.products)
+  @JoinTable()
+  public tags!: Tag[];
 
   @Column({default: false})
   public inStoreOnly!: boolean;

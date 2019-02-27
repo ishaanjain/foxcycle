@@ -40,11 +40,11 @@ export default class ProductDetail extends Vue {
     price : 0,
     imageUrls : "",
     stockCount : 0,
-    tags : "",
+    tags : [],
     inStoreOnly : false
   };
   
-  @Prop(String) id: string;
+  @Prop(String) id!: string;
 
   get isLoggedIn(): boolean {
     return !!this.$store.state.user;
