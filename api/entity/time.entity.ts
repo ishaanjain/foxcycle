@@ -6,46 +6,46 @@ export class Time {
   public id!: number;
 
   @Column()
-  public monstart!: Time;
+  public monstart!: Date;
 
   @Column()
-  public monend!: Time;
+  public monend!: Date;
 
   @Column()
-  public tuestart!: Time;
+  public tuestart!: Date;
 
   @Column()
-  public tuesend!: Time;
+  public tuesend!: Date;
 
   @Column()
-  public wedstart!: Time;
+  public wedstart!: Date;
 
   @Column()
-  public wedend!: Time;
+  public wedend!: Date;
   
   @Column()
-  public thursstart!: Time;
+  public thursstart!: Date;
 
   @Column()
-  public thursend!: Time;
+  public thursend!: Date;
 
   @Column()
-  public fristart!: Time;
+  public fristart!: Date;
 
   @Column()
-  public friend!: Time;
+  public friend!: Date;
 
   @Column()
-  public satstart!: Time;
+  public satstart!: Date;
 
   @Column()
-  public satend!: Time;
+  public satend!: Date;
 
   @Column()
-  public sunstart!: Time;
+  public sunstart!: Date;
 
   @Column()
-  public sunend!: Time;
+  public sunend!: Date;
 
   @Column()
   public description!: string; 

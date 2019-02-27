@@ -1,8 +1,7 @@
 <template>
   <div class="employees">
-    <div>Don't be firing anyone now lol</div>
     <div>{{error}}</div>
-    <table>
+    <table class="table is-striped is-fullwidth">
       <tr>
         <th>ID</th>
         <th>First Name</th>
@@ -25,8 +24,8 @@
           />
         </th>
         <th>
-          <button v-on:click="deleteEmployee(employee.id)">
-            X
+          <button class="button" v-on:click="deleteEmployee(employee.id)">
+            <span class="icon"><i class="fas fa-trash"></i></span>
           </button>
         </th>
       </tr>
@@ -90,6 +89,10 @@ export default class Employees extends Vue {
   }
 
   deleteEmployee(id: number) {
+    if (id === this.$store.state.user.id) {
+      alert("Trying to delete yourself? Probably not a good idea.")
+      return;
+    }
     axios.delete(APIConfig.buildUrl(`/users/${id}`), {
       headers: { token: this.$store.state.userToken }
     }).then((response: AxiosResponse) => {
@@ -102,6 +105,10 @@ export default class Employees extends Vue {
 
   editEmployee(event: any) {
     event.preventDefault();
+    if (parseInt(event.target.id, 10) === this.$store.state.user.id) {
+      alert("Trying to demote yourself? Probably not a good idea.")
+      return;
+    }
     const employee = this.myEmployees.find((employee: Employee) => 
       employee.id == event.target.id);
     if (!employee) return;
@@ -128,10 +135,7 @@ interface Employee {
 </script>
 
 <style scoped>
-table,
-th,
-td {
-  border: 1px solid black;
-  padding: 5px;
+table {
+  margin-top: 15px;
 }
 </style>
