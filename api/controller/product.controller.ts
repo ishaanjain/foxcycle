@@ -12,7 +12,7 @@ export class ProductController extends DefaultController {
     router
       .route("/products")
       .get((req: Request, res: Response) => {
-        var filters = req.headers.filters;
+        var filters = req.param("filters");
         var query = getRepository(Product).createQueryBuilder("product");
         query.leftJoinAndSelect("product.tags", "tag");
         if (filters && filters.length > 0) {
@@ -24,11 +24,6 @@ export class ProductController extends DefaultController {
         query.getMany().then((products: Product[]) => {
           res.status(200).send({ products });
         });
-        
-        // const productRepo = getRepository(Product);
-        // productRepo.find().then((products: Product[]) => {
-        //   res.status(200).send({ products });
-        // });
       })
       .post((req: Request, res: Response) => {
         const productRepo = getRepository(Product);
@@ -98,6 +93,7 @@ export class ProductController extends DefaultController {
           });
         });
       });
+
     return router;
   }
 

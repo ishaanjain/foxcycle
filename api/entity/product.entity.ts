@@ -24,7 +24,7 @@ export class Product {
   // @Column({default: null})
   // public tags!: string;
 
-  @ManyToMany(type => Tag, tag => tag.products)
+  @ManyToMany(type => Tag, tag => tag.products, { cascade: true })
   @JoinTable()
   public tags!: Tag[];
 

@@ -1,6 +1,5 @@
 <template>
    <div class="products">
-      {{this.getItems()}}
       <a class="button is-light" v-if="isLoggedIn" v-on:click="showAddProductModal()">Add a New Product</a>
       <AddNewProduct v-bind:is-showing="showAddProduct" v-on:success="successAddProduct()" v-on:cancel="cancelAddProduct()"/>
       <div class="columns">
@@ -9,9 +8,9 @@
             <div class="product-filters">
               <div v-for="(tag, index) in tags" v-bind:key="index">
                 <h4 class="subtitle">{{tag.name}}:</h4>
-                <div v-for="(t, index) in tag.t" v-bind:key="index">
+                <div v-for="(t, i) in tag.t" v-bind:key="i">
                   <label class="checkbox">
-                    <input type="checkbox" v-on:change="applyTag(t)" v-bind:checked="t.applied">{{t.s}}
+                    <input type="checkbox" v-on:click="applyTag(t)" v-bind:checked="t.applied">{{t.s}}
                   </label>
                 </div>
               </div>
@@ -40,7 +39,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import { Component, Prop } from "vue-property-decorator";
 import App from "@/App.vue";
 import AddNewProduct from "@/components/AddNewProduct.vue";
 import axios, { AxiosResponse } from "axios";
@@ -67,14 +66,26 @@ export default class Products extends Vue {
   getItems() {
     axios.get(APIConfig.buildUrl("/products"), {
       headers: {
-        token: this.$store.state.userToken,
+        token: this.$store.state.userToken
+      },
+      params: {
         filters: this.filters
       }
     })
     .then((response) => {
-      // debugger;
         this.items = response.data.products;
         this.generateTagList();
+    });
+  }
+
+  getFilterItems() {
+    axios.get(APIConfig.buildUrl("/products/"), {
+      params: {
+        filters: this.filters
+      }
+    })
+    .then((response) => {
+        this.items = response.data.products;
     });
   }
 
@@ -95,7 +106,6 @@ export default class Products extends Vue {
   }
 
   generateTagList() {
-    // debugger;
     this.tags = [];
     this.tagList = [];
     this.tagNameList = [];
@@ -148,6 +158,7 @@ export default class Products extends Vue {
   }
 
   applyFilters() {
+    this.filters = [];
     for (var i = 0; i < this.tags.length; i++) {
       for (var j = 0; j < this.tags[i].t.length; j++) {
         if (this.tags[i].t[j].applied) {
@@ -155,6 +166,7 @@ export default class Products extends Vue {
         }
       }
     }
+    this.getFilterItems();
   }
 
 }
