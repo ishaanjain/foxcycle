@@ -40,6 +40,14 @@
       v-on:success="signupSuccess"
       v-on:cancel="showSignup = false"
     />
+    <Modal 
+      v-bind:is-showing="showConfirm" 
+      title="Confirmation" 
+      success-button="Delete" 
+      v-on:success="confirmDelete" 
+      v-on:cancel="confirmCancel">
+      <div>Are you sure you want to delete this employee?</div>
+    </Modal>
   </div>
 </template>
 
@@ -48,10 +56,14 @@ import Vue from "vue";
 import axios, { AxiosResponse } from "axios";
 import { APIConfig } from "../utils/api.utils";
 import { Component } from "vue-property-decorator";
+import Modal from "../components/Modal.vue";
 import Signup from "../components/Signup.vue";
 
 @Component({
-  components: { Signup }
+  components: { 
+    Signup,
+    Modal
+  }
 })
 export default class Employees extends Vue {
   employee: Employee = {
@@ -63,6 +75,8 @@ export default class Employees extends Vue {
   };
   myEmployees: Employee[] = [];
   public showSignup: boolean = false;
+  public showConfirm: boolean = false;
+  pendingDeleteEmployeeId: number = -1;
   error: string = "";
   
   loadEmployees() {
@@ -89,11 +103,17 @@ export default class Employees extends Vue {
   }
 
   deleteEmployee(id: number) {
-    if (id === this.$store.state.user.id) {
+    this.showConfirm = true;
+    this.pendingDeleteEmployeeId = id;
+  }
+
+  confirmDelete() {
+    this.showConfirm = false;
+    if (this.pendingDeleteEmployeeId === this.$store.state.user.id) {
       alert("Trying to delete yourself? Probably not a good idea.")
       return;
     }
-    axios.delete(APIConfig.buildUrl(`/users/${id}`), {
+    axios.delete(APIConfig.buildUrl(`/users/${this.pendingDeleteEmployeeId}`), {
       headers: { token: this.$store.state.userToken }
     }).then((response: AxiosResponse) => {
       this.loadEmployees();
@@ -101,6 +121,11 @@ export default class Employees extends Vue {
       console.log(error.response.data);
       this.error = error.response.data.reason;
     });
+  }
+
+  confirmCancel() {
+    this.showConfirm = false;
+    this.pendingDeleteEmployeeId = -1;
   }
 
   editEmployee(event: any) {
