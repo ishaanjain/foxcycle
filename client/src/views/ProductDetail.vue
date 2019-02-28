@@ -1,6 +1,5 @@
 <template>
   <div class="products">
-    {{this.getProduct()}}
     <!-- <a class="button is-light" v-if="isLoggedIn" v-on:click="showAddProductModal()">Add a New Product</a> -->
     <!-- <AddNewProduct v-bind:is-showing="showAddProduct" v-on:success="successAddProduct()" v-on:cancel="cancelAddProduct()"/> -->
 
