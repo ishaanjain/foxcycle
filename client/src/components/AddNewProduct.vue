@@ -39,6 +39,7 @@
       </div>
       <div class="field">
         <label class="label">Item Categories/Tags: (separated by ";")</label>
+        <label class="label">ex: brand:Willier;color:Orange;size:Medium;type:Road</label>
         <div class="control">
           <input class="input" type="text" placeholder="product categories/tags" v-model="product.tags">
         </div>
