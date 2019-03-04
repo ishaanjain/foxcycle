@@ -1,7 +1,7 @@
 <template>
   <div class="products">
-    <!-- <a class="button is-light" v-if="isLoggedIn" v-on:click="showAddProductModal()">Add a New Product</a> -->
-    <!-- <AddNewProduct v-bind:is-showing="showAddProduct" v-on:success="successAddProduct()" v-on:cancel="cancelAddProduct()"/> -->
+    <a class="button is-light" v-if="isLoggedIn" v-on:click="showEditProductModal()">Edit this Product</a>
+    <EditProduct v-bind:product="item" v-bind:is-showing="showEditProduct" v-on:success="successEditProduct()" v-on:cancel="cancelEditProduct()"/>
 
     <div class="container products-container">
       <div class="tile is-ancestor">
@@ -22,16 +22,17 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import App from "@/App.vue";
 import axios, { AxiosResponse } from "axios";
+import EditProduct from "@/components/EditProduct.vue"
 import { APIConfig } from "../utils/api.utils";
 import { Product } from "../../../api/entity";
 
 @Component({
   components: {
-    App
+    App, EditProduct
   }
 })
 export default class ProductDetail extends Vue {
-  public showAddProduct: boolean = false;
+  public showEditProduct: boolean = false;
   public item: Product = {
     id : 0,
     name : "",
@@ -61,16 +62,16 @@ export default class ProductDetail extends Vue {
     
   }
 
-  showAddProductModal() {
-      this.showAddProduct = true;
+  showEditProductModal() {
+      this.showEditProduct = true;
   }
 
-  successAddProduct() {
-    this.showAddProduct = false;
+  successEditProduct() {
+    this.showEditProduct = false;
     // this.getProduct();
   }
-  cancelAddProduct() {
-    this.showAddProduct = false;
+  cancelEditProduct() {
+    this.showEditProduct = false;
   }
 
   mounted() {
