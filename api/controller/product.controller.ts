@@ -12,7 +12,7 @@ export class ProductController extends DefaultController {
     router
       .route("/products")
       .get((req: Request, res: Response) => {
-        var filters = req.param("filters");
+        var filters = req.query.filters;
         var query = getRepository(Product).createQueryBuilder("product");
         query.leftJoinAndSelect("product.tags", "tag");
         if (filters && filters.length > 0) {
