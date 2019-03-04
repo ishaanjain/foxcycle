@@ -1,8 +1,9 @@
 <template>
   <div class="products">
     <a class="button is-light" v-if="isLoggedIn" v-on:click="showEditProductModal()">Edit this Product</a>
+    <a class="button is-light" v-if="isLoggedIn" v-on:click="showDeleteProductModal()">Delete this Product</a>
     <EditProduct v-bind:product="item" v-bind:is-showing="showEditProduct" v-on:success="successEditProduct()" v-on:cancel="cancelEditProduct()"/>
-
+    <DeleteProduct v-bind:product="item" v-bind:is-showing="showDeleteProduct" v-on:success="successDeleteProduct()" v-on:cancel="cancelDeleteProduct()"/>
     <div class="container products-container">
       <div class="tile is-ancestor">
           
@@ -23,16 +24,18 @@ import { Component, Prop } from "vue-property-decorator";
 import App from "@/App.vue";
 import axios, { AxiosResponse } from "axios";
 import EditProduct from "@/components/EditProduct.vue"
+import DeleteProduct from "@/components/DeleteProduct.vue"
 import { APIConfig } from "../utils/api.utils";
 import { Product } from "../../../api/entity";
 
 @Component({
   components: {
-    App, EditProduct
+    App, EditProduct, DeleteProduct
   }
 })
 export default class ProductDetail extends Vue {
   public showEditProduct: boolean = false;
+  public showDeleteProduct: boolean = false;
   public item: Product = {
     id : 0,
     name : "",
@@ -59,7 +62,6 @@ export default class ProductDetail extends Vue {
     .then((response) => {
         this.item = response.data.product;
     });
-    
   }
 
   showEditProductModal() {
@@ -68,10 +70,23 @@ export default class ProductDetail extends Vue {
 
   successEditProduct() {
     this.showEditProduct = false;
-    // this.getProduct();
   }
+
   cancelEditProduct() {
     this.showEditProduct = false;
+  }
+
+  showDeleteProductModal() {
+      this.showDeleteProduct = true;
+  }
+
+  successDeleteProduct() {
+    this.showDeleteProduct = false;
+    this.$router.push({ name: "products" });
+  }
+
+  cancelDeleteProduct() {
+    this.showDeleteProduct = false;
   }
 
   mounted() {
