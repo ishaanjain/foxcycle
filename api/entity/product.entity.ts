@@ -24,7 +24,7 @@ export class Product {
   // @Column({default: null})
   // public tags!: string;
 
-  @ManyToMany(type => Tag, tag => tag.products, { cascade: true })
+  @ManyToMany(type => Tag, tag => tag.products, { cascade: true, onDelete: "CASCADE" })
   @JoinTable()
   public tags!: Tag[];
 

@@ -83,6 +83,15 @@ export default class AddNewProduct extends Vue {
       })
       .then((response: AxiosResponse<iProduct>) => {
         this.$emit("success");
+        this.product =  {
+          name: "",
+          description: "",
+          price: 0.0,
+          imageUrls: "",
+          stockCount: 0,
+          tags: "",
+          inStoreOnly: false
+        };
       })
       .catch((reason: any) => {
         this.error = reason.message;
