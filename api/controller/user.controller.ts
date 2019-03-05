@@ -13,8 +13,22 @@ export class UserController extends DefaultController {
     router.route("/users")
     .get(this.isAuthenticated(false, true), (req: Request, res: Response) => {
       const userRepo = getRepository(User);
-      userRepo.find().then((users: User[]) => {
+      const queryString = `
+        CAST(user.id AS CHAR) LIKE :id AND
+        user.firstName LIKE :firstName AND
+        user.lastName LIKE :lastName AND
+        user.emailAddress LIKE :emailAddress`;
+      const queryVars = {
+        id: `%${req.query.id || ''}%`, 
+        firstName: `%${req.query.firstName}%`,
+        lastName: `%${req.query.lastName}%`,
+        emailAddress: `%${req.query.emailAddress}%`,
+      };
+      userRepo.createQueryBuilder('user').where(queryString, queryVars).getMany()
+      .then((users: User[]) => {
         res.status(200).send({ users });
+      }).catch((error: any) => {
+        res.status(500).send({ reason: error.message });
       });
     })
     .post(this.isAuthenticated(false, true), (req: Request, res: Response) => {

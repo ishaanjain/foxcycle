@@ -14,7 +14,7 @@ export class LoginController extends DefaultController {
       const userRepo = getRepository(User);
       const sessionRepo = getRepository(Session);
       userRepo.findOne({ emailAddress }).then((user: User | undefined) => {
-        console.log("found user:", user);
+        // console.log("found user:", user);
         if (!user) {
           res.status(401).send({ error: "no user with that username" });
           return;

@@ -1,6 +1,40 @@
 <template>
   <div class="employees">
     <div>{{error}}</div>
+    <div id="employeesInputs">
+      <input 
+        class="input employeesInput" 
+        type="number"
+        placeholder="ID"
+        :value="filter.id"
+        @input="filterChange"
+        name="id"
+      />
+      <input 
+        class="input employeesInput" 
+        type="text"
+        placeholder="First Name"
+        :value="filter.firstName"
+        @input="filterChange"
+        name="firstName"
+      />
+      <input 
+        class="input employeesInput" 
+        type="text"
+        placeholder="Last Name"
+        :value="filter.lastName"
+        @input="filterChange"
+        name="lastName"
+      />
+      <input
+        class="input employeesInput" 
+        type="email"
+        placeholder="Email Address"
+        :value="filter.emailAddress"
+        @input="filterChange"
+        name="emailAddress"
+      />
+    </div>
     <table class="table is-striped is-fullwidth">
       <tr>
         <th>ID</th>
@@ -66,6 +100,12 @@ import Signup from "../components/Signup.vue";
   }
 })
 export default class Employees extends Vue {
+  filter: EmployeeFilter = {
+    id: undefined,
+    firstName: "",
+    lastName: "",
+    emailAddress: ""
+  };
   employee: Employee = {
     id: undefined,
     firstName: "",
@@ -79,9 +119,15 @@ export default class Employees extends Vue {
   pendingDeleteEmployeeId: number = -1;
   error: string = "";
   
+  filterChange(event: any) {
+    this.filter[event.target.name] = event.target.value;
+    this.loadEmployees();
+  }
+
   loadEmployees() {
     axios.get(APIConfig.buildUrl("/users"), {
-      headers: { token: this.$store.state.userToken }
+      headers: { token: this.$store.state.userToken },
+      params: this.filter
     }).then((response: AxiosResponse) => {
       this.myEmployees = response.data.users;
     }).catch((error: any) => {
@@ -157,10 +203,27 @@ interface Employee {
   emailAddress: string;
   isAdmin: boolean;
 }
+
+interface EmployeeFilter {
+  [key: string]: any;
+  id: number | undefined;
+  firstName: string;
+  lastName: string;
+  emailAddress: string;
+}
 </script>
 
 <style scoped>
-table {
-  margin-top: 15px;
+
+@import "~bulma/css/bulma.css";
+
+#employeesInputs {
+  margin: 20px 0px 15px 0px;
+  display: flex;
 }
+
+.employeesInput {
+  margin: 0px 10px 0px 10px;
+}
+
 </style>
