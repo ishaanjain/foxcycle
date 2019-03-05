@@ -17,10 +17,3 @@ Ishaan Jain - Team Lead
 Evan Zhang - Architect
 Abhijeet Sidhu - DB Lead
 Garrett Wayne - UI Lead
-
-For admin account 
-
-for sequel insert
-INSERT INTO `user` (`id`, `firstName`, `lastName`, `password`, `profileUrl`, `emailAddress`, `isAdmin`)
-VALUES
-	(7, 'admin', 'admin', 'admin', NULL, 'admin@email.com', 1);
