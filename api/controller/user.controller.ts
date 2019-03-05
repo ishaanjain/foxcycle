@@ -13,7 +13,6 @@ export class UserController extends DefaultController {
     router.route("/users")
     .get(this.isAuthenticated(false, true), (req: Request, res: Response) => {
       const userRepo = getRepository(User);
-      console.log(req);
       const queryString = `
         CAST(user.id AS CHAR) LIKE :id AND
         user.firstName LIKE :firstName AND
