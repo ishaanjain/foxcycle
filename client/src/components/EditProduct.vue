@@ -1,5 +1,5 @@
 <template>
-  <modal v-bind:is-showing="isShowing" title="Add Product" success-button="Add" v-on:success="success" v-on:cancel="cancel">
+  <modal v-bind:is-showing="isShowing" title="Edit Product" success-button="Save" v-on:success="success" v-on:cancel="cancel">
     <form v-on:submit.prevent="onSubmit">
       <p v-if="error" class="is-danger">
         {{ error }}
@@ -57,41 +57,24 @@ import axios, { AxiosResponse } from "axios";
 import { APIConfig } from "../utils/api.utils";
 import { Component, Prop, Vue } from "vue-property-decorator";
 import Modal from "./Modal.vue";
-import { iProduct } from "@/models/product.interface";
+import { Product } from "../../../api/entity";
 @Component({
   components: { Modal }
 })
-export default class AddNewProduct extends Vue {
+export default class EditProduct extends Vue {
   @Prop(Boolean) isShowing: boolean = false;
-  product: iProduct = {
-    name: "",
-    description: "",
-    price: 0.0,
-    imageUrls: "",
-    stockCount: 0,
-    tags: "",
-    inStoreOnly: false
-  };
+  @Prop() product!: Product;
   error: string | boolean = false;
   success() {
     this.error = false;
     axios
-      .post(APIConfig.buildUrl("/products"), this.product, {
+      .put(APIConfig.buildUrl(`/products/${this.product.id}`), this.product, {
         headers: {
           token: this.$store.state.userToken
         }
       })
-      .then((response: AxiosResponse<iProduct>) => {
+      .then((response: AxiosResponse<Product>) => {
         this.$emit("success");
-        this.product =  {
-          name: "",
-          description: "",
-          price: 0.0,
-          imageUrls: "",
-          stockCount: 0,
-          tags: "",
-          inStoreOnly: false
-        };
       })
       .catch((reason: any) => {
         this.error = reason.message;

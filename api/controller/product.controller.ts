@@ -12,7 +12,7 @@ export class ProductController extends DefaultController {
     router
       .route("/products")
       .get((req: Request, res: Response) => {
-        var filters = req.param("filters");
+        var filters = req.query.filters;
         var query = getRepository(Product).createQueryBuilder("product");
         query.leftJoinAndSelect("product.tags", "tag");
         if (filters && filters.length > 0) {
@@ -69,12 +69,9 @@ export class ProductController extends DefaultController {
     })
     .delete((req: Request, res: Response) => {
         const token = req.get("token");
-        const sessionRepo = getRepository(Session);
         const productRepo = getRepository(Product);
-        sessionRepo.findOne(token, {relations: ["user"]}).then((foundSession: Session | undefined) => {
-          productRepo.delete({id: req.params.id}).then(deleteResult => {
-            res.sendStatus(200);
-          });
+        productRepo.delete({id: req.params.id}).then(deleteResult => {
+          res.sendStatus(200);
         });
       })
       .put((req: Request, res: Response) => {

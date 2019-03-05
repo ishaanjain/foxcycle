@@ -1,6 +1,13 @@
 <template>
    <div class="products">
-      <a class="button is-light" v-if="isLoggedIn" v-on:click="showAddProductModal()">Add a New Product</a>
+     <div class="columns">
+       <div class="column is-one-fifth">
+        <h3 class="title is-3">Store:</h3>
+       </div>
+       <div class="column is-four-fifths">
+        <a class="button is-light" v-if="isLoggedIn" v-on:click="showAddProductModal()">Add a New Product</a>
+       </div>
+     </div>
       <div class="columns">
          <div class="column is-one-fifth">
             <h4 class="title is-4">Filter By:</h4>
@@ -16,7 +23,7 @@
                 </div>
               </div>
             </div>
-            <a class="button is-primary" v-on:click="applyFilters()">Apply</a>
+            <a class="button is-primary apply-button" v-on:click="applyFilters()">Apply</a>
             <a class="button is-light" v-on:click="clearAllFilters()">Reset</a>
             <AddNewProduct v-bind:is-showing="showAddProduct" v-on:success="successAddProduct()" v-on:cancel="cancelAddProduct()"/>
          </div>
@@ -222,7 +229,11 @@ h4.filter-header.subtitle {
 }
 
 .products {
-    margin-top: 20px;
+  margin-top: 20px;
+}
+
+.apply-button {
+  margin-right: 10px;
 }
 
 </style>
