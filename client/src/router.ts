@@ -7,6 +7,7 @@ import MyProfile from "./views/MyProfile.vue";
 import ProductDetail from "./views/ProductDetail.vue"
 import Products from "./views/Products.vue";
 import Services from "./views/Services.vue";
+import Cart from "./views/Services.vue";
 
 Vue.use(Router);
 
@@ -18,6 +19,11 @@ export default new Router({
       path: "/",
       name: "home",
       component: Home
+    },
+    {
+      path: "/",
+      name: "cart",
+      component: Cart
     },
     {
       path: "/products",

@@ -36,9 +36,10 @@
         <div class="navbar-end">
           <div class="navbar-item">
             <span class="icon">
-              <router-link to="/cart" exact-active-class="is-active">
-                <i class="fas fa-shopping-cart"></i>
-              </router-link>
+              <!-- <router-link to="/cart" exact-active-class="is-active" > -->
+
+                <i class="fas fa-shopping-cart"  v-on:click="showCartModal()"></i>
+              <!-- </router-link> -->
             </span>
             <div class="buttons">
               <router-link
@@ -62,26 +63,36 @@
       v-on:success="successLogin()" 
       v-on:cancel="cancelLogin()"
     />
+    <Cart
+      v-bind:is-showing="showCart"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import axios from "axios";
 import Vue from "vue";
-import Buefy from 'buefy'
+//import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import { Component } from "vue-property-decorator";
 import Signup from "@/components/Signup.vue";
 import Login from "@/components/Login.vue";
 import { APIConfig } from "@/utils/api.utils";
+import Cart from "@/components/Cart.vue";
 
 @Component({
   components: {
-    Login
+    Login,
+    Cart 
   }
 })
 export default class App extends Vue {
   public showLogin: boolean = false;
+  public showCart: boolean = false; 
+
+  showCartModal(){
+    this.showCart = true; 
+  }
 
   showLoginModal() {
     this.showLogin = true;
