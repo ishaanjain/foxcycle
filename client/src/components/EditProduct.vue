@@ -13,7 +13,7 @@
       <div class="field">
         <label class="label">Description:</label>
         <div class="control">
-          <textarea class="input" type="" placeholder="product description" v-model="product.description"></textarea>
+          <textarea class="input textarea" type="textarea" placeholder="product description" v-model="product.description"></textarea>
         </div>
       </div>
       <div class="field">
