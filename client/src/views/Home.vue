@@ -124,8 +124,9 @@ export default class Home extends Vue {
   getAnnounce() {
     axios.get(APIConfig.buildUrl(`/announce`), {})
     .then((response) => {
-        // debugger;
-        this.announcement = response.data.announce[0];
+        if (response.data.announce.length > 0) {
+          this.announcement = response.data.announce[0];
+        }
     });
   }
 
