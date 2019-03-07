@@ -45,7 +45,7 @@ Foxycle
 
 8. run `npm run serve` in the client/ directory
 
-9. Query the `dev` database with the contents of `data.sql` in the root directory
+9. Query the `dev` database with the contents of `data.sql` found in the root directory using Sequel Pro
 
 10. In your browser, navigate to `localhost:8080`
 
