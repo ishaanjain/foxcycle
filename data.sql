@@ -1,4 +1,4 @@
-INSERT INTO `product` (`id`, `name`, `price`, `imageUrls`, `stockCount`, `inStoreOnly`, `tagString`, `description`)
+INSERT INTO dev.product (`id`, `name`, `price`, `imageUrls`, `stockCount`, `inStoreOnly`, `tagString`, `description`)
 VALUES
 	(25, 'Marin Fairfax SC2 - 2018', 549, 'https://www.tiptopbikeshop.com/images/library/zoom/marin-fairfax-sc2-289205-1.jpg', 10, 0, 'brand:Marin;color:White;size:Medium;type:Road', 'The Fairfax SC2 gets you there quicker with its lightweight Series 2 alloy frame and upgrades that include a lighter weight aluminum fork and wide-range 3 x 9-speed Shimano Acera drivetrain. With 27 speeds, durable double-wall rims, and Schwalbe Road Cruiser puncture-resistant tires, plus an ergonomic saddle and grips, the Fairfax SC2 transforms your daily commute into a comfortable daily adventure.'),
 	(26, 'Kona Ute - 2019', 1599, 'https://www.tiptopbikeshop.com/images/library/zoom/kona-ute-350908-1.jpg', 6, 0, 'brand:Kona;color:Matte Black;size:Large;type:Road', 'Multiple Bike-of-the-Year awards speak for themselves. The Ute is a well-designed, carry-everything utility bike that makes quick work of trips to the store, dropping the kids off at school and bringing the tree home for the holidays. We didnt need any awards to tell us how rad this bike is, but its nice to see that other people get it.'),
@@ -10,7 +10,7 @@ VALUES
 	(34, 'Civia Parkway Step-Thru Electric Bike - 2018', 2799, 'https://www.tiptopbikeshop.com/images/library/zoom/civia-parkway-327379-14.jpg', 12, 0, 'brand:Civia;color:Light Blue;size:Medium;type:Electric', 'The Civia Parkway is the perfect ebike for experiencing the city. The there-when-you-need-it boost from Boschs ultra-reliable electric motor makes hills a breeze, while easy-to-use components celebrate the elegance of an uncomplicated bicycle. From no sweat crosstown commutes, to fitness rides, the Parkway is an exciting and fun option for getting around.\n\nHighlights:\n\n- Lightweight AL-6061 round frame tubing, rack and fender mounts\n- Bosch Active Line electric motor for gentle assist up to 20 mph\n- Equipped with Bosch Powerpack 400 frame battery, Purion compact computer, and 2A compact charger\n- Shimano 9-speed drivetrain and Shimano cable disc brakes\n- Kenda Kwick 26 x 2.0\" black/mocha tires with K-Shield\n- 26 x 2.3\" max. tire size without fenders'),
 	(35, 'Salsa Journeyman Apex 1 650', 999, 'https://www.tiptopbikeshop.com/images/library/zoom/salsa-journeyman-drop-bar-apex-650-346080-11.jpg', 1, 0, 'brand:Salsa;color:Pink;size:Large;type:Mountain', 'The Salsa Journeyman is an all-road bike with the chops to fulfill a wide variety of missions. Journeyman Apex 1 650 offers the comfort and traction of a wider, WTB Nano 2.1-inch tire, and youll notice the difference in traction and ride quality immediately when you go off-road. It also features SRAM Apex 1x11 gearing, which is perfect for venturing farther off the beaten path with a wide range and low-maintenance design. TRP Spyre mechanical disc brakes feature dual piston movement for easy setup, simple adjustments, and field serviceabilityall tremendous assets when youre riding in the middle of nowhere. Salsa cockpit components keep you solidly in control while remaining unobtrusive and lightweight. Whether youre wandering the backroads, bikepacking, or racing gravel, Journeyman is perfectly at home.');
 
-INSERT INTO `product_tags_tag` (`productId`, `tagId`)
+INSERT INTO dev.product_tags_tag (`productId`, `tagId`)
 VALUES
 	(31, 113),
 	(31, 114),
@@ -49,7 +49,7 @@ VALUES
 	(25, 151),
 	(25, 152);
 
-INSERT INTO `tag` (`id`, `name`)
+INSERT INTO dev.tag (`id`, `name`)
 VALUES
 	(49, 'brand:Blix'),
 	(50, 'color:Gloss Black'),
