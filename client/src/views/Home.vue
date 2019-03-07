@@ -35,7 +35,7 @@
         <a class="button is-primary" v-bind:class="{ 'is-hidden': !isLoggedIn}" v-on:click="showLoginModal()">New Announcement</a>
         <a class="button is-danger" v-bind:class="{ 'is-hidden': !isLoggedIn}" v-on:click="deleteAnnounce()">Delete Announcement</a>
         </div>
-        {{getAnnounce()}}
+
         <div class="tile is-child box " v-bind:class="{ 'is-hidden': hasAnnounce()}" >
           <p class="title">{{this.announcement.title}}</p>
           
@@ -116,8 +116,9 @@ export default class Home extends Vue {
   }
 
   mounted (){
-    this.getAnnounce();
     this.getItems();
+    this.getAnnounce();
+    
   }
 
   getAnnounce() {
