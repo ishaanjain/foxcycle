@@ -45,6 +45,19 @@
         </div>
         <div class="tile is-child">
           <p class="title">Featured</p>
+          <div class="container products-container">
+               <div class="p-parent">
+                  <div v-for="(item, index) in items" v-bind:key="index">
+                     <router-link :to="{name: 'product detail', params: { id: item.id.toString() }}">
+                        <div class="box product">
+                           <h1 class="product-title title is-5">{{item.name}}</h1>
+                           <img class="product" :src=item.imageUrls>
+                           <p class="title is-5 item-price">${{item.price}}  </p>
+                        </div>
+                     </router-link>
+                  </div>
+               </div>
+            </div>
         </div>
         <div class="tile is-child">
           <p class="subtitle">14256 Frank Pilling Road, San Luis Obispo, 93407</p>
@@ -65,6 +78,8 @@ import Announcement from "../components/Announcement.vue"
 import { APIConfig } from "../utils/api.utils";
 import { Announce } from "../../../api/entity";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { iProduct } from "../models/product.interface";
+
 
 @Component({
   components:{
@@ -83,6 +98,7 @@ export default class Home extends Vue {
 
   error: string | boolean = false;
 
+  public items: iProduct[] = [];
   get isLoggedIn(): boolean {
     return !!this.$store.state.user;
   }
@@ -101,6 +117,7 @@ export default class Home extends Vue {
 
   mounted (){
     this.getAnnounce();
+    this.getItems();
   }
 
   getAnnounce() {
@@ -123,6 +140,19 @@ export default class Home extends Vue {
       .catch((res: AxiosError) => {
         this.error = res.response && res.response.data.error;
       });
+  }
+  getItems() {
+    axios.get(APIConfig.buildUrl("/products"), {
+      headers: {
+        token: this.$store.state.userToken
+      },
+      params: {
+        filters: []
+      }
+    })
+    .then((response) => {
+        this.items = response.data.products.slice(0, 3);
+    });
   }
 
 }
