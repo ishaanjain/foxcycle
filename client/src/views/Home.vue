@@ -30,7 +30,7 @@
          </div>
          <div class="announcement tile is-parent is-vertical">
             <div class="tile">
-               <a class="button is-primary" v-bind:class="{ 'is-hidden': !isLoggedIn}" v-on:click="showAnnouncementModal()">Edit/Add Announcement</a>
+               <a class="button is-primary edit-announcement" v-bind:class="{ 'is-hidden': !isLoggedIn}" v-on:click="showAnnouncementModal()">Edit/Add Announcement</a>
                <a class="button is-danger" v-if="hasAnnounce()" v-bind:class="{ 'is-hidden': !isLoggedIn}" v-on:click="showDeleteAnnouncementModal()">Delete Announcement</a>
             </div>
             <div class="tile is-child box " v-bind:class="{ 'is-hidden': !hasAnnounce()}" >
@@ -157,9 +157,14 @@ export default class Home extends Vue {
 </script>
 
 <style scoped lang="scss">
-  .home {
-    max-width: unset;
-    width: unset;
-    margin: 2%;
-  }
+.home {
+  max-width: unset;
+  width: unset;
+  margin: 2%;
+}
+
+.edit-announcement {
+  margin-right: 14px;
+  margin-bottom: 14px;
+}
 </style>
