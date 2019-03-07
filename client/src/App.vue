@@ -67,7 +67,7 @@
     <div class="content has-text-centered">
       <p>
         <strong>WhiteSky</strong> 2019
-        {{this.about.phone}}
+        <!-- {{this.about.phone}} -->
       </p>
 
     </div>
@@ -134,9 +134,9 @@ export default class App extends Vue {
     });
   }
 
-  mounted(){
-    this.getAbout();
-  }
+  // mounted(){
+  //   this.getAbout();
+  // }
 
   getAbout() {
     axios.get(APIConfig.buildUrl(`/about`), {})
