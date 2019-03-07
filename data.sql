@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.24)
 # Database: dev
-# Generation Time: 2019-03-07 02:11:37 +0000
+# Generation Time: 2019-03-07 02:15:13 +0000
 # ************************************************************
 
 
@@ -395,8 +395,7 @@ LOCK TABLES `user` WRITE;
 INSERT INTO `user` (`id`, `firstName`, `lastName`, `password`, `profileUrl`, `emailAddress`, `isAdmin`)
 VALUES
 	(1,'a','a','a','a','asdf',1),
-	(8,'admin','admin','hi',NULL,'admin@email.com',1),
-	(9,'','','',NULL,'',0);
+	(8,'admin','admin','hi',NULL,'admin@email.com',1);
 
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
