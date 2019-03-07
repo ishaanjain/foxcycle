@@ -1,5 +1,6 @@
 <template>
   <div class="about">
+    <div class="container is-fullhd">
       <div class="columns">
     <div class="column">
       <img src="../../public/robert.jpg">
@@ -59,6 +60,15 @@
     </section>
     </div>
       </div>
+    </div>
+    <div class="container is-fluid">
+   <div class="tile is-child">
+        <p class="title">Location:</p>
+          <p class="subtitle">14256 Frank Pilling Road, San Luis Obispo, 93407</p>
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3256.2347832287987!2d-120.66442254947114!3d35.30014725828843!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80ecf1b3ba70fff3%3A0x4b4cd567ef80b51e!2sFrank+E.+Pilling+Computer+Science%2C+San+Luis+Obispo%2C+CA+93405!5e0!3m2!1sen!2sus!4v1551915459089" width="100%" height="500px" frameborder="0" style="border:0" allowfullscreen></iframe>
+        </div>
+</div>
+
   </div>
 
 </template>
