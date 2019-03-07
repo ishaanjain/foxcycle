@@ -34,9 +34,9 @@
                   <div v-for="(item, index) in items" v-bind:key="index">
                      <router-link :to="{name: 'product detail', params: { id: item.id.toString() }}">
                         <div class="box product">
-                           <h5 class="title is-5">{{item.name}}</h5>
+                           <h1 class="product-title title is-5">{{item.name}}</h1>
                            <img class="product" :src=item.imageUrls>
-                           <h3 class="item-price">${{item.price}}</h3>
+                           <p class="title is-5 item-price">${{item.price}}  </p>
                         </div>
                      </router-link>
                   </div>
@@ -54,7 +54,8 @@ import App from "@/App.vue";
 import AddNewProduct from "@/components/AddNewProduct.vue";
 import axios, { AxiosResponse } from "axios";
 import { APIConfig } from "../utils/api.utils";
-import { Product, Tag } from "../../../api/entity";
+import { iProduct } from "../models/product.interface";
+import { iTag } from "../models/tag.interface";
 
 @Component({
   components: {
@@ -63,7 +64,7 @@ import { Product, Tag } from "../../../api/entity";
 })
 export default class Products extends Vue {
   public showAddProduct: boolean = false;
-  public items: Product[] = [];
+  public items: iProduct[] = [];
   public tags: TagType[] = [];
   public tagList: String[] = [];
   public tagNameList: String[] = [];
@@ -120,7 +121,7 @@ export default class Products extends Vue {
     this.tagList = [];
     this.tagNameList = [];
     for (var i = 0; i < this.items.length; i++) {
-      var tags: Tag[] = this.items[i].tags;
+      var tags: iTag[] = this.items[i].tags;
       for (var j = 0; j < tags.length; j++) {
         if (!this.tagList.includes(tags[j].name)) {
           this.tagList.push(tags[j].name);
@@ -196,6 +197,11 @@ export interface TagApplied {
 
 <style lang="scss">
 
+h1.product-title {
+  height: 20px;
+  margin-bottom: 0px;
+}
+
 img.product {
   height: 76%;
   margin: 0px 0px 16px 0px;
@@ -206,8 +212,8 @@ img.product {
 }
 
 .product {
-  height: 300px;
-  width: 300px;
+  height: 340px;
+  width: 340px;
   float: left;
   margin: 14px;
 }

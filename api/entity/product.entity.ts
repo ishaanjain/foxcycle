@@ -9,7 +9,7 @@ export class Product {
   @Column()
   public name!: string;
 
-  @Column()
+  @Column({ length: "2040" })
   public description!: string;
 
   @Column()
@@ -21,8 +21,8 @@ export class Product {
   @Column({default: 0})
   public stockCount!: number;
 
-  // @Column({default: null})
-  // public tags!: string;
+  @Column({default: null})
+  public tagString!: string;
 
   @ManyToMany(type => Tag, tag => tag.products, { cascade: true, onDelete: "CASCADE" })
   @JoinTable()

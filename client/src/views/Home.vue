@@ -38,6 +38,19 @@
         </div>
         <div class="tile is-child">
           <p class="title">Featured</p>
+          <div class="container products-container">
+               <div class="p-parent">
+                  <div v-for="(item, index) in items" v-bind:key="index">
+                     <router-link :to="{name: 'product detail', params: { id: item.id.toString() }}">
+                        <div class="box product">
+                           <h1 class="product-title title is-5">{{item.name}}</h1>
+                           <img class="product" :src=item.imageUrls>
+                           <p class="title is-5 item-price">${{item.price}}  </p>
+                        </div>
+                     </router-link>
+                  </div>
+               </div>
+            </div>
         </div>
       </div>
       
@@ -60,6 +73,8 @@
 import { Component, Vue } from "vue-property-decorator";
 import Announcement from "../components/Announcement.vue"
 import { APIConfig } from "../utils/api.utils";
+import { iProduct } from "../models/product.interface";
+import axios, { AxiosResponse } from "axios";
 
 @Component({
   components:{
@@ -69,6 +84,7 @@ import { APIConfig } from "../utils/api.utils";
 
 export default class Home extends Vue {
   public showAnnounce: boolean = false;
+  public items: iProduct[] = [];
   get isLoggedIn(): boolean {
     return !!this.$store.state.user;
   }
@@ -83,6 +99,24 @@ export default class Home extends Vue {
 
   cancelLogin() {
     this.showAnnounce = false;
+  }
+
+  getItems() {
+    axios.get(APIConfig.buildUrl("/products"), {
+      headers: {
+        token: this.$store.state.userToken
+      },
+      params: {
+        filters: []
+      }
+    })
+    .then((response) => {
+        this.items = response.data.products.slice(0, 3);
+    });
+  }
+
+  mounted() {
+    this.getItems();
   }
 
 }
