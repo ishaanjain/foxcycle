@@ -4,8 +4,6 @@ import { Order } from "../entity";
 import isAuthenticated from "./auth";
 
 import { Request, Response, Router } from "express";
-import multer from "multer";
-import Path from "path";
 import { getRepository } from "typeorm";
 
 export class OrderController extends DefaultController {

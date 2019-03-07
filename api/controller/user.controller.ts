@@ -1,9 +1,9 @@
 import DefaultController from "./default.controller";
-import { Session, User } from "../entity";
+import { User } from "../entity";
 
 import isAuthenticated from "./auth";
 
-import { NextFunction, Request, Response, Router } from "express";
+import { Request, Response, Router } from "express";
 import multer from "multer";
 import Path from "path";
 import { getRepository } from "typeorm";

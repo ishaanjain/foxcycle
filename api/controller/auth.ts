@@ -5,8 +5,6 @@ import { getRepository } from "typeorm";
 
 export default function isAuthenticated(checkSameUser: boolean, checkAdmin: boolean) {
   return (req: Request, res: Response, next: NextFunction) => {
-    console.log('exported authentication function running');
-    console.log(req.originalUrl);
     const token: string | undefined = req.get("token");
     if (!token) {
       res.sendStatus(401);
