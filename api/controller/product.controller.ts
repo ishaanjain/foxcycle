@@ -15,11 +15,11 @@ export class ProductController extends DefaultController {
         var filters = req.query.filters;
         var query = getRepository(Product).createQueryBuilder("product");
         query.leftJoinAndSelect("product.tags", "tag");
-        if (filters && filters.length > 0) {
+        if (filters && filters.length == 1) {
           query.where("tag.name = :name", {name: filters[0]});
-          for (var i = 1; i < filters.length; i++) {
-            query.andWhere("tag.name = :name", {name: filters[i]});
-          }
+        }
+        else if (filters && filters.length > 1) {
+          query.where("tag.name in(:name)", {name: filters});
         }
         query.getMany().then((products: Product[]) => {
           res.status(200).send({ products });
