@@ -62,6 +62,16 @@
       v-on:success="successLogin()" 
       v-on:cancel="cancelLogin()"
     />
+    <footer class="footer">
+
+    <div class="content has-text-centered">
+      <p>
+        <strong>WhiteSky</strong> 2019
+        {{this.about.phone}}
+      </p>
+
+    </div>
+</footer>
   </div>
 </template>
 
@@ -74,6 +84,9 @@ import { Component } from "vue-property-decorator";
 import Signup from "@/components/Signup.vue";
 import Login from "@/components/Login.vue";
 import { APIConfig } from "@/utils/api.utils";
+import { About } from "../../api/entity";
+
+Vue.use(Buefy);
 
 @Component({
   components: {
@@ -82,6 +95,15 @@ import { APIConfig } from "@/utils/api.utils";
 })
 export default class App extends Vue {
   public showLogin: boolean = false;
+
+  public about: About = {
+    id: 0,
+    description : "",
+    imageurl : "",
+    title:"",
+    phone:"",
+    address:""
+  };
 
   showLoginModal() {
     this.showLogin = true;
@@ -109,6 +131,18 @@ export default class App extends Vue {
     }).then(() => {
       this.$store.commit("logout");
       this.$router.push({ name: "home" });
+    });
+  }
+
+  mounted(){
+    this.getAbout();
+  }
+
+  getAbout() {
+    axios.get(APIConfig.buildUrl(`/about`), {})
+    .then((response) => {
+        // debugger;
+        this.about = response.data.announce[0];
     });
   }
 }

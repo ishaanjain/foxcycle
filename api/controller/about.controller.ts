@@ -3,26 +3,28 @@ import DefaultController from "./default.controller";
 import {Request, Response, Router } from "express";
 
 import { getRepository } from "typeorm";
-import { Announce } from "../entity";
+import { About } from "../entity";
 
-export class AnnounceController extends DefaultController {
+export class AboutController extends DefaultController {
   protected initializeRoutes(): Router {
     const router = Router();
     router
-      .route("/announce")
+      .route("/about")
       .get((req: Request, res: Response) => {
-        const announceRepo = getRepository(Announce);
-        announceRepo.find().then((announce: Announce[]) => {
+        const announceRepo = getRepository(About);
+        announceRepo.find().then((announce: About[]) => {
           res.send({ announce });
         }); 
       })
       .post((req: Request, res: Response) => {
-        const announcement = getRepository(Announce);
-        const {description, title, imageurl} = req.body;
-        const ann = new Announce();
+        const announcement = getRepository(About);
+        const {description, title, imageurl, phone, address} = req.body;
+        const ann = new About();
         ann.description = description;
         ann.imageurl = imageurl;
         ann.title = title;
+        ann.phone = phone;
+        ann.address = address;
         announcement.save(ann).then(
           createdAnnounce => { 
             res.status(200).send({ createdAnnounce });
@@ -31,7 +33,7 @@ export class AnnounceController extends DefaultController {
       })
       .delete((req: Request, res: Response) => {
         const token = req.get("token");
-        const Repo = getRepository(Announce);
+        const Repo = getRepository(About);
         Repo.delete({}).then(deleteResult => {
           res.sendStatus(200);
         });
@@ -40,4 +42,4 @@ export class AnnounceController extends DefaultController {
   }
 } 
 
-export default AnnounceController;
+export default AboutController;
