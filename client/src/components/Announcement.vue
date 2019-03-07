@@ -1,7 +1,7 @@
 <template>
   <modal
     v-bind:is-showing="isShowing"
-    title="Announce"
+    title="Announcement"
     success-button="Post"
     v-on:success="success"
     v-on:cancel="cancel"
