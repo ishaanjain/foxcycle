@@ -212,8 +212,8 @@ img.product {
 }
 
 .product {
-  height: 340px;
-  width: 340px;
+  height: 300px;
+  width: 300px;
   float: left;
   margin: 14px;
 }
