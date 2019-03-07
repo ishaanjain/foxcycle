@@ -7,41 +7,30 @@
     v-on:cancel="cancel"
   >
     <form  enctype="multipart/form-data" novalidate v-on:submit.prevent="onSubmit">
-         <div class="field">
-        <label class="label">Description</label>
-        <div class="control">
-          <input
-            class="input"
-            type="text"
-            placeholder="Description"
-            v-model="words.description"
-          >
+      <div class="field">
+        <div class="field">
+          <label class="label">title:</label>
+          <div class="control">
+            <textarea class="input" type="" placeholder="title" v-model="announce.title"></textarea>
+          </div>
         </div>
-      </div>
-        <!-- <div class="profilePhoto">
-          <img :src="profileUrl"/>
+        <div class="field">
+          <label class="label">Announcement:</label>
+          <div class="control">
+            <textarea class="input" type="" placeholder="announcement" v-model="announce.description"></textarea>
+          </div>
         </div>
-        <div class="file">
-          <label class="file-label">
-            <input
-              type="file"
-              name="profilePhoto"
-              :disabled="isSaving"
-              v-on:change="filesChanged"
-              accept="image/*"
-              class="input-file file-input"
-            >
-            <span class="file-cta">
-              <span class="file-icon">
-                <font-awesome-icon icon="upload"/>
-              </span>
-              <span class="file-label">
-                Upload image...
-              </span>
-            </span>
-          </label>
-          <p v-if="isSaving">Uploading file...</p>
-        </div> -->
+        </div>
+          <div class="field">
+          <label class="label">Image Url:</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="image" v-model="announce.imageurl">
+          </div>
+        </div>
+        <span>
+          <img  :src="announce.imageurl"/>
+        </span>
+        
       </form>
   </modal>
 </template>
@@ -51,6 +40,8 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { APIConfig } from "../utils/api.utils";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import Modal from "./Modal.vue";
+import {iAnnounce} from "../models/announce.interface";
+import { Announce } from "../../../api/entity";
 
 @Component({
   components: {
@@ -58,28 +49,27 @@ import Modal from "./Modal.vue";
   }
 })
 export default class Announcement extends Vue {
-  words: descript = {
+  announce: iAnnounce = {
     description: "",
-  };
+    imageurl: "",
+    title:""
+  }
+
   error: string | boolean = false;
   @Prop(Boolean) isShowing: boolean = false;
 
-  @Watch("isShowing")
-  handleShowing(isShowingStart: boolean, isShowingEnd: boolean) {
-    if (!isShowingStart && isShowingEnd) {
-      this.words = {
-        description: ""
-      };
-    }
-  }
 
   success() {
     this.error = false;
     axios
-      .post(APIConfig.buildUrl("/announce"), {
-        description: this.words.description
-      })
-      .then((response) => {})
+      .delete(APIConfig.buildUrl("/announce"),{})
+      .then((response) => {this.$emit("success");})
+      .catch((res: AxiosError) => {
+        this.error = res.response && res.response.data.error;
+      });
+    axios
+      .post(APIConfig.buildUrl("/announce"), this.announce, {})
+      .then((response) => {this.$emit("success");})
       .catch((res: AxiosError) => {
         this.error = res.response && res.response.data.error;
       });
@@ -90,7 +80,4 @@ export default class Announcement extends Vue {
   }
 }
 
-export interface descript {
-  description: string;
-}
 </script>

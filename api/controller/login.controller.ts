@@ -7,7 +7,7 @@ import { Session, User } from "../entity";
 
 export class LoginController extends DefaultController {
   protected initializeRoutes(): express.Router {
-    const router = express.Router();
+    const router = express.Router(); 
 
     router.route("/login").post((req: Request, res: Response) => {
       const { emailAddress, password } = req.body;
