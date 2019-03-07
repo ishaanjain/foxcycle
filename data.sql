@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.24)
 # Database: dev
-# Generation Time: 2019-03-07 02:07:46 +0000
+# Generation Time: 2019-03-07 02:11:37 +0000
 # ************************************************************
 
 
@@ -22,6 +22,8 @@
 
 # Dump of table about
 # ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `about`;
 
 CREATE TABLE `about` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -47,6 +49,8 @@ UNLOCK TABLES;
 # Dump of table announce
 # ------------------------------------------------------------
 
+DROP TABLE IF EXISTS `announce`;
+
 CREATE TABLE `announce` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(255) NOT NULL DEFAULT '',
@@ -68,6 +72,8 @@ UNLOCK TABLES;
 
 # Dump of table product
 # ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `product`;
 
 CREATE TABLE `product` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -102,6 +108,8 @@ UNLOCK TABLES;
 
 # Dump of table product_tags_tag
 # ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `product_tags_tag`;
 
 CREATE TABLE `product_tags_tag` (
   `productId` int(11) NOT NULL,
@@ -161,6 +169,8 @@ UNLOCK TABLES;
 # Dump of table service
 # ------------------------------------------------------------
 
+DROP TABLE IF EXISTS `service`;
+
 CREATE TABLE `service` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -173,6 +183,8 @@ CREATE TABLE `service` (
 
 # Dump of table session
 # ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `session`;
 
 CREATE TABLE `session` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -197,6 +209,8 @@ UNLOCK TABLES;
 
 # Dump of table tag
 # ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tag`;
 
 CREATE TABLE `tag` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -316,6 +330,8 @@ UNLOCK TABLES;
 # Dump of table time
 # ------------------------------------------------------------
 
+DROP TABLE IF EXISTS `time`;
+
 CREATE TABLE `time` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `monstart` datetime NOT NULL,
@@ -341,6 +357,8 @@ CREATE TABLE `time` (
 # Dump of table to_do
 # ------------------------------------------------------------
 
+DROP TABLE IF EXISTS `to_do`;
+
 CREATE TABLE `to_do` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -356,6 +374,8 @@ CREATE TABLE `to_do` (
 
 # Dump of table user
 # ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
