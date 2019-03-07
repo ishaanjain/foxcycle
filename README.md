@@ -52,6 +52,7 @@ Foxycle
 ---
 
 ## Login Info
+
 #### Admin
 * username: admin
 * password: admin
@@ -59,9 +60,7 @@ Foxycle
 * username: a 
 * password: a
 
-
-Team Pizza: Pineapple
-
+## Team Members:
 * Ishaan Jain - Team Lead
 * Evan Zhang - Architect
 * Abhijeet Sidhu - DB Lead
