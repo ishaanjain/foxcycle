@@ -192,7 +192,7 @@ export default class Employees extends Vue {
     }).catch((error: any) => {
       console.log(error.response.data);
       this.error = error.response.data.reason;
-    })
+    });
   }
 }
 

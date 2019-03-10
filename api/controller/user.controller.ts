@@ -1,7 +1,9 @@
 import DefaultController from "./default.controller";
-import { Session, User } from "../entity";
+import { User } from "../entity";
 
-import { NextFunction, Request, Response, Router } from "express";
+import isAuthenticated from "./auth";
+
+import { Request, Response, Router } from "express";
 import multer from "multer";
 import Path from "path";
 import { getRepository } from "typeorm";
@@ -11,7 +13,7 @@ export class UserController extends DefaultController {
     const router = Router();
 
     router.route("/users")
-    .get(this.isAuthenticated(false, true), (req: Request, res: Response) => {
+    .get(isAuthenticated(false, true), (req: Request, res: Response) => {
       const userRepo = getRepository(User);
       const queryString = `
         CAST(user.id AS CHAR) LIKE :id AND
@@ -31,7 +33,7 @@ export class UserController extends DefaultController {
         res.status(500).send({ reason: error.message });
       });
     })
-    .post(this.isAuthenticated(false, true), (req: Request, res: Response) => {
+    .post(isAuthenticated(false, true), (req: Request, res: Response) => {
       const userRepo = getRepository(User);
       const user = new User();
       user.emailAddress = req.body.emailAddress;
@@ -47,7 +49,7 @@ export class UserController extends DefaultController {
     });
 
     router.route("/users/:id")
-    .get(this.isAuthenticated(true, false), (req: Request, res: Response) => {
+    .get(isAuthenticated(true, false), (req: Request, res: Response) => {
       const userRepo = getRepository(User);
       userRepo.findOne(req.params.id).then((user: User | undefined) => {
         if (!user) {
@@ -59,7 +61,7 @@ export class UserController extends DefaultController {
         res.status(500).send({ reason: error.message });
       });
     })
-    .post(this.isAuthenticated(true, false), multer({
+    .post(isAuthenticated(true, false), multer({
       dest: Path.join(__dirname, "..", "public", "profilePhotos")
     }).single("profilePhoto"), (req: Request, res: Response) => {
       const userRepo = getRepository(User);
@@ -80,7 +82,7 @@ export class UserController extends DefaultController {
         res.status(500).send({ reason: error.message });
       });
     })
-    .patch(this.isAuthenticated(false, true), (req: Request, res: Response) => {
+    .patch(isAuthenticated(false, true), (req: Request, res: Response) => {
       const userRepo = getRepository(User);
       userRepo.findOne({ id: req.params.id }).then((user: User | undefined) => {
         if (!user) {
@@ -95,7 +97,7 @@ export class UserController extends DefaultController {
         res.status(500).send({ reason: error.message });
       });
     })
-    .delete(this.isAuthenticated(false, true), (req: Request, res: Response) => {
+    .delete(isAuthenticated(false, true), (req: Request, res: Response) => {
       const userRepo = getRepository(User);
       userRepo.delete({ id: req.params.id }).then((deleteResult: any) => {
         if (deleteResult.raw.affectedRows == 0) {
@@ -109,32 +111,6 @@ export class UserController extends DefaultController {
     });
 
     return router;
-  }
-
-  protected isAuthenticated(checkSameUser: boolean, checkAdmin: boolean) {
-    return (req: Request, res: Response, next: NextFunction) => {
-      const token: string | undefined = req.get("token");
-      if (!token) {
-        res.sendStatus(401);
-        return;
-      }
-      const sessionRepo = getRepository(Session);
-      sessionRepo.findOne(token, { relations: ["user"] })
-      .then((foundSession: Session | undefined) => {
-        if (
-          foundSession &&
-          (!checkSameUser || 
-            foundSession.user.id === parseInt(req.params.id, 10)
-          ) &&
-          (!checkAdmin || foundSession.user.isAdmin) &&
-          (foundSession.expiresAt.getTime() > new Date().getTime())
-        ) {
-          next();
-        } else {
-          res.sendStatus(403);
-        }
-      });
-    };
   }
 }
 

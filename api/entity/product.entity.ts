@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable, Index } from "typeorm";
+import { 
+  Column, 
+  Entity, 
+  PrimaryGeneratedColumn,
+  ManyToMany, 
+  JoinTable, 
+  Index 
+} from "typeorm";
 import { Tag } from "./tag.entity";
 
 @Entity()

@@ -57,8 +57,8 @@ import axios, { AxiosResponse } from "axios";
 import { APIConfig } from "../utils/api.utils";
 import { Component, Prop, Vue } from "vue-property-decorator";
 import Modal from "./Modal.vue";
-
 import { iProduct } from "../models/product.interface";
+
 @Component({
   components: { Modal }
 })

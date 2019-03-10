@@ -104,7 +104,7 @@ export default class App extends Vue {
     description : "",
     imageurl : "",
     title:"",
-    phone:"",
+    phone:"805-123-4567",
     address:""
   };
 
