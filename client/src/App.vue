@@ -63,9 +63,9 @@
       v-on:success="successLogin()" 
       v-on:cancel="cancelLogin()"
     />
-    <Cart
+    <!-- <Cart
       v-bind:is-showing="showCart"
-    />
+    /> -->
   </div>
 </template>
 
@@ -78,12 +78,12 @@ import { Component } from "vue-property-decorator";
 import Signup from "@/components/Signup.vue";
 import Login from "@/components/Login.vue";
 import { APIConfig } from "@/utils/api.utils";
-import Cart from "@/components/Cart.vue";
+//import Cart from "@/components/Cart.vue";
 
 @Component({
   components: {
-    Login,
-    Cart 
+    Login
+    //Cart 
   }
 })
 export default class App extends Vue {

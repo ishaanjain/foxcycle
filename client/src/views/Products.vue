@@ -1,4 +1,4 @@
-<template>
+ <template>
    <div class="products">
      <div class="columns">
        <div class="column is-one-fifth">
