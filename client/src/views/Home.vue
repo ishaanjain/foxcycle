@@ -9,20 +9,13 @@
                   </figure>
                </div>
                <div class="tile is-child">
-                  <p class="title">Hours</p>
+                  <!-- <p class="title">Hours</p> -->
                   <a class="button is-light" v-bind:class="{ 'is-hidden': !isLoggedIn}" >Edit</a>
-                  <table style="width:100%">
-                     <tr>
-                        <th>Weekdays</th>
-                        <th>Weekends</th>
-                        <th></th>
-                     </tr>
-                     <tr>
-                        <td>8 am - 7 pm</td>
-                        <td>10 am - 6 pm</td>
-                        <td></td>
-                     </tr>
-                  </table>
+                    <b-table 
+                    :data="data" 
+                    :columns="columns"
+                    :hoverable="true"
+                    ></b-table>
                   <br>
                   <br>
                </div>
@@ -69,6 +62,7 @@ import { APIConfig } from "../utils/api.utils";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { iProduct } from "../models/product.interface";
 import { iAnnounce } from "../models/announce.interface";
+import { Time } from "../../../api/entity";
 
 @Component({
   components:{
@@ -84,6 +78,11 @@ export default class Home extends Vue {
     imageurl : "",
     title : ""
   };
+
+  // public time: Time = {
+  //   id: 0,
+  //   monstart: new Date
+  // }
 
   error: string | boolean = false;
 
@@ -151,6 +150,38 @@ export default class Home extends Vue {
     .then((response) => {
         this.items = response.data.products.slice(0, 3);
     });
+  }
+
+   data() {
+      return {
+          data: [
+              { 'week_day': 'Monday', 'start': '6:00 am', 'end': '8:00 pm'},
+              { 'week_day': 'Tuesday', 'start': '06:00:53', 'end': '06:00:53'},
+              { 'week_day': 'Wednesday', 'start': '06:00:53', 'end': '06:00:53'},
+              { 'week_day': 'Thursday', 'start': '06:00:53', 'end': '06:00:53'},
+              { 'week_day': 'Friday', 'start': '06:00:53', 'end': '06:00:53'},
+              { 'week_day': 'Saturday', 'start': '06:00:53', 'end': '06:00:53'},
+              { 'week_day': 'Sunday', 'start': '06:00:53', 'end': '06:00:53'},
+              { 'week_day': 'Holiday', 'start': '06:00:53', 'end': '06:00:53'},
+          ],
+          columns: [
+              {
+                field: 'week_day',
+                label: 'Hours',
+              },
+              {
+                  field: 'start',
+                  label: '',
+                  centered: true
+              },
+              {
+                  field: 'end',
+                  label: '',
+                  centered: true
+              },
+
+          ]
+      }
   }
 }
 

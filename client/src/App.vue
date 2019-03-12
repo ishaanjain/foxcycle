@@ -66,11 +66,11 @@
 
     <div class="content has-text-centered">
       <p>
-        <strong>WhiteSky</strong> 2019
-        <br>
         Phone Number: {{this.about.phone}}
         <br>
         Address: {{this.about.address}}
+        <br>
+        <strong>WhiteSky</strong> 2019
       </p>
 
     </div>
@@ -145,8 +145,8 @@ export default class App extends Vue {
     axios.get(APIConfig.buildUrl(`/about`), {})
     .then((response) => {
         // debugger;
-        if (response.data.announce != undefined) {
-          this.about = response.data.announce[0];
+        if (response.data.about != undefined) {
+          this.about = response.data.about[0];
         }
     });
   }
