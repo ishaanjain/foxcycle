@@ -63,9 +63,16 @@
       v-on:success="successLogin()" 
       v-on:cancel="cancelLogin()"
     />
-    <!-- <Cart
-      v-bind:is-showing="showCart"
-    /> -->
+    <footer class="footer">
+
+    <div class="content has-text-centered">
+      <p>
+        <strong>WhiteSky</strong> 2019
+        <!-- {{this.about.phone}} -->
+      </p>
+
+    </div>
+</footer>
   </div>
 </template>
 
@@ -78,7 +85,13 @@ import { Component } from "vue-property-decorator";
 import Signup from "@/components/Signup.vue";
 import Login from "@/components/Login.vue";
 import { APIConfig } from "@/utils/api.utils";
+<<<<<<< HEAD
 //import Cart from "@/components/Cart.vue";
+=======
+import { About } from "../../api/entity";
+
+Vue.use(Buefy);
+>>>>>>> e4b2b07c94bbfa2dcc8ab33a4d13fb87041ad253
 
 @Component({
   components: {
@@ -93,6 +106,15 @@ export default class App extends Vue {
   showCartModal(){
     this.showCart = true; 
   }
+
+  public about: About = {
+    id: 0,
+    description : "",
+    imageurl : "",
+    title:"",
+    phone:"805-123-4567",
+    address:""
+  };
 
   showLoginModal() {
     this.showLogin = true;
@@ -120,6 +142,18 @@ export default class App extends Vue {
     }).then(() => {
       this.$store.commit("logout");
       this.$router.push({ name: "home" });
+    });
+  }
+
+  // mounted(){
+  //   this.getAbout();
+  // }
+
+  getAbout() {
+    axios.get(APIConfig.buildUrl(`/about`), {})
+    .then((response) => {
+        // debugger;
+        this.about = response.data.announce[0];
     });
   }
 }

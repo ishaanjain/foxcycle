@@ -15,11 +15,11 @@ export class ProductController extends DefaultController {
         var filters = req.query.filters;
         var query = getRepository(Product).createQueryBuilder("product");
         query.leftJoinAndSelect("product.tags", "tag");
-        if (filters && filters.length > 0) {
+        if (filters && filters.length == 1) {
           query.where("tag.name = :name", {name: filters[0]});
-          for (var i = 1; i < filters.length; i++) {
-            query.andWhere("tag.name = :name", {name: filters[i]});
-          }
+        }
+        else if (filters && filters.length > 1) {
+          query.where("tag.name in(:name)", {name: filters});
         }
         query.getMany().then((products: Product[]) => {
           res.status(200).send({ products });
@@ -27,19 +27,22 @@ export class ProductController extends DefaultController {
       })
       .post((req: Request, res: Response) => {
         const productRepo = getRepository(Product);
-        const { name, description, price, imageUrls, stockCount, tags, inStoreOnly } = req.body;
+        const { name, description, price, imageUrls, stockCount, tagString, tags, inStoreOnly } = req.body;
         const product = new Product();
         product.name = name;
         product.description = description;
         product.price = price;
         product.imageUrls = imageUrls;
         product.stockCount = stockCount;
+        product.tagString = tagString;
         product.tags = [];
-        tags.split(";").forEach(function (tag: string) {
-          var t = new Tag();
-          t.name = tag;
-          product.tags.push(t);
-        });
+        if (tagString != "") {
+          tagString.split(";").forEach(function (tag: string) {
+            var t = new Tag();
+            t.name = tag;
+            product.tags.push(t);
+          });
+        }
         product.inStoreOnly = inStoreOnly;
         productRepo.save(product).then(
           createdProduct => {
@@ -69,24 +72,35 @@ export class ProductController extends DefaultController {
     })
     .delete((req: Request, res: Response) => {
         const token = req.get("token");
+        const sessionRepo = getRepository(Session);
         const productRepo = getRepository(Product);
-        productRepo.delete({id: req.params.id}).then(deleteResult => {
-          res.sendStatus(200);
+        sessionRepo.findOne(token, {relations: ["user"]}).then((foundSession: Session | undefined) => {
+          productRepo.delete({id: req.params.id}).then(deleteResult => {
+            res.sendStatus(200);
+          });
         });
       })
       .put((req: Request, res: Response) => {
         const productRepo = getRepository(Product);
         productRepo.findOneOrFail(req.params.id).then((foundProduct: Product) => {
-            const { name, description, price, imageUrls, stockCount, tags, inStoreOnly } = req.body;
+            const { name, description, price, imageUrls, stockCount, tagString, tags, inStoreOnly } = req.body;
             foundProduct.name = name;
             foundProduct.description = description;
             foundProduct.price = price;
             foundProduct.imageUrls = imageUrls;
             foundProduct.stockCount = stockCount;
-            foundProduct.tags = tags;
+            foundProduct.tagString = tagString;
+            foundProduct.tags = [];
+            if (tagString != "") {
+              tagString.split(";").forEach(function (tag: string) {
+                var t = new Tag();
+                t.name = tag;
+                foundProduct.tags.push(t);
+              });
+            }
             foundProduct.inStoreOnly = inStoreOnly;
             productRepo.save(foundProduct).then((updatedProduct: Product) => {
-            res.send(200).send({product: updatedProduct});
+              res.status(200).send({product: updatedProduct});
           });
         });
       });

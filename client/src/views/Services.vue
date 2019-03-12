@@ -25,15 +25,14 @@
     <div class="tile is-parent">
       <div class="tile is-child box">
       <p class="title">Tune-Ups & Builds</p>
-      
-        <body>  
-            TIP TOP TUNE-UP <br>
-            FREE FOR AS LONG AS YOU OWN YOUR TIP TOP BIKE <br>
-            STANDARD TUNE     $ 90 <br>
-            SINGLE-SPEED TUNE     $60 <br>
-            BUILD BIKE FROM BOX     $100 <br>
-            BUILD CUSTOM BICYCLE     STARTING AT $200 <br>
-          </body>
+                        <div v-for="(item, index) in items" v-bind:key="index">
+                     <router-link :to="{Name: 'product detail', params: { id: item.id.toString() }}">
+                        <div class="box product">
+                           <h5 class="title is-5">{{item.Description}}</h5>
+                           <h3 class="item-price">${{item.Price}}</h3>
+                        </div>
+                     </router-link>
+                  </div>
         </div>
       </div>
   
@@ -45,10 +44,42 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import axios, { AxiosResponse } from "axios";
+import App from "@/App.vue";
+import { APIConfig } from "../utils/api.utils";
 // import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
 
 @Component
-export default class Services extends Vue {}
+export default class Services extends Vue {
+
+
+  public items: Service[] = [];
+
+    getItems() {
+    axios.get(APIConfig.buildUrl("/services"), {
+      headers: {
+        token: this.$store.state.userToken
+      }
+    })
+    .then((response) => {
+        this.items = response.data.products;
+      
+    console.log(response);
+    
+    });
+  }
+  mounted(){
+    this.getItems();
+  }
+
+}
+
+interface Service {
+    Name: string;
+    Description: string;
+    Price: number;
+  }
+
 </script>
 
 <style scoped lang="scss">

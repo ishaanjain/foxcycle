@@ -7,7 +7,6 @@
       <div class="field">
         <label class="label">Are you sure you want to delete this product? There's no going back...</label>
       </div>
-      
     </form>
   </modal>
 </template>
@@ -17,13 +16,13 @@ import axios, { AxiosResponse } from "axios";
 import { APIConfig } from "../utils/api.utils";
 import { Component, Prop, Vue } from "vue-property-decorator";
 import Modal from "./Modal.vue";
-import { Product } from "../../../api/entity";
+import { iProduct } from "../models/product.interface";
 @Component({
   components: { Modal }
 })
 export default class DeleteProduct extends Vue {
   @Prop(Boolean) isShowing: boolean = false;
-  @Prop() product!: Product;
+  @Prop() product!: iProduct;
   error: string | boolean = false;
   success() {
     this.error = false;
@@ -33,7 +32,7 @@ export default class DeleteProduct extends Vue {
           token: this.$store.state.userToken
         }
       })
-      .then((response: AxiosResponse<Product>) => {
+      .then((response: AxiosResponse<iProduct>) => {
         this.$emit("success");
       })
       .catch((reason: any) => {

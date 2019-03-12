@@ -7,25 +7,25 @@
       <div class="field">
         <label class="label">Product Name:</label>
         <div class="control">
-          <input class="input" type="text" placeholder="product name" v-model="product.name">
+          <input class="input" type="text" placeholder="Product name" v-model="product.name">
         </div>
       </div>
       <div class="field">
         <label class="label">Description:</label>
         <div class="control">
-          <textarea class="input textarea" type="textarea" placeholder="product description" v-model="product.description"></textarea>
+          <textarea class="input textarea" type="textarea" placeholder="Product description" v-model="product.description"></textarea>
         </div>
       </div>
       <div class="field">
         <label class="label">Price:</label>
         <div class="control">
-          <input class="input" type="text" placeholder="email address" v-model="product.price">
+          <input class="input" type="text" placeholder="Price" v-model="product.price">
         </div>
       </div>
       <div class="field">
         <label class="label">Image Url(s):</label>
         <div class="control">
-          <input class="input" type="text" placeholder="product image url" v-model="product.imageUrls">
+          <input class="input" type="text" placeholder="Product image url" v-model="product.imageUrls">
         </div>
       </div>
       <span>
@@ -34,14 +34,14 @@
       <div class="field">
         <label class="label">Stock/Inventory Count:</label>
         <div class="control">
-          <input class="input" type="text" placeholder="stock/inventory count" v-model="product.stockCount">
+          <input class="input" type="text" placeholder="Stock/inventory count" v-model="product.stockCount">
         </div>
       </div>
       <div class="field">
-        <label class="label">Item Categories/Tags: (separated by ";")</label>
+        <label class="label">Item Categories:Tags: (separated by ";")</label>
         <label class="label">ex: brand:Willier;color:Orange;size:Medium;type:Road</label>
         <div class="control">
-          <input class="input" type="text" placeholder="product categories/tags" v-model="product.tags">
+          <input class="input" type="text" placeholder="Product categories/tags" v-model="product.tagString">
         </div>
       </div>
       <label class="checkbox">
@@ -57,19 +57,22 @@ import axios, { AxiosResponse } from "axios";
 import { APIConfig } from "../utils/api.utils";
 import { Component, Prop, Vue } from "vue-property-decorator";
 import Modal from "./Modal.vue";
-import { iProduct } from "@/models/product.interface";
+import { iProduct } from "../models/product.interface";
+
 @Component({
   components: { Modal }
 })
 export default class AddNewProduct extends Vue {
   @Prop(Boolean) isShowing: boolean = false;
   product: iProduct = {
+    id: 0,
     name: "",
     description: "",
     price: 0.0,
     imageUrls: "",
     stockCount: 0,
-    tags: "",
+    tagString : "",
+    tags: [],
     inStoreOnly: false
   };
   error: string | boolean = false;
@@ -84,12 +87,14 @@ export default class AddNewProduct extends Vue {
       .then((response: AxiosResponse<iProduct>) => {
         this.$emit("success");
         this.product =  {
+          id: 0,
           name: "",
           description: "",
           price: 0.0,
           imageUrls: "",
           stockCount: 0,
-          tags: "",
+          tagString : "",
+          tags: [],
           inStoreOnly: false
         };
       })

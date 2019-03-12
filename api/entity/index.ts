@@ -5,3 +5,5 @@ export * from "./tag.entity";
 export * from "./time.entity";
 export * from "./announce.entity";
 export * from "./service.entity";
+export * from "./about.entity";
+export * from "./order.entity";

@@ -48,12 +48,14 @@ const actions: ActionTree<iRootState, iRootState> = {
       headers: { token }
     }).then((res: AxiosResponse<{ user: iUser }>) => {
       commit("setUser", { user: res.data.user });
-      return res.data.user;
     });
   },
   login({ commit, dispatch }, payload) {
     const { userid, token, isAdmin } = payload;
-    dispatch("fetchUser", { userid, token }).then(user => {
+    return axios.get(APIConfig.buildUrl(`/users/${userid}`), {
+      headers: { token }
+    }).then((res: AxiosResponse<{ user: iUser }>) => {
+      let user = res.data.user;
       commit("login", { user, token, isAdmin });
     });
   }
