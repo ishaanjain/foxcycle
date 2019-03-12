@@ -1,15 +1,15 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 
-import { ProductOrder } from "./productOrder.entity";
+import { Product } from "./product.entity";
 
 @Entity()
-export class Order {
+export class ProductOrder {
   @PrimaryGeneratedColumn()
   public id!: number;
+  
+  @Column()
+  public product!: Product;
 
   @Column()
-  public productOrders!: ProductOrder[];
-
-  @Column()
-  public status!: number;
+  public productCount!: number;
 }

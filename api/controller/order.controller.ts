@@ -22,7 +22,8 @@ export class OrderController extends DefaultController {
     .post(isAuthenticated(false, true), (req: Request, res: Response) => {
       const orderRepo = getRepository(Order);
       const order = new Order();
-      order.password = req.body.password;
+      // order.productCount = req.body.productCount;
+      // etc
       orderRepo.save(order).then(createdOrder => {
         res.status(200).send({ createdOrder });
       }).catch((error: any) => {
@@ -50,7 +51,8 @@ export class OrderController extends DefaultController {
           res.status(400).send(`order with id ${req.params.id} not found.`);
           return;
         }
-        // order.isAdmin = req.body.isAdmin;
+        // order.productCount = req.body.productCount;
+        // etc
         orderRepo.save(order).then((updatedOrder: Order) => {
           res.status(200).send({order: updatedOrder});
         });
@@ -62,10 +64,10 @@ export class OrderController extends DefaultController {
       const orderRepo = getRepository(Order);
       orderRepo.delete({ id: req.params.id }).then((deleteResult: any) => {
         if (deleteResult.raw.affectedRows == 0) {
-          res.status(400).send(`order with id ${req.params.id} not found.`);
+          res.status(400).send(`order with id ${req.params.id} not found`);
           return;
         }
-        res.status(200).send("Success");
+        res.status(200).send(`order with id ${req.params.id} deleted`);
       }).catch((error: any) => {
         res.status(500).send({ reason: error.message });
       });

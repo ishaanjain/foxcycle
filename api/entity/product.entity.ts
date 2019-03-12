@@ -3,8 +3,8 @@ import {
   Entity, 
   PrimaryGeneratedColumn,
   ManyToMany, 
+  ManyToOne,
   JoinTable, 
-  Index 
 } from "typeorm";
 import { Tag } from "./tag.entity";
 

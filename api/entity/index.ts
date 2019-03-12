@@ -7,3 +7,4 @@ export * from "./announce.entity";
 export * from "./service.entity";
 export * from "./about.entity";
 export * from "./order.entity";
+export * from "./productOrder.entity";
