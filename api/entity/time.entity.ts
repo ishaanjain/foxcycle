@@ -46,7 +46,12 @@ export class Time {
 
   @Column()
   public sunend!: Date;
+  
+  @Column()
+  public holistart!: Date;
 
   @Column()
-  public description!: string; 
+  public holiend!: Date;
+
+
 }

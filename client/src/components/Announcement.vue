@@ -1,7 +1,7 @@
 <template>
   <modal
     v-bind:is-showing="isShowing"
-    title="Announce"
+    title="Announcement"
     success-button="Post"
     v-on:success="success"
     v-on:cancel="cancel"
@@ -28,9 +28,8 @@
           </div>
         </div>
         <span>
-          <img  :src="announce.imageurl"/>
+          <img :src="announce.imageurl"/>
         </span>
-        
       </form>
   </modal>
 </template>
@@ -49,27 +48,24 @@ import { Announce } from "../../../api/entity";
   }
 })
 export default class Announcement extends Vue {
-  announce: iAnnounce = {
-    description: "",
-    imageurl: "",
-    title:""
-  }
-
-  error: string | boolean = false;
   @Prop(Boolean) isShowing: boolean = false;
-
+  @Prop() announce!: iAnnounce;
+  error: string | boolean = false;
 
   success() {
     this.error = false;
     axios
       .delete(APIConfig.buildUrl("/announce"),{})
-      .then((response) => {this.$emit("success");})
-      .catch((res: AxiosError) => {
-        this.error = res.response && res.response.data.error;
-      });
-    axios
-      .post(APIConfig.buildUrl("/announce"), this.announce, {})
-      .then((response) => {this.$emit("success");})
+      .then((response) => {
+        axios
+          .post(APIConfig.buildUrl("/announce"), this.announce, {})
+          .then((response) => {
+            this.$emit("success");
+            })
+          .catch((res: AxiosError) => {
+          this.error = res.response && res.response.data.error;
+        });
+      })
       .catch((res: AxiosError) => {
         this.error = res.response && res.response.data.error;
       });

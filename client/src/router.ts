@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
-import About from "./views/About.vue";
+import Something from "./views/About.vue";
 import Employees from "./views/Employees.vue";
 import Home from "./views/Home.vue";
 import MyProfile from "./views/MyProfile.vue";
@@ -46,7 +46,7 @@ export default new Router({
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: About
+      component: Something
     },
     {
       path: "/my-profile",
