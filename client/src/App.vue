@@ -79,19 +79,15 @@
 <script lang="ts">
 import axios from "axios";
 import Vue from "vue";
-//import Buefy from 'buefy'
+import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import { Component } from "vue-property-decorator";
 import Signup from "@/components/Signup.vue";
 import Login from "@/components/Login.vue";
 import { APIConfig } from "@/utils/api.utils";
-<<<<<<< HEAD
-//import Cart from "@/components/Cart.vue";
-=======
 import { About } from "../../api/entity";
 
 Vue.use(Buefy);
->>>>>>> e4b2b07c94bbfa2dcc8ab33a4d13fb87041ad253
 
 @Component({
   components: {
