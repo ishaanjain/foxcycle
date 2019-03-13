@@ -46,7 +46,9 @@
                 v-if="isLoggedIn"
                 to="/my-profile"
                 exact-active-class="is-active"
-              >My Profile</router-link>
+              ><i class="fas fa-user-alt"></i>
+
+              </router-link>
               <a class="button is-light" v-if="!isLoggedIn" v-on:click="showLoginModal()">
                 Log in
               </a>
