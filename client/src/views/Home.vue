@@ -4,18 +4,79 @@
          <div class="hours tile is-vertical is-parent is-3">
             <div class="tile is-child box">
                <div class="tile">
-                  <figure class="image">
+                  <figure class="image" v-bind:class="{ 'is-hidden': this.open}">
                      <img src="../../public/close.gif">
+                  </figure>
+                  <figure class="image" v-bind:class="{ 'is-hidden': !this.open}">
+                     <img src="../../public/open.png">
                   </figure>
                </div>
                <div class="tile is-child">
                   <!-- <p class="title">Hours</p> -->
-                  <a class="button is-light" v-bind:class="{ 'is-hidden': !isLoggedIn}" >Edit</a>
-                    <b-table 
-                    :data="data" 
-                    :columns="columns"
-                    :hoverable="true"
-                    ></b-table>
+                  <!-- <a class="button is-light" v-bind:class="{ 'is-hidden': !isLoggedIn}" >Edit</a> -->
+                  <button class="button is-light is-dark" v-bind:class="{ 'is-hidden': !isLoggedIn}">
+                      Edit
+                  </button>
+                  <table class="table" v-if="this.time != undefined">
+                    <thead>
+                    <tr>
+                      <th>Hours</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                      <tr>
+                        <th>Monday</th>
+                        <td>{{this.time.monstart}} - {{this.time.monend}}</td>
+
+                      </tr>
+                      <tr>
+                        <th>Tuesday</th>
+
+                        <td>{{this.time.tuestart}} - {{this.time.tuesend}}</td>
+                      </tr>
+                      <tr>
+                        <th>Wednesday</th>
+                        <td>{{this.time.wedstart}} - {{this.time.wedend}}</td>
+
+                      </tr>
+                      <tr>
+                        <th>Thursday</th>
+                        <td>{{this.time.thurstart}} - {{this.time.thursend}}</td>
+
+                      </tr>
+                      <tr>
+                        <th>Friday</th>
+                        <td>{{this.time.fristart}} - {{this.time.friend }}</td>
+
+                      </tr>
+                      <tr>
+                        <th>Saturday</th>
+                        <td>{{this.time.satstart }} - {{this.time.satend}}</td>
+
+                      </tr>
+                      <tr>
+                        <th>Sunday</th>
+                        <td>{{this.time.sunstart}} - {{this.time.sunend }}</td>
+
+                      </tr>
+                      <!-- <tr>
+                        <th>Holiday</th>
+                         <td>{{this.time.holistart }} - {{this.time.holiend }}</td> 
+                          <b-timepicker
+                            rounded
+                            icon="clock"
+                            :hour-format='12'>
+                          </b-timepicker>
+                          <p> - </p>
+                          <b-timepicker
+                            rounded
+                            icon="clock"
+                            :hour-format='12'>
+                          </b-timepicker>
+                      </tr> -->
+                    </tbody>
+                  </table>
                   <br>
                   <br>
                </div>
@@ -62,7 +123,7 @@ import { APIConfig } from "../utils/api.utils";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { iProduct } from "../models/product.interface";
 import { iAnnounce } from "../models/announce.interface";
-import { Time } from "../../../api/entity";
+import { iTime } from "../models/time.interface";
 
 @Component({
   components:{
@@ -79,10 +140,29 @@ export default class Home extends Vue {
     title : ""
   };
 
-  // public time: Time = {
-  //   id: 0,
-  //   monstart: new Date
-  // }
+  public time: iTime = {
+    id: 0,
+    monstart: undefined,
+    monend: undefined,
+    tuestart: undefined,
+    tuesend: undefined,
+    wedstart: undefined,
+    wedend: undefined,
+    thursstart: undefined,
+    thursend: undefined,
+    fristart: undefined,
+    friend: undefined,
+    satstart: undefined,
+    satend: undefined,
+    sunstart: undefined,
+    sunend: undefined,
+    holistart: undefined,
+    holiend: undefined
+  }
+
+  public currenttime = new Date();
+
+  public open = false;
 
   error: string | boolean = false;
 
@@ -123,6 +203,7 @@ export default class Home extends Vue {
   mounted() {
     this.getItems();
     this.getAnnounce();
+    this.getTime();
   }
 
   getAnnounce() {
@@ -132,6 +213,23 @@ export default class Home extends Vue {
           this.announcement = response.data.announce[0];
         }
     });
+  }
+
+  getTime() {
+    this.currenttime = new Date();
+    
+    axios.get(APIConfig.buildUrl(`/time`), {})
+    .then((response) => {
+      // debugger;
+        if (response.data.time.length > 0) {
+          this.time = response.data.time[0];
+        }
+    });
+    if(this.time.monend != undefined && this.time.monstart != undefined)
+    if(this.currenttime.getHours() > this.time.monend.getHours() || this.currenttime.getHours() < this.time.monstart.getHours())
+      this.open = false;
+    else 
+      this.open = true;
   }
 
   hasAnnounce() {
@@ -152,37 +250,8 @@ export default class Home extends Vue {
     });
   }
 
-   data() {
-      return {
-          data: [
-              { 'week_day': 'Monday', 'start': '6:00 am', 'end': '8:00 pm'},
-              { 'week_day': 'Tuesday', 'start': '06:00:53', 'end': '06:00:53'},
-              { 'week_day': 'Wednesday', 'start': '06:00:53', 'end': '06:00:53'},
-              { 'week_day': 'Thursday', 'start': '06:00:53', 'end': '06:00:53'},
-              { 'week_day': 'Friday', 'start': '06:00:53', 'end': '06:00:53'},
-              { 'week_day': 'Saturday', 'start': '06:00:53', 'end': '06:00:53'},
-              { 'week_day': 'Sunday', 'start': '06:00:53', 'end': '06:00:53'},
-              { 'week_day': 'Holiday', 'start': '06:00:53', 'end': '06:00:53'},
-          ],
-          columns: [
-              {
-                field: 'week_day',
-                label: 'Hours',
-              },
-              {
-                  field: 'start',
-                  label: '',
-                  centered: true
-              },
-              {
-                  field: 'end',
-                  label: '',
-                  centered: true
-              },
 
-          ]
-      }
-  }
+
 }
 
 </script>
