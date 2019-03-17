@@ -12,8 +12,6 @@
                   </figure>
                </div>
                <div class="tile is-child">
-                  <!-- <p class="title">Hours</p> -->
-                  <!-- <a class="button is-light" v-bind:class="{ 'is-hidden': !isLoggedIn}" >Edit</a> -->
                   <button class="button is-light is-dark" v-bind:class="{ 'is-hidden': !isLoggedIn}">
                       Edit
                   </button>
@@ -24,58 +22,13 @@
                     </tr>
                     </thead>
                     <tbody>
-
-                      <tr>
-                        <th>Monday</th>
-                        <td>{{this.time.monstart}} - {{this.time.monend}}</td>
-
+                      <tr v-for="(time,index) in hours" v-bind:key="index">
+                        <td>{{time.name}}</td>
+                        <td>{{time.start}} - {{time.end %12}}</td>
                       </tr>
-                      <tr>
-                        <th>Tuesday</th>
-
-                        <td>{{this.time.tuestart}} - {{this.time.tuesend}}</td>
-                      </tr>
-                      <tr>
-                        <th>Wednesday</th>
-                        <td>{{this.time.wedstart}} - {{this.time.wedend}}</td>
-
-                      </tr>
-                      <tr>
-                        <th>Thursday</th>
-                        <td>{{this.time.thurstart}} - {{this.time.thursend}}</td>
-
-                      </tr>
-                      <tr>
-                        <th>Friday</th>
-                        <td>{{this.time.fristart}} - {{this.time.friend }}</td>
-
-                      </tr>
-                      <tr>
-                        <th>Saturday</th>
-                        <td>{{this.time.satstart }} - {{this.time.satend}}</td>
-
-                      </tr>
-                      <tr>
-                        <th>Sunday</th>
-                        <td>{{this.time.sunstart}} - {{this.time.sunend }}</td>
-
-                      </tr>
-                      <!-- <tr>
-                        <th>Holiday</th>
-                         <td>{{this.time.holistart }} - {{this.time.holiend }}</td> 
-                          <b-timepicker
-                            rounded
-                            icon="clock"
-                            :hour-format='12'>
-                          </b-timepicker>
-                          <p> - </p>
-                          <b-timepicker
-                            rounded
-                            icon="clock"
-                            :hour-format='12'>
-                          </b-timepicker>
-                      </tr> -->
                     </tbody>
+                    
+                    
                   </table>
                   <br>
                   <br>
@@ -142,23 +95,13 @@ export default class Home extends Vue {
 
   public time: iTime = {
     id: 0,
-    monstart: undefined,
-    monend: undefined,
-    tuestart: undefined,
-    tuesend: undefined,
-    wedstart: undefined,
-    wedend: undefined,
-    thursstart: undefined,
-    thursend: undefined,
-    fristart: undefined,
-    friend: undefined,
-    satstart: undefined,
-    satend: undefined,
-    sunstart: undefined,
-    sunend: undefined,
-    holistart: undefined,
-    holiend: undefined
+    dayofweek: 0,
+    start: 0,
+    end: 0,
+    name: ""
   }
+
+  hours: iTime[] = [];
 
   public currenttime = new Date();
 
@@ -222,7 +165,7 @@ export default class Home extends Vue {
     .then((response) => {
       // debugger;
         if (response.data.time.length > 0) {
-          this.time = response.data.time[0];
+          this.hours = response.data.time;
         }
     });
     if(this.time.monend != undefined && this.time.monstart != undefined)
