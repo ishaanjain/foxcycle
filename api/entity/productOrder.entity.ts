@@ -7,8 +7,8 @@ export class ProductOrder {
   @PrimaryGeneratedColumn()
   public id!: number;
   
-  @Column()
-  public product!: Product;
+//   @Column()
+//   public product!: Product;
 
   @Column()
   public productCount!: number;

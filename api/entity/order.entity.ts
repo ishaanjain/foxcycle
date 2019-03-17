@@ -7,8 +7,8 @@ export class Order {
   @PrimaryGeneratedColumn()
   public id!: number;
 
-  @Column()
-  public productOrders!: ProductOrder[];
+//   @Column()
+//   public productOrders!: ProductOrder[];
 
   @Column()
   public status!: number;
