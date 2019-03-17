@@ -12,9 +12,51 @@
                   </figure>
                </div>
                <div class="tile is-child">
-                  <button class="button is-light is-dark" v-bind:class="{ 'is-hidden': !isLoggedIn}">
-                      Edit
-                  </button>
+                  <section>
+
+        <b-collapse :open="false" aria-id="contentIdForA11y1">
+            <button
+                class="button is-primary"
+                slot="trigger"
+                aria-controls="contentIdForA11y1"
+                v-bind:class="{'is-hidden': !this.$store.state.user}"
+                v-on:click="changesign"
+            >Edit
+            </button>
+            <div class="notification">
+                <div class="content">
+                  <b-field horizontal label="Day">
+                  <b-select placeholder="Day"
+                        v-model="time.dayofweek">
+                    <option value="1">Monday</option>
+                    <option value="2">Tuesday</option>
+                      <option value="3">Wednesday</option>
+                      <option value="3">Wednesday</option>
+                      <option value="4">Thursday</option>
+                      <option value="5">Friday</option>
+                      <option value="6">Saturday</option>
+                      <option value="7">Sunday</option>
+                      <option value="8">Holiday</option>
+
+                    </b-select>
+                  </b-field>
+                  <b-field label="Open">
+                      <b-input type="number" v-model="time.start"></b-input>
+                  </b-field>
+                  <b-field label="Close">
+                      <b-input type="number" v-model="time.end"></b-input>
+                  </b-field>
+
+                  <p class="control">
+                    <a class="button is-primary"
+                       v-on:click="success"
+                    >{{this.sign}}</a>
+                  </p>
+                </div>
+            </div>
+        </b-collapse>
+
+    </section>
                   <table class="table" v-if="this.time != undefined">
                     <thead>
                     <tr>
@@ -24,7 +66,7 @@
                     <tbody>
                       <tr v-for="(time,index) in hours" v-bind:key="index">
                         <td>{{time.name}}</td>
-                        <td>{{time.start}} - {{time.end %12}}</td>
+                        <td>{{time.start}} - {{time.end}}</td>
                       </tr>
                     </tbody>
                     
@@ -101,6 +143,12 @@ export default class Home extends Vue {
     name: ""
   }
 
+  public sign = "Save";
+
+   changesign(){
+    this.sign="Save"
+  }
+
   hours: iTime[] = [];
 
   public currenttime = new Date();
@@ -168,11 +216,7 @@ export default class Home extends Vue {
           this.hours = response.data.time;
         }
     });
-    if(this.time.monend != undefined && this.time.monstart != undefined)
-    if(this.currenttime.getHours() > this.time.monend.getHours() || this.currenttime.getHours() < this.time.monstart.getHours())
-      this.open = false;
-    else 
-      this.open = true;
+    
   }
 
   hasAnnounce() {
@@ -193,6 +237,20 @@ export default class Home extends Vue {
     });
   }
 
+success() {
+    this.error = false;
+ 
+    axios
+      .put(APIConfig.buildUrl("/time"), this.time, {})
+      .then((response) => {
+        this.$emit("success");
+        this.sign="saved!";
+        })
+      .catch((res: AxiosError) => {
+      this.error = res.response && res.response.data.error;
+    });
+      
+  }
 
 
 }
