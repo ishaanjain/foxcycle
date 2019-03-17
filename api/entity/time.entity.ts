@@ -6,9 +6,6 @@ export class Time {
   public id!: number;
 
   @Column()
-  public dayofweek!: number;
-
-  @Column()
   public start!: number;
 
   @Column()
