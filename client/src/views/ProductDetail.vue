@@ -39,6 +39,9 @@
             <h5 class="title is-4">Price:</h5>
             <h1 class="title is-5">${{this.item.price}}</h1>
           </div>
+          <div class="product-field">
+            <h1 class="title is-5 product-instore-only" v-if="item.inStoreOnly">In Store Only! Please come in to our shop to purchase</h1>
+          </div>
         </div>
       </div>
     </div>
@@ -120,6 +123,15 @@ export default class ProductDetail extends Vue {
 
   successEditProduct() {
     this.showEditProduct = false;
+    this.tempProduct.id = this.item.id;
+    this.tempProduct.name = this.item.name;
+    this.tempProduct.description = this.item.description;
+    this.tempProduct.price = this.item.price;
+    this.tempProduct.imageUrls = this.item.imageUrls;
+    this.tempProduct.stockCount = this.item.stockCount;
+    this.tempProduct.tagString = this.item.tagString;
+    this.tempProduct.tags = this.item.tags;
+    this.tempProduct.inStoreOnly = this.item.inStoreOnly;
   }
 
   cancelEditProduct() {
@@ -189,6 +201,10 @@ div.product-quantity.has-addons {
 .product-quantity-container {
   text-align: center;
   padding-top: 50px;
+}
+
+.product-instore-only {
+  color: red;
 }
 
 </style>

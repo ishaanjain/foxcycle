@@ -12,11 +12,51 @@
                   </figure>
                </div>
                <div class="tile is-child">
-                  <!-- <p class="title">Hours</p> -->
-                  <!-- <a class="button is-light" v-bind:class="{ 'is-hidden': !isLoggedIn}" >Edit</a> -->
-                  <button class="button is-light is-dark" v-bind:class="{ 'is-hidden': !isLoggedIn}">
-                      Edit
-                  </button>
+                  <section>
+
+        <b-collapse :open="false" aria-id="contentIdForA11y1">
+            <button
+                class="button is-primary"
+                slot="trigger"
+                aria-controls="contentIdForA11y1"
+                v-bind:class="{'is-hidden': !this.$store.state.user}"
+                v-on:click="changesign"
+            >Edit
+            </button>
+            <div class="notification">
+                <div class="content">
+                  <b-field horizontal label="Day">
+                  <b-select placeholder="Day"
+                        v-model="time.dayofweek">
+                    <option value="1">Monday</option>
+                    <option value="2">Tuesday</option>
+                      <option value="3">Wednesday</option>
+                      <option value="3">Wednesday</option>
+                      <option value="4">Thursday</option>
+                      <option value="5">Friday</option>
+                      <option value="6">Saturday</option>
+                      <option value="7">Sunday</option>
+                      <option value="8">Holiday</option>
+
+                    </b-select>
+                  </b-field>
+                  <b-field label="Open">
+                      <b-input type="number" v-model="time.start"></b-input>
+                  </b-field>
+                  <b-field label="Close">
+                      <b-input type="number" v-model="time.end"></b-input>
+                  </b-field>
+
+                  <p class="control">
+                    <a class="button is-primary"
+                       v-on:click="success"
+                    >{{this.sign}}</a>
+                  </p>
+                </div>
+            </div>
+        </b-collapse>
+
+    </section>
                   <table class="table" v-if="this.time != undefined">
                     <thead>
                     <tr>
@@ -24,58 +64,13 @@
                     </tr>
                     </thead>
                     <tbody>
-
-                      <tr>
-                        <th>Monday</th>
-                        <td>{{this.time.monstart}} - {{this.time.monend}}</td>
-
+                      <tr v-for="(time,index) in hours" v-bind:key="index">
+                        <td>{{time.name}}</td>
+                        <td>{{time.start}} - {{time.end}}</td>
                       </tr>
-                      <tr>
-                        <th>Tuesday</th>
-
-                        <td>{{this.time.tuestart}} - {{this.time.tuesend}}</td>
-                      </tr>
-                      <tr>
-                        <th>Wednesday</th>
-                        <td>{{this.time.wedstart}} - {{this.time.wedend}}</td>
-
-                      </tr>
-                      <tr>
-                        <th>Thursday</th>
-                        <td>{{this.time.thurstart}} - {{this.time.thursend}}</td>
-
-                      </tr>
-                      <tr>
-                        <th>Friday</th>
-                        <td>{{this.time.fristart}} - {{this.time.friend }}</td>
-
-                      </tr>
-                      <tr>
-                        <th>Saturday</th>
-                        <td>{{this.time.satstart }} - {{this.time.satend}}</td>
-
-                      </tr>
-                      <tr>
-                        <th>Sunday</th>
-                        <td>{{this.time.sunstart}} - {{this.time.sunend }}</td>
-
-                      </tr>
-                      <!-- <tr>
-                        <th>Holiday</th>
-                         <td>{{this.time.holistart }} - {{this.time.holiend }}</td> 
-                          <b-timepicker
-                            rounded
-                            icon="clock"
-                            :hour-format='12'>
-                          </b-timepicker>
-                          <p> - </p>
-                          <b-timepicker
-                            rounded
-                            icon="clock"
-                            :hour-format='12'>
-                          </b-timepicker>
-                      </tr> -->
                     </tbody>
+                    
+                    
                   </table>
                   <br>
                   <br>
@@ -142,23 +137,19 @@ export default class Home extends Vue {
 
   public time: iTime = {
     id: 0,
-    monstart: undefined,
-    monend: undefined,
-    tuestart: undefined,
-    tuesend: undefined,
-    wedstart: undefined,
-    wedend: undefined,
-    thursstart: undefined,
-    thursend: undefined,
-    fristart: undefined,
-    friend: undefined,
-    satstart: undefined,
-    satend: undefined,
-    sunstart: undefined,
-    sunend: undefined,
-    holistart: undefined,
-    holiend: undefined
+    dayofweek: 0,
+    start: 0,
+    end: 0,
+    name: ""
   }
+
+  public sign = "Save";
+
+   changesign(){
+    this.sign="Save"
+  }
+
+  hours: iTime[] = [];
 
   public currenttime = new Date();
 
@@ -222,14 +213,10 @@ export default class Home extends Vue {
     .then((response) => {
       // debugger;
         if (response.data.time.length > 0) {
-          this.time = response.data.time[0];
+          this.hours = response.data.time;
         }
     });
-    if(this.time.monend != undefined && this.time.monstart != undefined)
-    if(this.currenttime.getHours() > this.time.monend.getHours() || this.currenttime.getHours() < this.time.monstart.getHours())
-      this.open = false;
-    else 
-      this.open = true;
+    
   }
 
   hasAnnounce() {
@@ -250,6 +237,20 @@ export default class Home extends Vue {
     });
   }
 
+success() {
+    this.error = false;
+ 
+    axios
+      .put(APIConfig.buildUrl("/time"), this.time, {})
+      .then((response) => {
+        this.$emit("success");
+        this.sign="saved!";
+        })
+      .catch((res: AxiosError) => {
+      this.error = res.response && res.response.data.error;
+    });
+      
+  }
 
 
 }

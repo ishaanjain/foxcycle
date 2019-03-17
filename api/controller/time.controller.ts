@@ -15,19 +15,20 @@ export class TimeController extends DefaultController {
       TimeRepo.find().then((time: Time[]) => {
         res.send({ time });
       }); 
+    })
+    .put((req: Request, res: Response) => {
+      const timeRepo = getRepository(Time);
+      timeRepo.findOneOrFail(req.params.dayofweek).then((found: Time) => {
+          const { name, dayofweek, start, end} = req.body;
+          found.name = name;
+          found.dayofweek = dayofweek;
+          found.start = start;
+          found.end = end;
+          timeRepo.save(found).then((updated: Time) => {
+            res.status(200).send({time: updated});
+        });
+      });
     });
-      // .post((req: Request, res: Response) => {
-      //   const ti = getRepository(Time);
-      //   ti.delete([]).then( make => {
-      //     const man = getManager();
-      //     const time = man.create(Time, req.body);
-      //     man.save(time).then(
-      //       maketime => {
-      //         res.status(200).send({ maketime });
-      //       }
-      //   );
-      //   });
-      // });
     return router;
   }
 }
