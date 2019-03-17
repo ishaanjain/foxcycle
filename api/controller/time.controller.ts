@@ -18,14 +18,24 @@ export class TimeController extends DefaultController {
     })
     .put((req: Request, res: Response) => {
       const timeRepo = getRepository(Time);
-      timeRepo.findOneOrFail(req.params.dayofweek).then((found: Time) => {
-          const { name, dayofweek, start, end} = req.body;
+      timeRepo.findOneOrFail({name: req.body.name}).then((found: Time) => {
+          const { name, start, end} = req.body;
           found.name = name;
-          found.dayofweek = dayofweek;
           found.start = start;
           found.end = end;
           timeRepo.save(found).then((updated: Time) => {
             res.status(200).send({time: updated});
+        });
+      }).catch((error: any) => {
+        const newtime = new Time();
+        const { name, start, end} = req.body;
+        newtime.name = name;
+        newtime.start = start;
+        newtime.end = end;
+        timeRepo.save(newtime).then((newt: Time) => {
+          res.status(200).send({time: newt});
+        }).catch((error: any) => {
+          res.status(500).send({ reason: error.message });
         });
       });
     });

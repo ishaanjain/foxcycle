@@ -25,19 +25,15 @@
             </button>
             <div class="notification">
                 <div class="content">
-                  <b-field horizontal label="Day">
-                  <b-select placeholder="Day"
-                        v-model="time.dayofweek">
-                    <option value="1">Monday</option>
-                    <option value="2">Tuesday</option>
-                      <option value="3">Wednesday</option>
-                      <option value="3">Wednesday</option>
-                      <option value="4">Thursday</option>
-                      <option value="5">Friday</option>
-                      <option value="6">Saturday</option>
-                      <option value="7">Sunday</option>
-                      <option value="8">Holiday</option>
-
+                  <b-field horizontal label="Day" required>
+                  <b-select v-model="time.name" >
+                      <option value="Monday">Monday</option>
+                      <option value="Tuesday">Tuesday</option>
+                      <option value="Wednesday">Wednesday</option>
+                      <option value="Thursday">Thursday</option>
+                      <option value="Friday">Friday</option>
+                      <option value="Saturday">Saturday</option>
+                      <option value="Sunday">Sunday</option>
                     </b-select>
                   </b-field>
                   <b-field label="Open">
@@ -49,7 +45,7 @@
 
                   <p class="control">
                     <a class="button is-primary"
-                       v-on:click="success"
+                       v-on:click="success" slot="trigger"
                     >{{this.sign}}</a>
                   </p>
                 </div>
@@ -69,15 +65,13 @@
                         <td>{{time.start}} - {{time.end}}</td>
                       </tr>
                     </tbody>
-                    
-                    
                   </table>
                   <br>
                   <br>
                </div>
             </div>
          </div>
-         <div class="announcement tile is-parent is-vertical">
+         <div class="announcement tile is-parent is-vertical is-9" >
             <div class="tile">
                <a class="button is-primary edit-announcement" v-bind:class="{ 'is-hidden': !isLoggedIn}" v-on:click="showAnnouncementModal()">Edit/Add Announcement</a>
                <a class="button is-danger" v-if="hasAnnounce()" v-bind:class="{ 'is-hidden': !isLoggedIn}" v-on:click="showDeleteAnnouncementModal()">Delete Announcement</a>
@@ -85,7 +79,7 @@
             <div class="tile is-child box " v-bind:class="{ 'is-hidden': !hasAnnounce()}" >
                <p class="title">{{this.announcement.title}}</p>
                <h2>{{ this.announcement.description}}</h2>
-               <img  :src=this.announcement.imageurl>
+               <img :src=this.announcement.imageurl >
             </div>
             <div class="tile is-child">
                <p class="title">Featured</p>
@@ -137,22 +131,19 @@ export default class Home extends Vue {
 
   public time: iTime = {
     id: 0,
-    dayofweek: 0,
     start: 0,
     end: 0,
     name: ""
   }
 
   public sign = "Save";
-
-   changesign(){
+  changesign(){
     this.sign="Save"
   }
 
   hours: iTime[] = [];
 
   public currenttime = new Date();
-
   public open = false;
 
   error: string | boolean = false;
@@ -207,16 +198,22 @@ export default class Home extends Vue {
   }
 
   getTime() {
+   
     this.currenttime = new Date();
     
     axios.get(APIConfig.buildUrl(`/time`), {})
     .then((response) => {
-      // debugger;
+      
         if (response.data.time.length > 0) {
           this.hours = response.data.time;
+          if(this.currenttime.getHours() < response.data.time[0].start || this.currenttime.getHours() > response.data.time[0].end)
+            this.open = false;
+          else
+            this.open = true;
         }
     });
-    
+
+    // debugger;
   }
 
   hasAnnounce() {
@@ -235,22 +232,25 @@ export default class Home extends Vue {
     .then((response) => {
         this.items = response.data.products.slice(0, 3);
     });
+    
   }
 
 success() {
     this.error = false;
- 
     axios
+    
       .put(APIConfig.buildUrl("/time"), this.time, {})
       .then((response) => {
         this.$emit("success");
         this.sign="saved!";
-        })
+        this.$router.push({ name: "home" });
+      })
       .catch((res: AxiosError) => {
       this.error = res.response && res.response.data.error;
     });
-      
   }
+
+  
 
 
 }
