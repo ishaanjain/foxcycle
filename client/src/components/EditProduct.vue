@@ -1,6 +1,6 @@
 <template>
   <modal
-    v-bind:is-showing="isShowing"
+    v-bind:is-showing="true"
     title="Edit Product"
     success-button="Save"
     v-on:success="success"
@@ -11,7 +11,7 @@
       <div class="field">
         <label class="label">Product Name:</label>
         <div class="control">
-          <input class="input" type="text" placeholder="Product name" v-model="product.name">
+          <input class="input" type="text" placeholder="Product name" v-model="tempProduct.name">
         </div>
       </div>
       <div class="field">
@@ -21,14 +21,14 @@
             class="input textarea"
             type="textarea"
             placeholder="Product description"
-            v-model="product.description"
+            v-model="tempProduct.description"
           ></textarea>
         </div>
       </div>
       <div class="field">
         <label class="label">Price:</label>
         <div class="control">
-          <input class="input" type="text" placeholder="Price" v-model="product.price">
+          <input class="input" type="text" placeholder="Price" v-model="tempProduct.price">
         </div>
       </div>
       <div class="field">
@@ -38,12 +38,12 @@
             class="input"
             type="text"
             placeholder="Product image url"
-            v-model="product.imageUrls"
+            v-model="tempProduct.imageUrls"
           >
         </div>
       </div>
       <span>
-        <img id="product-preview-image" :src="product.imageUrls">
+        <img id="product-preview-image" :src="tempProduct.imageUrls">
       </span>
       <div class="field">
         <label class="label">Stock/Inventory Count:</label>
@@ -52,7 +52,7 @@
             class="input"
             type="text"
             placeholder="Stock/inventory count"
-            v-model="product.stockCount"
+            v-model="tempProduct.stockCount"
           >
         </div>
       </div>
@@ -64,12 +64,12 @@
             class="input"
             type="text"
             placeholder="Product categories/tags"
-            v-model="product.tagString"
+            v-model="tempProduct.tagString"
           >
         </div>
       </div>
       <label class="checkbox">
-        <input type="checkbox" v-model="product.inStoreOnly">
+        <input type="checkbox" v-model="tempProduct.inStoreOnly">
         In Store Only
       </label>
     </form>
@@ -87,15 +87,25 @@ import { iProduct } from "../models/product.interface";
   components: { Modal }
 })
 export default class EditProduct extends Vue {
-  @Prop(Boolean) isShowing: boolean = false;
+  // @Prop(Boolean) isShowing: boolean = false;
   @Prop() product!: iProduct;
+  public tempProduct: iProduct = {
+    id: this.product.id,
+    name: this.product.name,
+    description: this.product.description,
+    price: this.product.price,
+    imageUrls: this.product.imageUrls,
+    stockCount: this.product.stockCount,
+    tagString: this.product.tagString,
+    tags: this.product.tags,
+    inStoreOnly: this.product.inStoreOnly
+  };
   error: string | boolean = false;
 
   success() {
-    debugger;
     this.error = false;
     axios
-      .put(APIConfig.buildUrl(`/products/${this.product.id}`), this.product, {
+      .put(APIConfig.buildUrl(`/products/${this.product.id}`), this.tempProduct, {
         headers: {
           token: this.$store.state.userToken
         }
@@ -110,6 +120,11 @@ export default class EditProduct extends Vue {
   cancel() {
     this.$emit("cancel");
   }
+
+  mounted() {
+    
+  }
+
 }
 </script>
 
