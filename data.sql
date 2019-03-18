@@ -429,7 +429,7 @@ LOCK TABLES `user` WRITE;
 
 INSERT INTO `user` (`id`, `firstName`, `lastName`, `password`, `profileUrl`, `emailAddress`, `isAdmin`)
 VALUES
-	(1,'a','a','a','a','asdf',1),
+	(1,'a','a','a','a','a',1),
 	(8,'admin','admin','hi',NULL,'admin@email.com',1);
 
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
