@@ -24,7 +24,7 @@
             </button>
             <div class="notification">
                 <div class="content">
-                  <b-field horizontal label="Day" required>
+                  <b-field horizontal label="Day" min="3">
                   <b-select v-model="time.name" >
                       <option value="Monday">Monday</option>
                       <option value="Tuesday">Tuesday</option>
@@ -36,16 +36,17 @@
                     </b-select>
                   </b-field>
                   <b-field label="Open">
-                      <b-input type="number" v-model="time.start"></b-input>
+                      <b-input type="number" v-model="time.start" min="1"
+                      max="24" step ="1"></b-input>
                   </b-field>
                   <b-field label="Close">
-                      <b-input type="number" v-model="time.end"></b-input>
+                      <b-input type="number" v-model="time.end" min="1"
+                      max="24" step ="1"></b-input>
                   </b-field>
 
                   <p class="control">
                     <a class="button is-primary"
-                       v-on:click="success" slot="trigger"
-                aria-controls="contentIdForA11y1"
+                       v-on:click="success" 
                     >Save
                    </a>
                   </p>
@@ -250,6 +251,7 @@ export default class Home extends Vue {
     });
     
   }
+
 
   success() {
     this.error = false;

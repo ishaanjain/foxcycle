@@ -32,6 +32,9 @@
           <router-link class="navbar-item is-tab" to="/about" exact-active-class="is-active">
             About
           </router-link>
+          <router-link class="navbar-item is-tab" to="/tracking" exact-active-class="is-active">
+            Tracking
+          </router-link>
         </div>
         <div class="navbar-end">
           <div class="navbar-item">
