@@ -19,7 +19,6 @@
                 slot="trigger"
                 aria-controls="contentIdForA11y1"
                 v-bind:class="{'is-hidden': !this.$store.state.user}"
-                v-on:click="changesign"
             >Edit
             </button>
             <div class="notification">
@@ -57,7 +56,8 @@
                   <p class="control">
                     <a class="button is-primary"
                        v-on:click="success"
-                    >{{this.sign}}</a>
+                       @click="toast"
+                    >Save</a>
                   </p>
                 </div>
             </div>
@@ -99,11 +99,6 @@ export default class Something extends Vue{
   };
   error: string | boolean = false;
 
-  public sign = "Send";
-
-  changesign(){
-    this.sign="Send"
-  }
 
   mounted(){
     // debugger;
@@ -129,7 +124,6 @@ export default class Something extends Vue{
           .post(APIConfig.buildUrl("/about"), this.about, {})
           .then((response) => {
             this.$emit("success");
-            this.sign="saved!";
             })
           .catch((res: AxiosError) => {
           this.error = res.response && res.response.data.error;
@@ -138,6 +132,13 @@ export default class Something extends Vue{
       .catch((res: AxiosError) => {
         this.error = res.response && res.response.data.error;
       });
+  }
+  
+  toast(){
+     this.$toast.open({
+                    message: 'Saved!',
+                    type: 'is-success'
+                })!
   }
 
 }
