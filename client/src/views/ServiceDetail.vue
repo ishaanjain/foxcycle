@@ -118,6 +118,7 @@ export default class ServiceDetail extends Vue {
   }
 
   cancelEditService() {
+    this.showEditService = false;
     this.item.id = this.tempService.id;
     this.item.name = this.tempService.name;
     this.item.description = this.tempService.description;
@@ -130,7 +131,7 @@ export default class ServiceDetail extends Vue {
 
   successDeleteService() {
     this.showDeleteService = false;
-    this.$router.push({ name: "services" });
+    this.$router.push({ name: "service" });
   }
 
   cancelDeleteService() {
