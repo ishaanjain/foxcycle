@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="columns">
+    <h1 v-if="cart.length == 0">You have no items to checkout with, please return to the store</h1>
+    <div v-if="cart.length > 0" class="columns">
       <div class="column is-half">
         <p class="title">Cart</p>
         <table class="table">
