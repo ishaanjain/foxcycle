@@ -22,10 +22,26 @@
         <p class="subtitle">Total: ${{total}}</p>
     </div>
     <div class="column is-half">
-        <div class="content">
+        <div>
             <b-field label="Name">
-                <!-- <b-input maxlength="50"> </b-input> -->
+                <b-input type="search"
+                    maxlength="30"
+                    min="1">
+                </b-input>
             </b-field>
+            <b-field label="Address">
+                <b-input type="search"
+                    maxlength="30"
+                    min="1">
+                </b-input>
+            </b-field>
+            <b-field label="Credit Card Number">
+                <b-input type="search"
+                    maxlength="30"
+                    min="1">
+                </b-input>
+            </b-field>
+
             
 
             <p class="control">
