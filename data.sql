@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.24)
 # Database: dev
-# Generation Time: 2019-03-18 19:50:41 +0000
+# Generation Time: 2019-03-18 21:08:33 +0000
 # ************************************************************
 
 
@@ -70,25 +70,6 @@ VALUES
 UNLOCK TABLES;
 
 
-# Dump of table item
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `item`;
-
-CREATE TABLE `item` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `price` int(11) NOT NULL,
-  `imageUrls` varchar(255) DEFAULT NULL,
-  `stockCount` int(11) NOT NULL DEFAULT '0',
-  `tags` varchar(255) DEFAULT NULL,
-  `inStoreOnly` tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
-
 # Dump of table order
 # ------------------------------------------------------------
 
@@ -113,7 +94,8 @@ LOCK TABLES `order` WRITE;
 
 INSERT INTO `order` (`id`, `status`, `totalPrice`, `storePickup`, `name`, `address`, `creditCard`, `userId`)
 VALUES
-	(1,'processing',99,1,'Adam Smith','111 Black Road, India','12345',NULL);
+	(1,'processing',99,1,'Adam Smith','111 Black Road, India','12345',NULL),
+	(2,'Done',1231,0,'Bored','MOther f','12532',NULL);
 
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
 UNLOCK TABLES;
