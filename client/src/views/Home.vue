@@ -20,7 +20,6 @@
                 slot="trigger"
                 aria-controls="contentIdForA11y1"
                 v-bind:class="{'is-hidden': !this.$store.state.user}"
-                v-on:click="changesign"
             >Edit
             </button>
             <div class="notification">
@@ -47,8 +46,11 @@
                     <a class="button is-primary"
                        v-on:click="success" slot="trigger"
                 aria-controls="contentIdForA11y1"
-                    >{{this.sign}}</a>
+                    >Save
+                   </a>
                   </p>
+                   
+               
                 </div>
             </div>
         </b-collapse>
@@ -138,9 +140,11 @@ export default class Home extends Vue {
     name: ""
   }
 
-  public sign = "Save";
-  changesign(){
-    this.sign="Save"
+  toast(){
+      this.$toast.open({
+                    message: 'Saved!',
+                    type: 'is-success'
+                })
   }
 
   hours: iTime[] = [];
@@ -244,35 +248,30 @@ export default class Home extends Vue {
   }
 
   success() {
-    let day = this.currenttime.toString().split(' ')[0];
     this.error = false;
     axios
       .put(APIConfig.buildUrl("/time"), this.time, {})
       .then((response) => {
         this.$emit("success");
-        this.sign="saved!";
-        let day = this.time.name;
+        let day = response.data.time.name;
           var arrday;
           var index;
           for(index = 0; index < this.hours.length; index++){
             var newstring = this.hours[index].name;
-            // debugger;
             if(newstring.indexOf(day) != -1){
               this.hours[index] = response.data.time;
               arrday = response.data.time;
+              console.log(arrday);
             }
-              
           }
-          
           if(arrday == undefined)
-            this.hours.push(response.data.time);
-
-          console.log(this.hours.toString());
-         
+            this.hours.push(response.data.time);  
+       
       })
       .catch((res: AxiosError) => {
       this.error = res.response && res.response.data.error;
     });
+    this.toast();
   }
 }
 
