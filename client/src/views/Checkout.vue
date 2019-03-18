@@ -16,9 +16,11 @@
             <tr v-for="(item, index) in productOrders" v-bind:key="index">
               <td>
                 {{item.name}}
-                <img style="display: block; height:200px" :src="item.image">
+                
+                <img style="height:15%" :src="item.image">
               </td>
-              <td>{{item.productCount}}</td>
+           
+              <td>{{item.quantity}}</td>
               <td>${{item.price}}</td>
             </tr>
           </tbody>
@@ -36,6 +38,10 @@
           <b-field label="Credit Card Number">
             <b-input type="search" maxlength="30" v-model="ccNum"></b-input>
           </b-field>
+          <label id="orderPickupLabel" class="checkbox">
+          <input type="checkbox" v-bind="storePickup">
+          Pick Up Order In Store
+          </label>
 
           <p class="control">
             <a class="button is-primary" v-on:click="checkout">Order</a>
@@ -61,6 +67,7 @@ export default class Checkout extends Vue {
   public name: string = "";
   public address: string = "";
   public ccNum: string = "";
+  public storePickup: boolean = false;
 
   mounted() {
     this.orderTotal();
@@ -73,29 +80,45 @@ export default class Checkout extends Vue {
   }
 
   checkout() {
-    var currentOrder: iOrder = {
-      id: 1,
-      productOrders: this.productOrders,
-      totalPrice: this.total,
-      storePickup: false,
-      name: this.name,
-      address: this.address,
-      creditCard: this.ccNum,
-      status: ""
-    };
-    axios
-      .post(APIConfig.buildUrl("/orders"), currentOrder, {
-        headers: {
-          token: this.$store.state.userToken
-        }
-      })
-      .then((response: AxiosResponse<iOrder>) => {
-        this.$store.state.productOrders = [];
-        this.$router.push({ name: "success" });
-      })
-      .catch((reason: any) => {
-        console.error(reason.message);
+    var oneItemHasToBePickedUpInStore = false;
+    this.productOrders.forEach((i: iProductOrder) => {
+      if (i.inStoreOnly) {
+        oneItemHasToBePickedUpInStore = true;
+      }
+    });
+
+    if (oneItemHasToBePickedUpInStore && !this.storePickup) {
+      this.$toast.open({
+        message: "One Item Must Be Picked Up In Store",
+        position: "is-bottom",
+        type: "is-danger"
       });
+    }
+    else {
+      var currentOrder: iOrder = {
+        id: 1,
+        productOrders: this.productOrders,
+        totalPrice: this.total,
+        storePickup: false,
+        name: this.name,
+        address: this.address,
+        creditCard: this.ccNum,
+        status: ""
+      };
+      axios
+        .post(APIConfig.buildUrl("/orders"), currentOrder, {
+          headers: {
+            token: this.$store.state.userToken
+          }
+        })
+        .then((response: AxiosResponse<iOrder>) => {
+          this.$store.state.productOrders = [];
+          this.$router.push({ name: "success" });
+        })
+        .catch((reason: any) => {
+          console.error(reason.message);
+        });
+    }
   }
 }
 </script>
@@ -103,5 +126,9 @@ export default class Checkout extends Vue {
 <style scoped lang="scss">
 .checkout {
   margin-top: 20px;
+}
+
+#orderPickupLabel {
+  margin-bottom: 40px;
 }
 </style>
