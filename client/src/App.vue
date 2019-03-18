@@ -62,7 +62,7 @@
       v-on:cancel="hideLoginModal"
     />
     <Cart v-if="showCart" v-on:success="goToCheckout" v-on:cancel="hideCartModal"/>
-    <footer class="footer has-text-centered">
+    <footer class="footer has-text-centered" id="footer">
       <p>
         Phone Number: {{this.about.phone}}
         <br>
@@ -163,8 +163,6 @@ export default class App extends Vue {
 
 
 <style lang="scss">
-$footer-background-color: white !default;
-$footer-padding: 10rem 0rem 0rem !default;
 
 @import "~bulma/css/bulma.css";
 #app {
@@ -174,9 +172,9 @@ $footer-padding: 10rem 0rem 0rem !default;
   color: #2c3e50;
 }
 
-.footer {
-  background-color: $footer-background-color;
-  padding: $footer-padding;
+#footer {
+  padding: 3rem 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .foxcycle-logo-img {
