@@ -127,6 +127,10 @@ export default class ProductDetail extends Vue {
     return !!this.$store.state.user;
   }
 
+  mounted() {
+    this.getProduct();
+  }
+
   getProduct() {
     axios
       .get(APIConfig.buildUrl(`/products/${this.id}`), {
@@ -211,7 +215,9 @@ export default class ProductDetail extends Vue {
             additionalQuantity: this.itemQuantity
           });
           this.$toast.open({
-            message: `${this.itemQuantity} items successfully added to the cart!`,
+            message: `${
+              this.itemQuantity
+            } items successfully added to the cart!`,
             position: "is-bottom",
             type: "is-success"
           });
@@ -237,7 +243,7 @@ export default class ProductDetail extends Vue {
         quantity: this.itemQuantity,
         description: this.item.description
       };
-      this.$store.commit("cart", orderItem);
+      this.$store.commit("cart", { orderItem });
       this.$toast.open({
         message: `${this.itemQuantity} items successfully added to the cart!`,
         position: "is-bottom",
@@ -245,10 +251,6 @@ export default class ProductDetail extends Vue {
       });
       return true;
     }
-  }
-
-  mounted() {
-    this.getProduct();
   }
 }
 </script>

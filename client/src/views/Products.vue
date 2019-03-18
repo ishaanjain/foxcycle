@@ -11,7 +11,7 @@
     </div>
     <div class="columns">
       <div class="column is-one-fifth">
-        <h4 class="title is-4">Filter By</h4>
+        <h4 class="title is-4">Filter</h4>
         <div class="product-filters">
           <div v-for="(tag, index) in tags" v-bind:key="index">
             <h4 class="subtitle filter-header">{{tag.name}}:</h4>

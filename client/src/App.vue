@@ -34,7 +34,7 @@
             class="navbar-item is-tab"
             to="/tracking"
             exact-active-class="is-active"
-          >Tracking</router-link>
+          >Track Order</router-link>
         </div>
         <div class="navbar-end">
           <div class="navbar-item">

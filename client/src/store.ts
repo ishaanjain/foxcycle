@@ -42,8 +42,8 @@ const mutations: MutationTree<iRootState> = {
     state.user = null;
     state.isAdmin = false;
   },
-  cart(state, id) {
-    state.items.push(id);
+  cart(state, payload) {
+    state.items.push(payload.orderItem);
   },
   updateCart(state, payload) {
     state.items.forEach( function (order: iProductOrder){
