@@ -21,7 +21,7 @@
               </td>
            
               <td>{{item.quantity}}</td>
-              <td>{{item.price}}</td>
+              <td>${{item.price}}</td>
             </tr>
           </tbody>
         </table>
@@ -30,13 +30,13 @@
       <div class="column is-half">
         <div>
           <b-field label="Name">
-            <b-input type="search" maxlength="30" ></b-input>
+            <b-input type="search" maxlength="30" v-model="name"></b-input>
           </b-field>
           <b-field label="Address">
-            <b-input type="search" maxlength="60" ></b-input>
+            <b-input type="search" maxlength="60" v-model="address"></b-input>
           </b-field>
           <b-field label="Credit Card Number">
-            <b-input type="search" maxlength="30" ></b-input>
+            <b-input type="search" maxlength="30" v-model="ccNum"></b-input>
           </b-field>
 
           <p class="control">
@@ -54,11 +54,15 @@ import { Component, Vue } from "vue-property-decorator";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { APIConfig } from "../utils/api.utils";
 import { iProductOrder } from "../models/productOrder.interface";
+import { iOrder } from "../models/order.interface";
 
 @Component
 export default class Checkout extends Vue {
   public productOrders = this.$store.state.productOrders;
   public total = 0;
+  public name: string = "";
+  public address: string = "";
+  public ccNum: string = "";
 
   mounted() {
     this.orderTotal();
@@ -71,7 +75,28 @@ export default class Checkout extends Vue {
   }
 
   checkout() {
-    this.$router.push({ name: "success" });
+    var currentOrder: iOrder = {
+      id: 1,
+      productOrders: this.productOrders,
+      totalPrice: this.total,
+      storePickup: false,
+      name: this.name,
+      address: this.address,
+      creditCard: this.ccNum,
+      status: ""
+    };
+    axios
+      .post(APIConfig.buildUrl("/orders"), currentOrder, {
+        headers: {
+          token: this.$store.state.userToken
+        }
+      })
+      .then((response: AxiosResponse<iOrder>) => {
+        this.$router.push({ name: "success" });
+      })
+      .catch((reason: any) => {
+        console.error(reason.message);
+      });
   }
 }
 </script>
