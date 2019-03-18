@@ -12,8 +12,8 @@ export class AboutController extends DefaultController {
       .route("/about")
       .get((req: Request, res: Response) => {
         const announceRepo = getRepository(About);
-        announceRepo.find().then((announce: About[]) => {
-          res.send({ announce });
+        announceRepo.find().then((about: About[]) => {
+          res.send({ about });
         }); 
       })
       .post((req: Request, res: Response) => {

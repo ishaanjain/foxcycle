@@ -47,7 +47,9 @@
                 v-if="isLoggedIn"
                 to="/my-profile"
                 exact-active-class="is-active"
-              >My Profile</router-link>
+              ><i class="fas fa-user-alt"></i>
+
+              </router-link>
               <a class="button is-light" v-if="!isLoggedIn" v-on:click="showLoginModal()">
                 Log in
               </a>
@@ -67,8 +69,11 @@
 
     <div class="content has-text-centered">
       <p>
+        Phone Number: {{this.about.phone}}
+        <br>
+        Address: {{this.about.address}}
+        <br>
         <strong>WhiteSky</strong> 2019
-        <!-- {{this.about.phone}} -->
       </p>
 
     </div>
@@ -141,15 +146,17 @@ export default class App extends Vue {
     });
   }
 
-  // mounted(){
-  //   this.getAbout();
-  // }
+  mounted(){
+    this.getAbout();
+  }
 
   getAbout() {
     axios.get(APIConfig.buildUrl(`/about`), {})
     .then((response) => {
         // debugger;
-        this.about = response.data.announce[0];
+        if (response.data.about != undefined) {
+          this.about = response.data.about[0];
+        }
     });
   }
 }

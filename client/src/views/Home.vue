@@ -4,31 +4,74 @@
          <div class="hours tile is-vertical is-parent is-3">
             <div class="tile is-child box">
                <div class="tile">
-                  <figure class="image">
+                  <figure class="image" v-bind:class="{ 'is-hidden': this.open}">
                      <img src="../../public/close.gif">
+                  </figure>
+                  <figure class="image" v-bind:class="{ 'is-hidden': !this.open}">
+                     <img src="../../public/open.png">
                   </figure>
                </div>
                <div class="tile is-child">
-                  <p class="title">Hours</p>
-                  <a class="button is-light" v-bind:class="{ 'is-hidden': !isLoggedIn}" >Edit</a>
-                  <table style="width:100%">
-                     <tr>
-                        <th>Weekdays</th>
-                        <th>Weekends</th>
-                        <th></th>
-                     </tr>
-                     <tr>
-                        <td>8 am - 7 pm</td>
-                        <td>10 am - 6 pm</td>
-                        <td></td>
-                     </tr>
+                  <section>
+
+        <b-collapse :open="false" aria-id="contentIdForA11y1">
+            <button
+                class="button is-primary"
+                slot="trigger"
+                aria-controls="contentIdForA11y1"
+                v-bind:class="{'is-hidden': !this.$store.state.user}"
+                v-on:click="changesign"
+            >Edit
+            </button>
+            <div class="notification">
+                <div class="content">
+                  <b-field horizontal label="Day" required>
+                  <b-select v-model="time.name" >
+                      <option value="Monday">Monday</option>
+                      <option value="Tuesday">Tuesday</option>
+                      <option value="Wednesday">Wednesday</option>
+                      <option value="Thursday">Thursday</option>
+                      <option value="Friday">Friday</option>
+                      <option value="Saturday">Saturday</option>
+                      <option value="Sunday">Sunday</option>
+                    </b-select>
+                  </b-field>
+                  <b-field label="Open">
+                      <b-input type="number" v-model="time.start"></b-input>
+                  </b-field>
+                  <b-field label="Close">
+                      <b-input type="number" v-model="time.end"></b-input>
+                  </b-field>
+
+                  <p class="control">
+                    <a class="button is-primary"
+                       v-on:click="success" slot="trigger"
+                    >{{this.sign}}</a>
+                  </p>
+                </div>
+            </div>
+        </b-collapse>
+
+    </section>
+                  <table class="table" v-if="this.time != undefined">
+                    <thead>
+                    <tr>
+                      <th>Hours</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(time,index) in hours" v-bind:key="index">
+                        <td>{{time.name}}</td>
+                        <td>{{time.start}} - {{time.end}}</td>
+                      </tr>
+                    </tbody>
                   </table>
                   <br>
                   <br>
                </div>
             </div>
          </div>
-         <div class="announcement tile is-parent is-vertical">
+         <div class="announcement tile is-parent is-vertical is-9" >
             <div class="tile">
                <a class="button is-primary edit-announcement" v-bind:class="{ 'is-hidden': !isLoggedIn}" v-on:click="showAnnouncementModal()">Edit/Add Announcement</a>
                <a class="button is-danger" v-if="hasAnnounce()" v-bind:class="{ 'is-hidden': !isLoggedIn}" v-on:click="showDeleteAnnouncementModal()">Delete Announcement</a>
@@ -36,7 +79,7 @@
             <div class="tile is-child box " v-bind:class="{ 'is-hidden': !hasAnnounce()}" >
                <p class="title">{{this.announcement.title}}</p>
                <h2>{{ this.announcement.description}}</h2>
-               <img  :src=this.announcement.imageurl>
+               <img :src=this.announcement.imageurl >
             </div>
             <div class="tile is-child">
                <p class="title">Featured</p>
@@ -69,6 +112,7 @@ import { APIConfig } from "../utils/api.utils";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { iProduct } from "../models/product.interface";
 import { iAnnounce } from "../models/announce.interface";
+import { iTime } from "../models/time.interface";
 
 @Component({
   components:{
@@ -84,6 +128,23 @@ export default class Home extends Vue {
     imageurl : "",
     title : ""
   };
+
+  public time: iTime = {
+    id: 0,
+    start: 0,
+    end: 0,
+    name: ""
+  }
+
+  public sign = "Save";
+  changesign(){
+    this.sign="Save"
+  }
+
+  hours: iTime[] = [];
+
+  public currenttime = new Date();
+  public open = false;
 
   error: string | boolean = false;
 
@@ -124,6 +185,7 @@ export default class Home extends Vue {
   mounted() {
     this.getItems();
     this.getAnnounce();
+    this.getTime();
   }
 
   getAnnounce() {
@@ -133,6 +195,25 @@ export default class Home extends Vue {
           this.announcement = response.data.announce[0];
         }
     });
+  }
+
+  getTime() {
+   
+    this.currenttime = new Date();
+    
+    axios.get(APIConfig.buildUrl(`/time`), {})
+    .then((response) => {
+      
+        if (response.data.time.length > 0) {
+          this.hours = response.data.time;
+          if(this.currenttime.getHours() < response.data.time[0].start || this.currenttime.getHours() > response.data.time[0].end)
+            this.open = false;
+          else
+            this.open = true;
+        }
+    });
+
+    // debugger;
   }
 
   hasAnnounce() {
@@ -151,7 +232,27 @@ export default class Home extends Vue {
     .then((response) => {
         this.items = response.data.products.slice(0, 3);
     });
+    
   }
+
+success() {
+    this.error = false;
+    axios
+    
+      .put(APIConfig.buildUrl("/time"), this.time, {})
+      .then((response) => {
+        this.$emit("success");
+        this.sign="saved!";
+        this.$router.push({ name: "home" });
+      })
+      .catch((res: AxiosError) => {
+      this.error = res.response && res.response.data.error;
+    });
+  }
+
+  
+
+
 }
 
 </script>

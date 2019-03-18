@@ -45,7 +45,7 @@
         </div>
       </div>
       <label class="checkbox">
-        <input type="checkbox" v-bind:checked="product.inStoreOnly">
+        <input type="checkbox" v-model="product.inStoreOnly">
             In Store Only
         </label>
     </form>
@@ -68,6 +68,7 @@ export default class EditProduct extends Vue {
   error: string | boolean = false;
 
   success() {
+    debugger;
     this.error = false;
     axios
       .put(APIConfig.buildUrl(`/products/${this.product.id}`), this.product, {
