@@ -12,31 +12,32 @@ export class OrderController extends DefaultController {
 
     router.route("/orders")
     // .get(isAuthenticated(false, true), (req: Request, res: Response) => {
-    //   const orderRepo = getRepository(Order);
-    //   orderRepo.find().then((orders: Order[]) => {
-    //     res.status(200).send({ orders });
-    //   }).catch((error: any) => {
-    //     res.status(500).send({ reason: error.message });
-    //   });
-    // })
     .get((req: Request, res: Response) => {
       const orderRepo = getRepository(Order);
-      orderRepo.find().then((orders: Order[]) => {
+      orderRepo.find({relations: ["productOrders"]}).then((orders: Order[]) => {
         res.status(200).send({ orders });
       }).catch((error: any) => {
         res.status(500).send({ reason: error.message });
       });
     })
-    .post(isAuthenticated(false, true), (req: Request, res: Response) => {
-      const orderRepo = getRepository(Order);
-      const order = new Order();
-      // order.productCount = req.body.productCount;
-      // etc
-      orderRepo.save(order).then(createdOrder => {
+    // .post(isAuthenticated(false, true), (req: Request, res: Response) => {
+    .post(async (req: Request, res: Response) => {
+      try {
+        const orderRepo = getRepository(Order);
+        const order = new Order();
+        // an order status can be processing, dispatched, or complete
+        order.status = "processing";
+        // order.productCount = ;
+        order.totalPrice = req.body.totalPrice;
+        order.storePickup = req.body.storePickup;
+        order.name = req.body.name;
+        order.address = req.body.address;
+        order.creditCard = req.body.creditCard;
+        const createdOrder = await orderRepo.save(order);
         res.status(200).send({ createdOrder });
-      }).catch((error: any) => {
+      } catch(error) {
         res.status(500).send({ reason: error.message });
-      });
+      }
     });
 
     router.route("/orders/:id")
