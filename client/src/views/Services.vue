@@ -1,5 +1,5 @@
 <template>
-  <div class="services tile is-ancestor">
+  <div id="parent-services-container" class="services tile">
     <div class="title">
       <p class="subtitle">All Services are performed in store</p>
       <div>
@@ -9,14 +9,14 @@
           v-on:click="showAddServiceModal()"
         >Add a New Service</a>
       </div>
-      <div class="container products-container">
+      <div class="service-container">
         <div class="p-parent">
           <div v-for="(item, index) in items" v-bind:key="index">
             <router-link :to="{name: 'service detail', params: { id: item.id.toString() }}">
-              <div class="box product">
-                <h1 class="product-title title">{{item.name}}</h1>
-                <p class="product-title item-price is-5">${{item.price}}</p>
-                <p class="product-description title is-5">{{item.description}}</p>
+              <div class="box service">
+                <h1 class="service-title title is-3">{{item.name}}</h1>
+                <p class="service-title item-price is-5">${{item.price}}</p>
+                <p class="service-description title is-5">{{item.description}}</p>
               </div>
             </router-link>
           </div>
@@ -89,59 +89,57 @@ export default class Services extends Vue {
 </script>
 
 <style scoped lang="scss">
+
+div.services {
+  width: 1550px;
+}
+
+div.title {
+  width: 1550px;
+}
+
+#parent-services-container {
+  max-width: 1550px;
+  width: auto;
+  margin-left: 20px;
+  margin-right: 0px;
+}
+
 .services {
   margin: 2%;
 }
-h1.product-title {
+h1.service-title {
   height: 20px;
-  margin-bottom: 0px;
+  margin-bottom: 18px;
 }
 
-h1.product-description {
+h1.service-description {
   height: 10px;
   margin-bottom: 0px;
 }
 
-img.product {
+img.service {
   height: 76%;
   margin: 0px 0px 16px 0px;
 }
 
-.product:hover {
+.service:hover {
   cursor: pointer;
 }
 
-.product {
-  height: 200px;
-  width: 300px;
+.service {
+  height: 300px;
+  width: 350px;
   float: left;
   margin: 14px;
 }
-.edit-product {
-  margin-right: 14px;
-}
 
 .p-parent {
-  width: 88%;
+  width: 100%;
 }
 
 .item-price {
   text-align: right;
 }
 
-.filter-types {
-  padding-bottom: 26px;
-}
-
-h4.filter-header.subtitle {
-  margin-bottom: 4px;
-}
-
-.products {
-  margin-top: 20px;
-}
-
-.apply-button {
-  margin-right: 10px;
-}
 </style>
