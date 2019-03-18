@@ -7,6 +7,7 @@ import MyProfile from "./views/MyProfile.vue";
 import ProductDetail from "./views/ProductDetail.vue"
 import Products from "./views/Products.vue";
 import Services from "./views/Services.vue";
+import ServiceDetail from "./views/ServiceDetail.vue";
 import Cart from "./views/Services.vue";
 
 Vue.use(Router);
@@ -40,6 +41,12 @@ export default new Router({
       path: "/services",
       name: "service",
       component: Services
+    },
+    {
+      path: "/services/:id",
+      name: "service detail",
+      component: ServiceDetail,
+      props: true
     },
     {
       path: "/employees",
