@@ -100,7 +100,6 @@ export default class ServiceDetail extends Vue {
         }
       })
       .then(response => {
-        console.log(response.data);
         this.item = response.data.service;
         this.tempService.id = this.item.id;
         this.tempService.name = this.item.name;
