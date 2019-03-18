@@ -16,8 +16,10 @@
             <tr v-for="(item, index) in cart" v-bind:key="index">
               <td>
                 {{item.name}}
+                
                 <img style="height:15%" :src="item.image">
               </td>
+              <td>
               <td>{{item.quantity}}</td>
               <td>{{item.price}}</td>
             </tr>

@@ -3,12 +3,12 @@
     <div class="tile is-ancestor">
       <div class="hours tile is-vertical is-parent is-3">
         <div class="tile is-child box">
-          <div class="tile">
+          <div class="tile is-child">
             <figure class="image" v-bind:class="{ 'is-hidden': this.open}">
-              <img src="../../public/close.gif">
+              <img src="../../public/close.gif"><br>
             </figure>
             <figure class="image" v-bind:class="{ 'is-hidden': !this.open}">
-              <img src="../../public/open.png">
+              <img src="../../public/open.png"><br>
             </figure>
           </div>
           <div class="tile is-child">
