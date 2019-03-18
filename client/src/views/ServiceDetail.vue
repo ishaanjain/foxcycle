@@ -5,13 +5,31 @@
         <h3 class="title is-3">Service Details:</h3>
       </div>
       <div class="column is-three-fifths">
-        <a class="button is-light edit-product" v-if="isLoggedIn" v-on:click="showEditServiceModal()">Edit this Service</a>
-        <a class="button is-light" v-if="isLoggedIn" v-on:click="showDeleteServiceModal()">Delete this Service</a>  
+        <a
+          class="button is-light edit-product"
+          v-if="isLoggedIn"
+          v-on:click="showEditServiceModal()"
+        >Edit this Service</a>
+        <a
+          class="button is-light"
+          v-if="isLoggedIn"
+          v-on:click="showDeleteServiceModal()"
+        >Delete this Service</a>
       </div>
     </div>
     <div class="product-detail">
-      <EditService v-bind:service="item" v-bind:is-showing="showEditService" v-on:success="successEditService()" v-on:cancel="cancelEditService()"/>
-      <DeleteService v-bind:service="item" v-bind:is-showing="showDeleteService" v-on:success="successDeleteService()" v-on:cancel="cancelDeleteService()"/>
+      <EditService
+        v-bind:service="item"
+        v-bind:is-showing="showEditService"
+        v-on:success="successEditService()"
+        v-on:cancel="cancelEditService()"
+      />
+      <DeleteService
+        v-bind:service="item"
+        v-bind:is-showing="showDeleteService"
+        v-on:success="successDeleteService()"
+        v-on:cancel="cancelDeleteService()"
+      />
       <div class="columns">
         <div class="column is-three-fifths">
           <div class="product-field product-name">
@@ -37,15 +55,17 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import App from "@/App.vue";
 import axios, { AxiosResponse } from "axios";
-import EditService from "@/components/EditService.vue"
-import DeleteService from "@/components/DeleteService.vue"
+import EditService from "@/components/EditService.vue";
+import DeleteService from "@/components/DeleteService.vue";
 import { APIConfig } from "../utils/api.utils";
 import { iService } from "../models/service.interface";
-import { debug } from 'util';
+import { debug } from "util";
 
 @Component({
   components: {
-    App, EditService, DeleteService
+    App,
+    EditService,
+    DeleteService
   }
 })
 export default class ServiceDetail extends Vue {
@@ -53,19 +73,19 @@ export default class ServiceDetail extends Vue {
   public showDeleteService: boolean = false;
 
   public item: iService = {
-    id : 0,
-    name : "",
-    description : "",
-    price : 0
+    id: 0,
+    name: "",
+    description: "",
+    price: 0
   };
 
   public tempService: iService = {
-    id : 0,
-    name : "",
-    description : "",
-    price : 0
+    id: 0,
+    name: "",
+    description: "",
+    price: 0
   };
-  
+
   @Prop(String) id!: string;
 
   get isLoggedIn(): boolean {
@@ -73,19 +93,20 @@ export default class ServiceDetail extends Vue {
   }
 
   getService() {
-    axios.get(APIConfig.buildUrl(`/services/${this.id}`), {
-      params: {
-        id: this.id
-      }
-    })
-    .then((response) => {
-      console.log(response.data);
-      this.item = response.data.service;
-      this.tempService.id = this.item.id;
-      this.tempService.name = this.item.name;
-      this.tempService.description = this.item.description;
-      this.tempService.price = this.item.price;
-    });
+    axios
+      .get(APIConfig.buildUrl(`/services/${this.id}`), {
+        params: {
+          id: this.id
+        }
+      })
+      .then(response => {
+        console.log(response.data);
+        this.item = response.data.service;
+        this.tempService.id = this.item.id;
+        this.tempService.name = this.item.name;
+        this.tempService.description = this.item.description;
+        this.tempService.price = this.item.price;
+      });
   }
 
   showEditServiceModal() {
@@ -119,13 +140,10 @@ export default class ServiceDetail extends Vue {
   mounted() {
     this.getService();
   }
-
 }
-
 </script>
 
 <style lang="scss">
-
 img.product {
   height: 200px;
 }
@@ -154,5 +172,4 @@ div.product-quantity.has-addons {
   text-align: center;
   padding-top: 50px;
 }
-
 </style>
