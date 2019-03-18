@@ -14,6 +14,7 @@ interface iRootState {
   user: iUser | null;
   isAdmin: boolean;
   productOrders: iProductOrder[];
+  orderNumber: number;
 }
 
 interface iLoginPayload {
@@ -25,7 +26,8 @@ const state: iRootState = {
   userToken: null,
   user: null,
   isAdmin: false,
-  productOrders: []
+  productOrders: [],
+  orderNumber: 0
 };
 
 const mutations: MutationTree<iRootState> = {
@@ -54,6 +56,9 @@ const mutations: MutationTree<iRootState> = {
 
       }
     });
+  },
+  updateOrderNumber(state, payload) {
+    state.orderNumber = payload;
   }
 };
 
