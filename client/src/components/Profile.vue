@@ -146,10 +146,13 @@ export default class Profile extends Vue {
   }
 
   get profileUrl(): string {
-    if (this.user) {
-      return APIConfig.buildUrl(`/${this.user.profileUrl}`);
+    if (!this.user) {
+      return "";
     }
-    return "";
+    if (!this.user.profileUrl) {
+      return "";
+    }
+    return APIConfig.buildUrl(`/${this.user.profileUrl}`);
   }
 }
 </script>
