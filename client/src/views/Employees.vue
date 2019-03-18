@@ -2,38 +2,38 @@
   <div class="employees">
     <div>{{error}}</div>
     <div id="employeesInputs">
-      <input 
-        class="input employeesInput" 
+      <input
+        class="input employeesInput"
         type="number"
         placeholder="ID"
         :value="filter.id"
         @input="filterChange"
         name="id"
-      />
-      <input 
-        class="input employeesInput" 
+      >
+      <input
+        class="input employeesInput"
         type="text"
         placeholder="First Name"
         :value="filter.firstName"
         @input="filterChange"
         name="firstName"
-      />
-      <input 
-        class="input employeesInput" 
+      >
+      <input
+        class="input employeesInput"
         type="text"
         placeholder="Last Name"
         :value="filter.lastName"
         @input="filterChange"
         name="lastName"
-      />
+      >
       <input
-        class="input employeesInput" 
+        class="input employeesInput"
         type="email"
         placeholder="Email Address"
         :value="filter.emailAddress"
         @input="filterChange"
         name="emailAddress"
-      />
+      >
     </div>
     <table class="table is-striped is-fullwidth">
       <tr>
@@ -50,16 +50,18 @@
         <th>{{employee.lastName}}</th>
         <th>{{employee.emailAddress}}</th>
         <th>
-          <input 
-            type="checkbox" 
+          <input
+            type="checkbox"
             :id="employee.id"
             :checked="employee.isAdmin"
-            v-on:click="editEmployee" 
-          />
+            v-on:click="editEmployee"
+          >
         </th>
         <th>
           <button class="button" v-on:click="deleteEmployee(employee.id)">
-            <span class="icon"><i class="fas fa-trash"></i></span>
+            <span class="icon">
+              <i class="fas fa-trash"></i>
+            </span>
           </button>
         </th>
       </tr>
@@ -69,17 +71,14 @@
         <strong>Add employee</strong>
       </button>
     </div>
-    <Signup
-      v-if="showSignup"
-      v-on:success="signupSuccess"
-      v-on:cancel="showSignup = false"
-    />
-    <Modal 
-      v-bind:is-showing="showConfirm" 
-      title="Confirmation" 
-      success-button="Delete" 
-      v-on:success="confirmDelete" 
-      v-on:cancel="confirmCancel">
+    <Signup v-if="showSignup" v-on:success="signupSuccess" v-on:cancel="showSignup = false"/>
+    <Modal
+      v-bind:is-showing="showConfirm"
+      title="Confirmation"
+      success-button="Delete"
+      v-on:success="confirmDelete"
+      v-on:cancel="confirmCancel"
+    >
       <div>Are you sure you want to delete this employee?</div>
     </Modal>
   </div>
@@ -94,7 +93,7 @@ import Modal from "../components/Modal.vue";
 import Signup from "../components/Signup.vue";
 
 @Component({
-  components: { 
+  components: {
     Signup,
     Modal
   }
@@ -118,22 +117,25 @@ export default class Employees extends Vue {
   public showConfirm: boolean = false;
   pendingDeleteEmployeeId: number = -1;
   error: string = "";
-  
+
   filterChange(event: any) {
     this.filter[event.target.name] = event.target.value;
     this.loadEmployees();
   }
 
   loadEmployees() {
-    axios.get(APIConfig.buildUrl("/users"), {
-      headers: { token: this.$store.state.userToken },
-      params: this.filter
-    }).then((response: AxiosResponse) => {
-      this.myEmployees = response.data.users;
-    }).catch((error: any) => {
-      console.log(error.response.data);
-      this.error = error.response.data.reason;
-    });
+    axios
+      .get(APIConfig.buildUrl("/users"), {
+        headers: { token: this.$store.state.userToken },
+        params: this.filter
+      })
+      .then((response: AxiosResponse) => {
+        this.myEmployees = response.data.users;
+      })
+      .catch((error: any) => {
+        console.log(error.response.data);
+        this.error = error.response.data.reason;
+      });
   }
 
   mounted() {
@@ -156,17 +158,20 @@ export default class Employees extends Vue {
   confirmDelete() {
     this.showConfirm = false;
     if (this.pendingDeleteEmployeeId === this.$store.state.user.id) {
-      alert("Trying to delete yourself? Probably not a good idea.")
+      alert("Trying to delete yourself? Probably not a good idea.");
       return;
     }
-    axios.delete(APIConfig.buildUrl(`/users/${this.pendingDeleteEmployeeId}`), {
-      headers: { token: this.$store.state.userToken }
-    }).then((response: AxiosResponse) => {
-      this.loadEmployees();
-    }).catch((error: any) => {
-      console.log(error.response.data);
-      this.error = error.response.data.reason;
-    });
+    axios
+      .delete(APIConfig.buildUrl(`/users/${this.pendingDeleteEmployeeId}`), {
+        headers: { token: this.$store.state.userToken }
+      })
+      .then((response: AxiosResponse) => {
+        this.loadEmployees();
+      })
+      .catch((error: any) => {
+        console.log(error.response.data);
+        this.error = error.response.data.reason;
+      });
   }
 
   confirmCancel() {
@@ -177,22 +182,30 @@ export default class Employees extends Vue {
   editEmployee(event: any) {
     event.preventDefault();
     if (parseInt(event.target.id, 10) === this.$store.state.user.id) {
-      alert("Trying to demote yourself? Probably not a good idea.")
+      alert("Trying to demote yourself? Probably not a good idea.");
       return;
     }
-    const employee = this.myEmployees.find((employee: Employee) => 
-      employee.id == event.target.id);
+    const employee = this.myEmployees.find(
+      (employee: Employee) => employee.id == event.target.id
+    );
     if (!employee) return;
-    axios.patch(APIConfig.buildUrl(`/users/${event.target.id}`), {
-      isAdmin: !employee.isAdmin
-    }, {
-      headers: { token: this.$store.state.userToken }
-    }).then((response: AxiosResponse) => {
-      employee.isAdmin = response.data.user.isAdmin;
-    }).catch((error: any) => {
-      console.log(error.response.data);
-      this.error = error.response.data.reason;
-    });
+    axios
+      .patch(
+        APIConfig.buildUrl(`/users/${event.target.id}`),
+        {
+          isAdmin: !employee.isAdmin
+        },
+        {
+          headers: { token: this.$store.state.userToken }
+        }
+      )
+      .then((response: AxiosResponse) => {
+        employee.isAdmin = response.data.user.isAdmin;
+      })
+      .catch((error: any) => {
+        console.log(error.response.data);
+        this.error = error.response.data.reason;
+      });
   }
 }
 
@@ -214,7 +227,6 @@ interface EmployeeFilter {
 </script>
 
 <style scoped>
-
 @import "~bulma/css/bulma.css";
 
 #employeesInputs {
@@ -225,5 +237,4 @@ interface EmployeeFilter {
 .employeesInput {
   margin: 0px 10px 0px 10px;
 }
-
 </style>

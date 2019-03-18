@@ -1,50 +1,59 @@
  <template>
-   <div class="products">
-     <div class="columns">
-       <div class="column is-one-fifth">
+  <div class="products">
+    <div class="columns">
+      <div class="column is-one-fifth">
         <h3 class="title is-3">Store:</h3>
-       </div>
-       <div class="column is-four-fifths">
-        <a class="button is-light" v-if="isLoggedIn" v-on:click="showAddProductModal()">Add a New Product</a>
-       </div>
-     </div>
-      <div class="columns">
-         <div class="column is-one-fifth">
-            <h4 class="title is-4">Filter By:</h4>
-            <div class="product-filters">
-              <div v-for="(tag, index) in tags" v-bind:key="index">
-                <h4 class="subtitle filter-header">{{tag.name}}:</h4>
-                <div class="filter-types">
-                  <div v-for="(t, i) in tag.t" v-bind:key="i">
-                    <label class="checkbox">
-                      <input type="checkbox" v-on:click="applyTag(t)" v-bind:checked="t.applied">{{t.s}}
-                    </label>
-                  </div>
-                </div>
+      </div>
+      <div class="column is-four-fifths">
+        <a
+          class="button is-light"
+          v-if="isLoggedIn"
+          v-on:click="showAddProductModal()"
+        >Add a New Product</a>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column is-one-fifth">
+        <h4 class="title is-4">Filter By:</h4>
+        <div class="product-filters">
+          <div v-for="(tag, index) in tags" v-bind:key="index">
+            <h4 class="subtitle filter-header">{{tag.name}}:</h4>
+            <div class="filter-types">
+              <div v-for="(t, i) in tag.t" v-bind:key="i">
+                <label class="checkbox">
+                  <input type="checkbox" v-on:click="applyTag(t)" v-bind:checked="t.applied">
+                  {{t.s}}
+                </label>
               </div>
             </div>
-            <a class="button is-primary apply-button" v-on:click="applyFilters()">Apply</a>
-            <a class="button is-light" v-on:click="clearAllFilters()">Reset</a>
-            <AddNewProduct v-bind:is-showing="showAddProduct" v-on:success="successAddProduct()" v-on:cancel="cancelAddProduct()"/>
-         </div>
-         <div class="column is-four-fifths">
-           <h4 class="title is-4">Products:</h4>
-            <div class="container products-container">
-               <div class="p-parent">
-                  <div v-for="(item, index) in items" v-bind:key="index">
-                     <router-link :to="{name: 'product detail', params: { id: item.id.toString() }}">
-                        <div class="box product">
-                           <h1 class="product-title title is-5">{{item.name}}</h1>
-                           <img class="product" :src=item.imageUrls>
-                           <p class="title is-5 item-price">${{item.price}}  </p>
-                        </div>
-                     </router-link>
-                  </div>
-               </div>
-            </div>
-         </div>
+          </div>
+        </div>
+        <a class="button is-primary apply-button" v-on:click="applyFilters()">Apply</a>
+        <a class="button is-light" v-on:click="clearAllFilters()">Reset</a>
+        <AddNewProduct
+          v-bind:is-showing="showAddProduct"
+          v-on:success="successAddProduct()"
+          v-on:cancel="cancelAddProduct()"
+        />
       </div>
-   </div>
+      <div class="column is-four-fifths">
+        <h4 class="title is-4">Products:</h4>
+        <div class="container products-container">
+          <div class="p-parent">
+            <div v-for="(item, index) in items" v-bind:key="index">
+              <router-link :to="{name: 'product detail', params: { id: item.id.toString() }}">
+                <div class="box product">
+                  <h1 class="product-title title is-5">{{item.name}}</h1>
+                  <img class="product" :src="item.imageUrls">
+                  <p class="title is-5 item-price">${{item.price}}</p>
+                </div>
+              </router-link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -59,7 +68,8 @@ import { iTag } from "../models/tag.interface";
 
 @Component({
   components: {
-    App, AddNewProduct
+    App,
+    AddNewProduct
   }
 })
 export default class Products extends Vue {
@@ -75,33 +85,35 @@ export default class Products extends Vue {
   }
 
   getItems() {
-    axios.get(APIConfig.buildUrl("/products"), {
-      headers: {
-        token: this.$store.state.userToken
-      },
-      params: {
-        filters: this.filters
-      }
-    })
-    .then((response) => {
+    axios
+      .get(APIConfig.buildUrl("/products"), {
+        headers: {
+          token: this.$store.state.userToken
+        },
+        params: {
+          filters: this.filters
+        }
+      })
+      .then(response => {
         this.items = response.data.products;
         this.generateTagList();
-    });
+      });
   }
 
   getFilterItems() {
-    axios.get(APIConfig.buildUrl("/products/"), {
-      params: {
-        filters: this.filters
-      }
-    })
-    .then((response) => {
+    axios
+      .get(APIConfig.buildUrl("/products/"), {
+        params: {
+          filters: this.filters
+        }
+      })
+      .then(response => {
         this.items = response.data.products;
-    });
+      });
   }
 
   showAddProductModal() {
-      this.showAddProduct = true;
+    this.showAddProduct = true;
   }
 
   successAddProduct() {
@@ -128,7 +140,7 @@ export default class Products extends Vue {
         }
       }
     }
-    this.tagList.sort((n1,n2) => {
+    this.tagList.sort((n1, n2) => {
       if (n1 > n2) {
         return 1;
       }
@@ -139,24 +151,27 @@ export default class Products extends Vue {
     });
     var index = -1;
     for (var i = 0; i < this.tagList.length; i++) {
-      var name = this.tagList[i].substring(0, this.tagList[i].indexOf(":")).toUpperCase();
+      var name = this.tagList[i]
+        .substring(0, this.tagList[i].indexOf(":"))
+        .toUpperCase();
       var tagVal = this.tagList[i].substring(this.tagList[i].indexOf(":") + 1);
       if (!this.tagNameList.includes(name)) {
         this.tagNameList.push(name);
-        this.tags.push({name : name, t: []});
+        this.tags.push({ name: name, t: [] });
         index++;
       }
-      if (this.tags[index] != undefined && !this.tags[index].t.includes({s : tagVal, applied : false})) {
-        this.tags[index].t.push({s : tagVal, applied : false});
+      if (
+        this.tags[index] != undefined &&
+        !this.tags[index].t.includes({ s: tagVal, applied: false })
+      ) {
+        this.tags[index].t.push({ s: tagVal, applied: false });
       }
     }
   }
 
-  applyTag(t : TagApplied) {
-    if (t.applied)
-      t.applied = false;
-    else
-      t.applied = true;
+  applyTag(t: TagApplied) {
+    if (t.applied) t.applied = false;
+    else t.applied = true;
   }
 
   clearAllFilters() {
@@ -180,23 +195,20 @@ export default class Products extends Vue {
     }
     this.getFilterItems();
   }
-
 }
 
 export interface TagType {
-  name : string;
-  t : TagApplied[];
+  name: string;
+  t: TagApplied[];
 }
 
 export interface TagApplied {
-  s : string;
+  s: string;
   applied: boolean;
 }
-
 </script>
 
 <style lang="scss">
-
 h1.product-title {
   height: 20px;
   margin-bottom: 0px;
@@ -241,5 +253,4 @@ h4.filter-header.subtitle {
 .apply-button {
   margin-right: 10px;
 }
-
 </style>
