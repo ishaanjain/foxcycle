@@ -92,6 +92,7 @@ export default class Checkout extends Vue {
         }
       })
       .then((response: AxiosResponse<iOrder>) => {
+        this.$store.state.productOrders = [];
         this.$router.push({ name: "success" });
       })
       .catch((reason: any) => {
