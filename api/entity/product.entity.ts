@@ -3,10 +3,11 @@ import {
   Entity, 
   PrimaryGeneratedColumn,
   ManyToMany, 
-  ManyToOne,
-  JoinTable, 
+  JoinTable,
+  OneToMany, 
 } from "typeorm";
 import { Tag } from "./tag.entity";
+import { ProductOrder } from "./productOrder.entity";
 
 @Entity()
 export class Product {
@@ -37,4 +38,7 @@ export class Product {
 
   @Column({default: false})
   public inStoreOnly!: boolean;
+
+  @OneToMany(type => ProductOrder, productOrder => productOrder.product)
+  public productOrders!: ProductOrder[];
 }

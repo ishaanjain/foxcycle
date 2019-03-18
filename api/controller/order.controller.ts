@@ -11,7 +11,15 @@ export class OrderController extends DefaultController {
     const router = Router();
 
     router.route("/orders")
-    .get(isAuthenticated(false, true), (req: Request, res: Response) => {
+    // .get(isAuthenticated(false, true), (req: Request, res: Response) => {
+    //   const orderRepo = getRepository(Order);
+    //   orderRepo.find().then((orders: Order[]) => {
+    //     res.status(200).send({ orders });
+    //   }).catch((error: any) => {
+    //     res.status(500).send({ reason: error.message });
+    //   });
+    // })
+    .get((req: Request, res: Response) => {
       const orderRepo = getRepository(Order);
       orderRepo.find().then((orders: Order[]) => {
         res.status(200).send({ orders });

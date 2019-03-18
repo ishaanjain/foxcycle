@@ -7,8 +7,8 @@ export class Order {
   @PrimaryGeneratedColumn()
   public id!: number;
 
-//   @Column()
-//   public productOrders!: ProductOrder[];
+  @OneToMany(type => ProductOrder, productOrder => productOrder.order)
+  public productOrders!: ProductOrder[];
 
   @Column()
   public status!: number;
