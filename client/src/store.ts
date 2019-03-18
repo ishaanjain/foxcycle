@@ -51,6 +51,7 @@ const mutations: MutationTree<iRootState> = {
         const additionalQuantity = parseInt(payload.additionalQuantity);
         order.productCount += additionalQuantity;
         order.price += (order.price / (order.productCount - additionalQuantity)) * additionalQuantity;
+
       }
     });
   }
