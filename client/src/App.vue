@@ -25,6 +25,12 @@
           >Services</router-link>
           <router-link
             class="navbar-item is-tab"
+            v-if="isLoggedIn"
+            to="/orders"
+            exact-active-class="is-active"
+          >Orders</router-link>
+          <router-link
+            class="navbar-item is-tab"
             v-if="isAdmin"
             to="/employees"
             exact-active-class="is-active"
@@ -163,7 +169,6 @@ export default class App extends Vue {
 
 
 <style lang="scss">
-
 @import "~bulma/css/bulma.css";
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
