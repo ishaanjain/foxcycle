@@ -16,11 +16,9 @@
             <tr v-for="(item, index) in productOrders" v-bind:key="index">
               <td>
                 {{item.name}}
-                
-                <img style="height:15%" :src="item.image">
+                <img style="display: block; height:200px" :src="item.image">
               </td>
-           
-              <td>{{item.quantity}}</td>
+              <td>{{item.productCount}}</td>
               <td>${{item.price}}</td>
             </tr>
           </tbody>
