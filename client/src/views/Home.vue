@@ -46,6 +46,7 @@
                   <p class="control">
                     <a class="button is-primary"
                        v-on:click="success" slot="trigger"
+                aria-controls="contentIdForA11y1"
                     >{{this.sign}}</a>
                   </p>
                 </div>
@@ -57,12 +58,13 @@
                     <thead>
                     <tr>
                       <th>Hours</th>
+                      <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(time,index) in hours" v-bind:key="index">
-                        <td>{{time.name}}</td>
-                        <td>{{time.start}} - {{time.end}}</td>
+                      <tr v-for="(t, index) in hours" v-bind:key="index">
+                        <td>{{t.name}}</td>
+                        <td>{{t.start}} - {{t.end}}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -182,11 +184,13 @@ export default class Home extends Vue {
     this.showDeleteAnnounce = false;
   }
 
+
   mounted() {
     this.getItems();
     this.getAnnounce();
     this.getTime();
   }
+  
 
   getAnnounce() {
     axios.get(APIConfig.buildUrl(`/announce`), {})
@@ -198,22 +202,26 @@ export default class Home extends Vue {
   }
 
   getTime() {
-   
-    this.currenttime = new Date();
-    
     axios.get(APIConfig.buildUrl(`/time`), {})
     .then((response) => {
-      
         if (response.data.time.length > 0) {
           this.hours = response.data.time;
-          if(this.currenttime.getHours() < response.data.time[0].start || this.currenttime.getHours() > response.data.time[0].end)
+          let day = this.currenttime.toString().split(' ')[0];
+          var arrday;
+          var index;
+          for(index = 0; index < this.hours.length; index++){
+            var newstring = this.hours[index].name;
+            if(newstring.indexOf(day) != -1)
+              arrday = this.hours[index];
+          }
+          if(arrday != undefined)
+          if(this.currenttime.getHours() < arrday.start || this.currenttime.getHours() > arrday.end)
             this.open = false;
           else
             this.open = true;
-        }
+        } 
     });
 
-    // debugger;
   }
 
   hasAnnounce() {
@@ -235,24 +243,37 @@ export default class Home extends Vue {
     
   }
 
-success() {
+  success() {
+    let day = this.currenttime.toString().split(' ')[0];
     this.error = false;
     axios
-    
       .put(APIConfig.buildUrl("/time"), this.time, {})
       .then((response) => {
         this.$emit("success");
         this.sign="saved!";
-        this.$router.push({ name: "home" });
+        let day = this.time.name;
+          var arrday;
+          var index;
+          for(index = 0; index < this.hours.length; index++){
+            var newstring = this.hours[index].name;
+            // debugger;
+            if(newstring.indexOf(day) != -1){
+              this.hours[index] = response.data.time;
+              arrday = response.data.time;
+            }
+              
+          }
+          
+          if(arrday == undefined)
+            this.hours.push(response.data.time);
+
+          console.log(this.hours.toString());
+         
       })
       .catch((res: AxiosError) => {
       this.error = res.response && res.response.data.error;
     });
   }
-
-  
-
-
 }
 
 </script>
