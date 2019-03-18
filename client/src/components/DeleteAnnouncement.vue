@@ -1,9 +1,13 @@
 <template>
-  <modal v-bind:is-showing="isShowing" title="Delete Announcement" success-button="Delete" v-on:success="success" v-on:cancel="cancel">
+  <modal
+    v-bind:is-showing="isShowing"
+    title="Delete Announcement"
+    success-button="Delete"
+    v-on:success="success"
+    v-on:cancel="cancel"
+  >
     <form v-on:submit.prevent="onSubmit">
-      <p v-if="error" class="is-danger">
-        {{ error }}
-      </p>
+      <p v-if="error" class="is-danger">{{ error }}</p>
       <div class="field">
         <label class="label">Are you sure you want to delete this Announcement?</label>
       </div>
@@ -27,10 +31,10 @@ export default class DeleteAnnouncement extends Vue {
   success() {
     this.error = false;
     axios
-      .delete(APIConfig.buildUrl("/announce"),{})
-      .then((response) => {
-          this.$emit("success");
-          })
+      .delete(APIConfig.buildUrl("/announce"), {})
+      .then(response => {
+        this.$emit("success");
+      })
       .catch((res: AxiosError) => {
         this.error = res.response && res.response.data.error;
       });
@@ -42,9 +46,7 @@ export default class DeleteAnnouncement extends Vue {
 </script>
 
 <style lang="scss">
-
 #product-preview-image {
   height: 100px;
 }
-
 </style>

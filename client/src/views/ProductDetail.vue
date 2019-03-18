@@ -206,9 +206,6 @@ export default class ProductDetail extends Vue {
             id: items[i].id,
             newQuantity: this.itemQuantity
           });
-          console.log(
-            "[ViewShopItems.vue]" + JSON.stringify(this.$store.state.items)
-          );
           alert(`${this.itemQuantity} items successfully added to the cart!`);
           return true;
         }
@@ -229,9 +226,6 @@ export default class ProductDetail extends Vue {
         description: this.item.description
       };
       this.$store.commit("cart", orderItem);
-      console.log(
-        "[ViewShopItems.vue]" + JSON.stringify(this.$store.state.items)
-      );
       alert(`${this.itemQuantity} items successfully added to the cart!`);
       return true;
     }

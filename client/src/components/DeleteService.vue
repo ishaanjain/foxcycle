@@ -1,9 +1,13 @@
 <template>
-  <modal v-bind:is-showing="isShowing" title="Delete Service" success-button="Delete" v-on:success="success" v-on:cancel="cancel">
+  <modal
+    v-bind:is-showing="isShowing"
+    title="Delete Service"
+    success-button="Delete"
+    v-on:success="success"
+    v-on:cancel="cancel"
+  >
     <form v-on:submit.prevent="onSubmit">
-      <p v-if="error" class="is-danger">
-        {{ error }}
-      </p>
+      <p v-if="error" class="is-danger">{{ error }}</p>
       <div class="field">
         <label class="label">Are you sure you want to delete this service? There's no going back...</label>
       </div>
@@ -16,7 +20,7 @@ import axios, { AxiosResponse } from "axios";
 import { APIConfig } from "../utils/api.utils";
 import { Component, Prop, Vue } from "vue-property-decorator";
 import Modal from "./Modal.vue";
-import { iService} from "../models/service.interface";
+import { iService } from "../models/service.interface";
 @Component({
   components: { Modal }
 })
@@ -46,9 +50,7 @@ export default class DeleteService extends Vue {
 </script>
 
 <style lang="scss">
-
 #product-preview-image {
   height: 100px;
 }
-
 </style>
