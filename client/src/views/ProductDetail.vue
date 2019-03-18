@@ -196,7 +196,11 @@ export default class ProductDetail extends Vue {
     for (var i in items) {
       if (items[i].id == this.item.id) {
         if (this.itemQuantity > this.item.stockCount - items[i].quantity) {
-          alert("Not enough stock for quantity being added");
+          this.$toast.open({
+            message: "Not enough stock for quantity being added",
+            position: "is-bottom",
+            type: "is-danger"
+          });
           console.log(
             "out of stock for addition to orderItems" + this.itemQuantity
           );
@@ -216,7 +220,11 @@ export default class ProductDetail extends Vue {
       }
     }
     if (this.itemQuantity > this.item.stockCount) {
-      alert("Not enough stock for quantity being added");
+      this.$toast.open({
+        message: "Not enough stock for quantity being added",
+        position: "is-bottom",
+        type: "is-danger"
+      });
       console.log("out of stock" + this.itemQuantity);
       return false;
     } else {
