@@ -6,6 +6,7 @@
     v-on:success="success"
     v-on:cancel="cancel"
   >
+    <p v-if="items.length == 0">Your cart is empty, please add some items to the cart</p>
     <table class="table is-striped is-fullwidth" v-show="items.length">
       <thead>
         <tr>
