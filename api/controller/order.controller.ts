@@ -24,11 +24,8 @@ export class OrderController extends DefaultController {
           address: `%${req.query.address}%`,
           creditCard: `%${req.query.creditCard}%`,
         };
-
+        // orderRepo.find({  relations: ["productOrders", "user"] })
         orderRepo.createQueryBuilder('order').where(queryString, queryVars).getMany()
-        // orderRepo.find({
-        //   relations: ["productOrders", "user"]
-        // })
         .then((orders: Order[]) => {
           res.status(200).send({ orders });
         }).catch((error: any) => {
