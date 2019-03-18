@@ -41,7 +41,9 @@
                     </b-field>
 
                     <p class="control">
-                      <a class="button is-primary" v-on:click="success">Save</a>
+                      <a class="button is-primary" 
+                        v-on:click="success"
+                      >Save</a>
                     </p>
                   </div>
                 </div>
