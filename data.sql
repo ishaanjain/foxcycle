@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.24)
 # Database: dev
-# Generation Time: 2019-03-18 10:41:41 +0000
+# Generation Time: 2019-03-18 19:50:41 +0000
 # ************************************************************
 
 
@@ -70,6 +70,25 @@ VALUES
 UNLOCK TABLES;
 
 
+# Dump of table item
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `item`;
+
+CREATE TABLE `item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `price` int(11) NOT NULL,
+  `imageUrls` varchar(255) DEFAULT NULL,
+  `stockCount` int(11) NOT NULL DEFAULT '0',
+  `tags` varchar(255) DEFAULT NULL,
+  `inStoreOnly` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
 # Dump of table order
 # ------------------------------------------------------------
 
@@ -83,9 +102,21 @@ CREATE TABLE `order` (
   `name` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
   `creditCard` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  `userId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_caabe91507b3379c7ba73637b84` (`userId`),
+  CONSTRAINT `FK_caabe91507b3379c7ba73637b84` FOREIGN KEY (`userId`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+LOCK TABLES `order` WRITE;
+/*!40000 ALTER TABLE `order` DISABLE KEYS */;
+
+INSERT INTO `order` (`id`, `status`, `totalPrice`, `storePickup`, `name`, `address`, `creditCard`, `userId`)
+VALUES
+	(1,'processing',99,1,'Adam Smith','111 Black Road, India','12345',NULL);
+
+/*!40000 ALTER TABLE `order` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table product
@@ -137,10 +168,20 @@ CREATE TABLE `product_order` (
   PRIMARY KEY (`id`),
   KEY `FK_717057f3f11a007030181422152` (`productId`),
   KEY `FK_42291ebe165058deecb017e652b` (`orderId`),
-  CONSTRAINT `FK_42291ebe165058deecb017e652b` FOREIGN KEY (`orderId`) REFERENCES `product` (`id`),
+  CONSTRAINT `FK_42291ebe165058deecb017e652b` FOREIGN KEY (`orderId`) REFERENCES `order` (`id`),
   CONSTRAINT `FK_717057f3f11a007030181422152` FOREIGN KEY (`productId`) REFERENCES `product` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+LOCK TABLES `product_order` WRITE;
+/*!40000 ALTER TABLE `product_order` DISABLE KEYS */;
+
+INSERT INTO `product_order` (`id`, `productCount`, `productId`, `orderId`)
+VALUES
+	(1,2,25,1),
+	(2,6,26,1);
+
+/*!40000 ALTER TABLE `product_order` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table product_tags_tag
@@ -221,10 +262,8 @@ LOCK TABLES `service` WRITE;
 
 INSERT INTO `service` (`id`, `name`, `price`, `description`)
 VALUES
-	(2,'Tire Change',49,'A common Tire Change for your ride, includes all labor, tubing, and new tires for your sweet bike, hope you enjoy!'),
-	(3,'Brake Pads',39,'A common repair job for your bike, bring it in and we will repair your brake pads and install new ones for this price'),
-	(5,'Chain Replacement',0,'Your typical Chain replacement repair, we grease and oil your new chain so that it works so amazingly well over your bike, keeping you on the road, because that is most important'),
-	(6,'Handlebar Alignment',10,'Handlebar Alignment, This is a great service for you, we align your handlebars and make it so that you can steer your new and cool bike really straight without worrying about crashing');
+	(3,'',230,'2r'),
+	(5,'',0,'');
 
 /*!40000 ALTER TABLE `service` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -244,16 +283,6 @@ CREATE TABLE `session` (
   CONSTRAINT `FK_3d2f174ef04fb312fdebd0ddc53` FOREIGN KEY (`userId`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-LOCK TABLES `session` WRITE;
-/*!40000 ALTER TABLE `session` DISABLE KEYS */;
-
-INSERT INTO `session` (`id`, `expiresAt`, `userId`)
-VALUES
-	(5,'2019-03-06 18:12:44',1),
-	(24,'2019-03-18 03:50:54',8);
-
-/*!40000 ALTER TABLE `session` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table tag
@@ -416,12 +445,12 @@ DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `emailAddress` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `firstName` varchar(255) NOT NULL,
   `lastName` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `profileUrl` varchar(255) DEFAULT NULL,
-  `emailAddress` varchar(255) NOT NULL,
   `isAdmin` tinyint(4) NOT NULL,
+  `profileUrl` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `IDX_eea9ba2f6e1bb8cb89c4e672f6` (`emailAddress`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -429,10 +458,10 @@ CREATE TABLE `user` (
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 
-INSERT INTO `user` (`id`, `firstName`, `lastName`, `password`, `profileUrl`, `emailAddress`, `isAdmin`)
+INSERT INTO `user` (`id`, `emailAddress`, `password`, `firstName`, `lastName`, `isAdmin`, `profileUrl`)
 VALUES
-	(1,'a','a','a','a','a',1),
-	(8,'admin','admin','hi',NULL,'admin@email.com',1);
+	(1,'a','a','a','a',1,NULL),
+	(2,'b','b','b','b',0,NULL);
 
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
