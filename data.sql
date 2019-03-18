@@ -221,8 +221,10 @@ LOCK TABLES `service` WRITE;
 
 INSERT INTO `service` (`id`, `name`, `price`, `description`)
 VALUES
-	(3,'',230,'2r'),
-	(5,'',0,'');
+	(2,'Tire Change',49,'A common Tire Change for your ride, includes all labor, tubing, and new tires for your sweet bike, hope you enjoy!'),
+	(3,'Brake Pads',39,'A common repair job for your bike, bring it in and we will repair your brake pads and install new ones for this price'),
+	(5,'Chain Replacement',0,'Your typical Chain replacement repair, we grease and oil your new chain so that it works so amazingly well over your bike, keeping you on the road, because that is most important'),
+	(6,'Handlebar Alignment',10,'Handlebar Alignment, This is a great service for you, we align your handlebars and make it so that you can steer your new and cool bike really straight without worrying about crashing');
 
 /*!40000 ALTER TABLE `service` ENABLE KEYS */;
 UNLOCK TABLES;
