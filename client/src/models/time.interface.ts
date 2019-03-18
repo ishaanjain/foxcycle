@@ -5,4 +5,6 @@ export interface iTime {
     name: string;
     startam: string;
     endam: string;
+    smin: number;
+    emin: number;
 }

@@ -33,12 +33,13 @@
                         <option value="Sunday">Sunday</option>
                       </b-select>
                     </b-field>
-                    <b-field label="Open (24 hr)">
-                      <b-input type="number" v-model="time.start" min="1" max="24" step="1"></b-input>
+                    <b-field label="Open">
+                      <b-input type="time" v-model="starting" required></b-input>
                     </b-field>
-                    <b-field label="Close (24 hr)">
-                      <b-input type="number" v-model="time.end" min="1" max="24" step="1"></b-input>
+                    <b-field label="Close">
+                      <b-input type="time" v-model="ending" required></b-input>
                     </b-field>
+
 
                     <p class="control">
                       <a class="button is-primary" 
@@ -59,7 +60,7 @@
               <tbody>
                 <tr v-for="(t, index) in hours" v-bind:key="index">
                   <td>{{t.name}}</td>
-                  <td>{{t.start}} {{t.startam}} - {{t.end % 12}} {{t.endam}}</td>
+                  <td>{{t.start}}:{{t.smin.toString().padStart(2, '0')}} {{t.startam}} - {{t.end}}:{{t.emin.toString().padStart(2, '0')}} {{t.endam}}</td>
                 </tr>
               </tbody>
             </table>
@@ -151,9 +152,13 @@ export default class Home extends Vue {
     end: 2,
     name: "Monday",
     startam: "am",
-    endam: "pm"
+    endam: "pm",
+    emin: 0,
+    smin: 0
   };
 
+  public starting = "7:00";
+  public ending = "15:00";
 
   toast() {
     this.$toast.open({
@@ -227,14 +232,27 @@ export default class Home extends Vue {
         for (index = 0; index < this.hours.length; index++) {
           var newstring = this.hours[index].name;
           if (newstring.indexOf(day) != -1) arrday = this.hours[index];
+          else if(this.hours[index].start == 0) this.hours[index].start = 12;
+          else if(this.hours[index].start != 12) this.hours[index].start = this.hours[index].start % 12;
+          if(this.hours[index].end == 0) this.hours[index].end = 12;
+          else if(this.hours[index].end != 12) this.hours[index].end = this.hours[index].end % 12;
         }
-        if (arrday != undefined)
-          if (
-            this.currenttime.getHours() < arrday.start ||
-            this.currenttime.getHours() > arrday.end
-          )
+        if (arrday != undefined){
+          if (this.currenttime.getHours() < arrday.start &&
+          this.currenttime.getMinutes() > arrday.smin
+            )
             this.open = false;
-          else this.open = true;
+          else{
+            if(this.currenttime.getMinutes() < arrday.end && this.currenttime.getMinutes() > arrday.emin){
+                this.open = false;
+            }else
+            this.open = true;
+          }
+          if(arrday.start == 0) arrday.start = 12;
+          else if(arrday.start != 12) arrday.start = arrday.start % 12;
+          if(arrday.end == 0 ) arrday.end = 12;
+          else if(arrday.end != 12) arrday.end = arrday.end % 12;
+        }
       }
     });
   }
@@ -260,6 +278,12 @@ export default class Home extends Vue {
 
   success() {
     this.error = false;
+
+    this.time.start = parseInt(this.starting.split(":")[0]);
+    this.time.end = parseInt(this.ending.split(":")[0]);
+    this.time.smin = parseInt(this.starting.split(":")[1]);
+    this.time.emin = parseInt(this.ending.split(":")[1]);
+
     if(this.time.start > 12){
       this.time.startam = "pm";
     } else{
@@ -271,6 +295,7 @@ export default class Home extends Vue {
     }else{
       this.time.startam = "am";
     }
+
     axios
       .put(APIConfig.buildUrl("/time"), this.time, {})
       .then(response => {
@@ -283,7 +308,6 @@ export default class Home extends Vue {
           if (newstring.indexOf(day) != -1) {
             this.hours[index] = response.data.time;
             arrday = response.data.time;
-            console.log(arrday);
           }
         }
         if (arrday == undefined) this.hours.push(response.data.time);

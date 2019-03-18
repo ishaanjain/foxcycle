@@ -9,6 +9,12 @@ export class Time {
   public start!: number;
 
   @Column()
+  public smin!: number;
+
+  @Column()
+  public emin!:number;
+
+  @Column()
   public end!: number;
 
   @Column()
