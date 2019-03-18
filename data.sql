@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.24)
 # Database: dev
-# Generation Time: 2019-03-12 00:34:13 +0000
+# Generation Time: 2019-03-12 00:48:57 +0000
 # ************************************************************
 
 
@@ -192,6 +192,15 @@ CREATE TABLE `service` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+LOCK TABLES `service` WRITE;
+/*!40000 ALTER TABLE `service` DISABLE KEYS */;
+
+INSERT INTO `service` (`id`, `name`, `description`, `price`)
+VALUES
+	(1,'chain','chain',10);
+
+/*!40000 ALTER TABLE `service` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table session

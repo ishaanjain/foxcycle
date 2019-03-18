@@ -39,6 +39,9 @@
             <h5 class="title is-4">Price:</h5>
             <h1 class="title is-5">${{this.item.price}}</h1>
           </div>
+          <div class="product-field">
+            <h1 class="title is-5 product-instore-only" v-if="item.inStoreOnly">In Store Only! Please come in to our shop to purchase</h1>
+          </div>
         </div>
       </div>
     </div>
@@ -55,6 +58,7 @@ import DeleteProduct from "@/components/DeleteProduct.vue"
 import { APIConfig } from "../utils/api.utils";
 import { iProduct } from "../models/product.interface";
 import { iTag } from "../models/tag.interface";
+import { iProductOrder } from "../models/productOrder.interface"
 
 @Component({
   components: {
@@ -120,6 +124,15 @@ export default class ProductDetail extends Vue {
 
   successEditProduct() {
     this.showEditProduct = false;
+    this.tempProduct.id = this.item.id;
+    this.tempProduct.name = this.item.name;
+    this.tempProduct.description = this.item.description;
+    this.tempProduct.price = this.item.price;
+    this.tempProduct.imageUrls = this.item.imageUrls;
+    this.tempProduct.stockCount = this.item.stockCount;
+    this.tempProduct.tagString = this.item.tagString;
+    this.tempProduct.tags = this.item.tags;
+    this.tempProduct.inStoreOnly = this.item.inStoreOnly;
   }
 
   cancelEditProduct() {
@@ -149,7 +162,42 @@ export default class ProductDetail extends Vue {
   }
 
   addProductToCart() {
-    alert("item added to cart");
+    var items: iProductOrder[] = this.$store.state.items;
+    for (var i in items) {
+      if (items[i].id == this.item.id) {
+        if (this.itemQuantity > (this.item.stockCount - items[i].quantity)) {
+          alert("Not enough stock for quantity being added");
+          console.log("out of stock for addition to orderItems" + this.itemQuantity);
+          return false;
+        }
+        else {
+          this.$store.commit("updateCart", {id: items[i].id, newQuantity: this.itemQuantity});
+          console.log("[ViewShopItems.vue]" + JSON.stringify(this.$store.state.items));
+          alert(`${this.itemQuantity} items successfully added to the cart!`);
+          return true;
+        }
+      }
+    }
+    if (this.itemQuantity > this.item.stockCount) {
+      alert("Not enough stock for quantity being added");
+      console.log("out of stock" + this.itemQuantity);
+      return false;
+    } 
+    else {
+      var orderItem: iProductOrder = {
+        id: this.item.id,
+        name: this.item.name,
+        price: this.item.price * this.itemQuantity,
+        image: this.item.imageUrls,
+        delivery: true,
+        quantity: this.itemQuantity,
+        description: this.item.description
+      }
+      this.$store.commit("cart", orderItem);
+      console.log("[ViewShopItems.vue]" + JSON.stringify(this.$store.state.items));
+      alert(`${this.itemQuantity} items successfully added to the cart!`);
+      return true;
+    }
   }
 
   mounted() {
@@ -189,6 +237,10 @@ div.product-quantity.has-addons {
 .product-quantity-container {
   text-align: center;
   padding-top: 50px;
+}
+
+.product-instore-only {
+  color: red;
 }
 
 </style>
