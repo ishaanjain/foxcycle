@@ -1,9 +1,13 @@
 <template>
-  <modal v-bind:is-showing="isShowing" title="Add Product" success-button="Add" v-on:success="success" v-on:cancel="cancel">
+  <modal
+    v-bind:is-showing="isShowing"
+    title="Add Product"
+    success-button="Add"
+    v-on:success="success"
+    v-on:cancel="cancel"
+  >
     <form v-on:submit.prevent="onSubmit">
-      <p v-if="error" class="is-danger">
-        {{ error }}
-      </p>
+      <p v-if="error" class="is-danger">{{ error }}</p>
       <div class="field">
         <label class="label">Product Name:</label>
         <div class="control">
@@ -13,7 +17,12 @@
       <div class="field">
         <label class="label">Description:</label>
         <div class="control">
-          <textarea class="input textarea" type="textarea" placeholder="Product description" v-model="product.description"></textarea>
+          <textarea
+            class="input textarea"
+            type="textarea"
+            placeholder="Product description"
+            v-model="product.description"
+          ></textarea>
         </div>
       </div>
       <div class="field">
@@ -25,29 +34,44 @@
       <div class="field">
         <label class="label">Image Url(s):</label>
         <div class="control">
-          <input class="input" type="text" placeholder="Product image url" v-model="product.imageUrls">
+          <input
+            class="input"
+            type="text"
+            placeholder="Product image url"
+            v-model="product.imageUrls"
+          >
         </div>
       </div>
       <span>
-        <img id="product-preview-image" :src="product.imageUrls"/>
+        <img id="product-preview-image" :src="product.imageUrls">
       </span>
       <div class="field">
         <label class="label">Stock/Inventory Count:</label>
         <div class="control">
-          <input class="input" type="text" placeholder="Stock/inventory count" v-model="product.stockCount">
+          <input
+            class="input"
+            type="text"
+            placeholder="Stock/inventory count"
+            v-model="product.stockCount"
+          >
         </div>
       </div>
       <div class="field">
         <label class="label">Item Categories:Tags: (separated by ";")</label>
         <label class="label">ex: brand:Willier;color:Orange;size:Medium;type:Road</label>
         <div class="control">
-          <input class="input" type="text" placeholder="Product categories/tags" v-model="product.tagString">
+          <input
+            class="input"
+            type="text"
+            placeholder="Product categories/tags"
+            v-model="product.tagString"
+          >
         </div>
       </div>
       <label class="checkbox">
         <input type="checkbox" v-bind:checked="product.inStoreOnly">
-            In Store Only
-        </label>
+        In Store Only
+      </label>
     </form>
   </modal>
 </template>
@@ -71,7 +95,7 @@ export default class AddNewProduct extends Vue {
     price: 0.0,
     imageUrls: "",
     stockCount: 0,
-    tagString : "",
+    tagString: "",
     tags: [],
     inStoreOnly: false
   };
@@ -86,14 +110,14 @@ export default class AddNewProduct extends Vue {
       })
       .then((response: AxiosResponse<iProduct>) => {
         this.$emit("success");
-        this.product =  {
+        this.product = {
           id: 0,
           name: "",
           description: "",
           price: 0.0,
           imageUrls: "",
           stockCount: 0,
-          tagString : "",
+          tagString: "",
           tags: [],
           inStoreOnly: false
         };
@@ -109,9 +133,7 @@ export default class AddNewProduct extends Vue {
 </script>
 
 <style lang="scss">
-
 #product-preview-image {
   height: 100px;
 }
-
 </style>

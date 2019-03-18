@@ -1,9 +1,13 @@
 <template>
-  <modal v-bind:is-showing="isShowing" title="Edit Service" success-button="Save" v-on:success="success" v-on:cancel="cancel">
+  <modal
+    v-bind:is-showing="isShowing"
+    title="Edit Service"
+    success-button="Save"
+    v-on:success="success"
+    v-on:cancel="cancel"
+  >
     <form v-on:submit.prevent="onSubmit">
-      <p v-if="error" class="is-danger">
-        {{ error }}
-      </p>
+      <p v-if="error" class="is-danger">{{ error }}</p>
       <div class="field">
         <label class="label">Service Name:</label>
         <div class="control">
@@ -13,7 +17,12 @@
       <div class="field">
         <label class="label">Description:</label>
         <div class="control">
-          <textarea class="input textarea" type="textarea" placeholder="Service description" v-model="service.description"></textarea>
+          <textarea
+            class="input textarea"
+            type="textarea"
+            placeholder="Service description"
+            v-model="service.description"
+          ></textarea>
         </div>
       </div>
       <div class="field">
@@ -31,7 +40,7 @@ import axios, { AxiosResponse } from "axios";
 import { APIConfig } from "../utils/api.utils";
 import { Component, Prop, Vue } from "vue-property-decorator";
 import Modal from "./Modal.vue";
-import { iService } from '@/models/service.interface';
+import { iService } from "@/models/service.interface";
 
 @Component({
   components: { Modal }
@@ -63,9 +72,7 @@ export default class EditService extends Vue {
 </script>
 
 <style lang="scss">
-
 #product-preview-image {
   height: 100px;
 }
-
 </style>

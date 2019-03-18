@@ -3,7 +3,7 @@
     <div class="profilePhoto column">
       <form enctype="multipart/form-data" novalidate>
         <div class="profilePhoto">
-          <img :src="profileUrl"/>
+          <img :src="profileUrl">
         </div>
         <div class="file">
           <label class="file-label">
@@ -19,9 +19,7 @@
               <span class="file-icon">
                 <font-awesome-icon icon="upload"/>
               </span>
-              <span class="file-label">
-                Choose a profile image…
-              </span>
+              <span class="file-label">Choose a profile image…</span>
             </span>
           </label>
           <p v-if="isSaving">Uploading file...</p>
