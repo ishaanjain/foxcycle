@@ -38,16 +38,16 @@
     <table class="table is-striped is-fullwidth">
       <tr>
         <th>ID</th>
-        <th>Total Price</th>
-        <th>In-Store Pickup</th>
+        <!-- <th>Total Price</th> -->
+        <th>Store Pickup</th>
         <th>Customer Name</th>
         <th>Customer Address</th>
         <th>Credit Card #</th>
         <th>Status</th>
       </tr>
-      <tr v-for="(order, index) in myOrders" v-bind:key="index">
+      <tr v-for="(order, index) in myOrders" v-bind:key="index" v-bind:idx="index" v-on:click="orderClick">
         <th>{{order.id}}</th>
-        <th>{{order.totalPrice}}</th>
+        <!-- <th>{{order.totalPrice}}</th> -->
         <th>{{order.storePickup}}</th>
         <th>{{order.name}}</th>
         <th>{{order.address}}</th>
@@ -62,6 +62,13 @@
         </th>
       </tr>
     </table>
+    <EditOrder
+      v-if="showEditOrder"
+      v-bind:order="order"
+      v-on:success="editOrderSuccess"
+      v-on:cancel="showEditOrder = false"
+    >
+    </EditOrder>
     <Modal
       v-bind:is-showing="showConfirm"
       title="Confirmation"
@@ -77,14 +84,16 @@
 <script lang="ts">
 import Vue from "vue";
 import axios, { AxiosResponse } from "axios";
-import { APIConfig } from "../utils/api.utils";
 import { Component } from "vue-property-decorator";
+import { APIConfig } from "../utils/api.utils";
 import { iOrder } from "@/models/order.interface";
 import Modal from "../components/Modal.vue";
+import EditOrder from "./EditOrder.vue";
 
 @Component({
   components: {
-    Modal
+    EditOrder,
+    Modal,
   }
 })
 export default class Orders extends Vue {
@@ -92,9 +101,13 @@ export default class Orders extends Vue {
     id: undefined,
     name: "",
     address: "",
-    creditCard: "",
+    creditCard: ""
   };
   myOrders: iOrder[] = [];
+
+  showEditOrder: boolean = false;
+  clickedOrderId: number = -1;
+
   public showConfirm: boolean = false;
   pendingDeleteOrderId: number = -1;
   error: string = "";
@@ -124,6 +137,20 @@ export default class Orders extends Vue {
       this.$router.push({ name: "home" });
     }
     this.loadOrders();
+  }
+
+  orderClick(event: any) {
+    this.showEditOrder = true;
+    this.clickedOrderId = event.currentTarget.getAttribute("idx");
+  }
+
+  get order(): iOrder {
+    return this.myOrders[this.clickedOrderId];
+  }
+
+  editOrderSuccess() {
+    this.showEditOrder = false;
+    this.loadOrders;
   }
 
   deleteOrder(id: number) {
@@ -161,12 +188,8 @@ export default class Orders extends Vue {
     axios
       .patch(
         APIConfig.buildUrl(`/orders/${event.target.id}`),
-        {
-          status: "dispatched"
-        },
-        {
-          headers: { token: this.$store.state.userToken }
-        }
+        { status: "dispatched" },
+        { headers: { token: this.$store.state.userToken } }
       )
       .then((response: AxiosResponse) => {
         // order.isAdmin = response.data.user.isAdmin;
