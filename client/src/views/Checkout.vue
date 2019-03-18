@@ -38,7 +38,7 @@
             <b-input type="search" maxlength="30" v-model="ccNum"></b-input>
           </b-field>
           <label id="orderPickupLabel" class="checkbox">
-          <input type="checkbox" v-bind="storePickup">
+          <input type="checkbox" v-model="storePickup">
           Pick Up Order In Store
           </label>
 
