@@ -206,7 +206,11 @@ export default class ProductDetail extends Vue {
             id: items[i].id,
             newQuantity: this.itemQuantity
           });
-          alert(`${this.itemQuantity} items successfully added to the cart!`);
+          this.$toast.open({
+            message: `${this.itemQuantity} items successfully added to the cart!`,
+            position: "is-bottom",
+            type: "is-success"
+          });
           return true;
         }
       }
@@ -226,7 +230,11 @@ export default class ProductDetail extends Vue {
         description: this.item.description
       };
       this.$store.commit("cart", orderItem);
-      alert(`${this.itemQuantity} items successfully added to the cart!`);
+      this.$toast.open({
+        message: `${this.itemQuantity} items successfully added to the cart!`,
+        position: "is-bottom",
+        type: "is-success"
+      });
       return true;
     }
   }
