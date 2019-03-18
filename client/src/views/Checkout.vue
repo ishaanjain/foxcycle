@@ -30,13 +30,13 @@
       <div class="column is-half">
         <div>
           <b-field label="Name">
-            <b-input type="search" maxlength="30" min="1"></b-input>
+            <b-input type="search" maxlength="30" ></b-input>
           </b-field>
           <b-field label="Address">
-            <b-input type="search" maxlength="30" min="1"></b-input>
+            <b-input type="search" maxlength="60" ></b-input>
           </b-field>
           <b-field label="Credit Card Number">
-            <b-input type="search" maxlength="30" min="1"></b-input>
+            <b-input type="search" maxlength="30" ></b-input>
           </b-field>
 
           <p class="control">
@@ -70,7 +70,9 @@ export default class Checkout extends Vue {
     });
   }
 
-  checkout() {}
+  checkout() {
+    this.$router.push({ name: "success" });
+  }
 }
 </script>
 

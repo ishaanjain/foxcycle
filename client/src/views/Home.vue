@@ -316,7 +316,7 @@ export default class Home extends Vue {
       .catch((res: AxiosError) => {
         this.error = res.response && res.response.data.error;
       });
-
+    
     this.toast();
   }
 }
