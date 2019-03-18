@@ -20,7 +20,7 @@
     <div class="product-detail">
       <EditProduct
         v-bind:product="item"
-        v-bind:is-showing="showEditProduct"
+        v-if="showEditProduct"
         v-on:success="successEditProduct()"
         v-on:cancel="cancelEditProduct()"
       />
@@ -109,17 +109,6 @@ export default class ProductDetail extends Vue {
     tags: [],
     inStoreOnly: false
   };
-  public tempProduct: iProduct = {
-    id: 0,
-    name: "",
-    description: "",
-    price: 0,
-    imageUrls: "",
-    stockCount: 0,
-    tagString: "",
-    tags: [],
-    inStoreOnly: false
-  };
 
   @Prop(String) id!: string;
 
@@ -140,15 +129,6 @@ export default class ProductDetail extends Vue {
       })
       .then(response => {
         this.item = response.data.product;
-        this.tempProduct.id = this.item.id;
-        this.tempProduct.name = this.item.name;
-        this.tempProduct.description = this.item.description;
-        this.tempProduct.price = this.item.price;
-        this.tempProduct.imageUrls = this.item.imageUrls;
-        this.tempProduct.stockCount = this.item.stockCount;
-        this.tempProduct.tagString = this.item.tagString;
-        this.tempProduct.tags = this.item.tags;
-        this.tempProduct.inStoreOnly = this.item.inStoreOnly;
       });
   }
 
@@ -158,27 +138,10 @@ export default class ProductDetail extends Vue {
 
   successEditProduct() {
     this.showEditProduct = false;
-    this.tempProduct.id = this.item.id;
-    this.tempProduct.name = this.item.name;
-    this.tempProduct.description = this.item.description;
-    this.tempProduct.price = this.item.price;
-    this.tempProduct.imageUrls = this.item.imageUrls;
-    this.tempProduct.stockCount = this.item.stockCount;
-    this.tempProduct.tagString = this.item.tagString;
-    this.tempProduct.tags = this.item.tags;
-    this.tempProduct.inStoreOnly = this.item.inStoreOnly;
+    this.getProduct();
   }
 
   cancelEditProduct() {
-    this.item.id = this.tempProduct.id;
-    this.item.name = this.tempProduct.name;
-    this.item.description = this.tempProduct.description;
-    this.item.price = this.tempProduct.price;
-    this.item.imageUrls = this.tempProduct.imageUrls;
-    this.item.stockCount = this.tempProduct.stockCount;
-    this.item.tagString = this.tempProduct.tagString;
-    this.item.tags = this.tempProduct.tags;
-    this.item.inStoreOnly = this.tempProduct.inStoreOnly;
     this.showEditProduct = false;
   }
 
@@ -198,8 +161,8 @@ export default class ProductDetail extends Vue {
   addProductToCart() {
     var productOrders: iProductOrder[] = this.$store.state.productOrders;
     for (var i in productOrders) {
-      if (productOrders[i].id == this.item.id) {
-        if (this.itemQuantity > this.item.stockCount - productOrders[i].quantity) {
+      if (productOrders[i].productId == this.item.id) {
+        if (this.itemQuantity > this.item.stockCount - productOrders[i].productCount) {
           this.$toast.open({
             message: "Not enough stock for quantity being added",
             position: "is-bottom",
@@ -211,7 +174,7 @@ export default class ProductDetail extends Vue {
           return false;
         } else {
           this.$store.commit("updateCart", {
-            id: productOrders[i].id,
+            productId: productOrders[i].productId,
             additionalQuantity: this.itemQuantity
           });
           this.$toast.open({
@@ -235,13 +198,11 @@ export default class ProductDetail extends Vue {
       return false;
     } else {
       var orderItem: iProductOrder = {
-        id: this.item.id,
+        productId: this.item.id,
+        productCount: this.itemQuantity,
         name: this.item.name,
         price: this.item.price * this.itemQuantity,
-        image: this.item.imageUrls,
-        delivery: true,
-        quantity: this.itemQuantity,
-        description: this.item.description
+        image: this.item.imageUrls
       };
       this.$store.commit("addToCart", { orderItem });
       this.$toast.open({

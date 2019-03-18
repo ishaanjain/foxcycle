@@ -47,10 +47,11 @@ const mutations: MutationTree<iRootState> = {
   },
   updateCart(state, payload) {
     state.productOrders.forEach( function (order: iProductOrder){
-      if (payload.id === order.id) {
+      if (payload.productId === order.productId) {
         const additionalQuantity = parseInt(payload.additionalQuantity);
-        order.quantity += additionalQuantity;
-        order.price += (order.price / (order.quantity - additionalQuantity)) * additionalQuantity;
+        order.productCount += additionalQuantity;
+        order.price += (order.price / (order.productCount - additionalQuantity)) * additionalQuantity;
+
       }
     });
   }
