@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.24)
 # Database: dev
-# Generation Time: 2019-03-18 06:37:50 +0000
+# Generation Time: 2019-03-18 07:20:22 +0000
 # ************************************************************
 
 
@@ -40,7 +40,7 @@ LOCK TABLES `about` WRITE;
 
 INSERT INTO `about` (`id`, `description`, `address`, `phone`, `title`, `imageurl`)
 VALUES
-	(1,'Hello World','10243 CSC307 Drive','654 134 1235','Our Story','https://www.hindustantimes.com/rf/image_size_960x540/HT/p2/2018/04/03/Pictures/_56db43e2-3722-11e8-8aa5-05fdb8d0ae52.jpg');
+	(2,'Hi there! Welcome to FoxCycle. We are a local bike shop stationed in the beautiful city of San Luis Obispo, California. Please come into the store or check out our cool new website built by some CSC 307 students at Cal Poly! Thank you!','10243 CSC307 Drive','654 134 1235','Our Story','https://www.hindustantimes.com/rf/image_size_960x540/HT/p2/2018/04/03/Pictures/_56db43e2-3722-11e8-8aa5-05fdb8d0ae52.jpg');
 
 /*!40000 ALTER TABLE `about` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -251,7 +251,7 @@ INSERT INTO `session` (`id`, `expiresAt`, `userId`)
 VALUES
 	(5,'2019-03-06 18:12:44',1),
 	(9,'2019-03-06 18:35:48',9),
-	(11,'2019-03-18 00:06:16',8);
+	(12,'2019-03-18 00:46:43',8);
 
 /*!40000 ALTER TABLE `session` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -390,6 +390,21 @@ CREATE TABLE `time` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+LOCK TABLES `time` WRITE;
+/*!40000 ALTER TABLE `time` DISABLE KEYS */;
+
+INSERT INTO `time` (`id`, `start`, `end`, `name`)
+VALUES
+	(1,9,17,'Monday'),
+	(2,9,17,'Tuesday'),
+	(3,9,17,'Wednesday'),
+	(4,9,17,'Thursday'),
+	(5,9,17,'Friday'),
+	(6,1,1,'Saturday'),
+	(7,1,1,'Sunday');
+
+/*!40000 ALTER TABLE `time` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table to_do
