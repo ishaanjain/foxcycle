@@ -20,7 +20,7 @@
           <td>{{p.name}}
                 <img style="display: block; height:50px" :src="p.image"></td>
           <td>${{ p.price }}</td>
-          <td>{{ p.quantity }}</td>
+          <td>{{ p.productCount }}</td>
         </tr>
         <tr>
           <td>
