@@ -126,7 +126,7 @@ export default class Something extends Vue {
 
 <style lang="scss">
 .about-image {
-  margin-top: 20px;
+  margin: 25px 0px 20px;
   width: 500px;
 }
 </style>

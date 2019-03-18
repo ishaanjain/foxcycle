@@ -1,5 +1,5 @@
 <template>
-  <div id="parent-services-container" class="services tile">
+  <div id="services-container" class="tile">
     <div class="title">
       <p class="subtitle">All Services are performed in store</p>
       <div>
@@ -13,7 +13,7 @@
         <div class="p-parent">
           <div v-for="(item, index) in items" v-bind:key="index">
             <router-link :to="{name: 'service detail', params: { id: item.id.toString() }}">
-              <div class="box service">
+              <div class="box service-box">
                 <h1 class="service-title title is-3">{{item.name.substr(0, 32)}}</h1>
                 <p class="service-title item-price is-5">${{item.price}}</p>
                 <p class="service-description title is-5">{{item.description.substr(0, 220)}}</p>
@@ -90,24 +90,16 @@ export default class Services extends Vue {
 
 <style scoped lang="scss">
 
-div.services {
-  width: 1550px;
-}
-
 div.title {
   width: 1550px;
 }
 
-#parent-services-container {
+#services-container {
   max-width: 1550px;
   width: auto;
-  margin-left: 20px;
-  margin-right: 0px;
+  margin: 25px 0px 0px 120px;
 }
 
-.services {
-  margin: 2%;
-}
 h1.service-title {
   height: 20px;
   margin-bottom: 18px;
@@ -118,20 +110,20 @@ h1.service-description {
   margin-bottom: 0px;
 }
 
-img.service {
+img.service-box {
   height: 76%;
   margin: 0px 0px 16px 0px;
 }
 
-.service:hover {
+.service-box:hover {
   cursor: pointer;
 }
 
-.service {
+.service-box {
   height: 300px;
   width: 350px;
   float: left;
-  margin: 14px;
+  margin: 14px 28px 14px 0px;
 }
 
 .p-parent {

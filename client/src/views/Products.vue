@@ -1,9 +1,6 @@
  <template>
   <div class="products">
     <div class="columns">
-      <div class="column is-one-fifth">
-        <h3 class="title is-3">Store:</h3>
-      </div>
       <div class="column is-four-fifths">
         <a
           class="button is-light"
@@ -14,7 +11,7 @@
     </div>
     <div class="columns">
       <div class="column is-one-fifth">
-        <h4 class="title is-4">Filter By:</h4>
+        <h4 class="title is-4">Filter By</h4>
         <div class="product-filters">
           <div v-for="(tag, index) in tags" v-bind:key="index">
             <h4 class="subtitle filter-header">{{tag.name}}:</h4>
@@ -37,7 +34,7 @@
         />
       </div>
       <div class="column is-four-fifths">
-        <h4 class="title is-4">Products:</h4>
+        <h4 class="title is-4">Products</h4>
         <div class="container products-container">
           <div class="p-parent">
             <div v-for="(item, index) in items" v-bind:key="index">
@@ -227,7 +224,7 @@ img.product {
   height: 300px;
   width: 300px;
   float: left;
-  margin: 14px;
+  margin: 14px 28px 14px 0px;
 }
 
 .p-parent {
