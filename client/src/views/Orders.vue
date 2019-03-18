@@ -13,50 +13,46 @@
       <input
         class="input ordersInput"
         type="text"
-        placeholder="First Name"
-        :value="filter.firstName"
+        placeholder="Customer Name"
+        :value="filter.name"
         @input="filterChange"
-        name="firstName"
+        name="name"
       >
       <input
         class="input ordersInput"
         type="text"
-        placeholder="Last Name"
-        :value="filter.lastName"
+        placeholder="Customer Adress"
+        :value="filter.address"
         @input="filterChange"
-        name="lastName"
+        name="address"
       >
       <input
         class="input ordersInput"
-        type="email"
-        placeholder="Email Address"
-        :value="filter.emailAddress"
+        type="number"
+        placeholder="Credit Card #"
+        :value="filter.creditCard"
         @input="filterChange"
-        name="emailAddress"
+        name="creditCard"
       >
     </div>
     <table class="table is-striped is-fullwidth">
       <tr>
         <th>ID</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Email Address</th>
-        <th>Admin</th>
-        <th></th>
+        <th>Total Price</th>
+        <th>In-Store Pickup</th>
+        <th>Customer Name</th>
+        <th>Customer Address</th>
+        <th>Credit Card #</th>
+        <th>Status</th>
       </tr>
       <tr v-for="(order, index) in myOrders" v-bind:key="index">
         <th>{{order.id}}</th>
-        <th>{{order.firstName}}</th>
-        <th>{{order.lastName}}</th>
-        <th>{{order.emailAddress}}</th>
-        <th>
-          <input
-            type="checkbox"
-            :id="order.id"
-            :checked="order.isAdmin"
-            v-on:click="editOrder"
-          >
-        </th>
+        <th>{{order.totalPrice}}</th>
+        <th>{{order.storePickup}}</th>
+        <th>{{order.name}}</th>
+        <th>{{order.address}}</th>
+        <th>{{order.creditCard}}</th>
+        <th>{{order.status}}</th>
         <th>
           <button class="button" v-on:click="deleteOrder(order.id)">
             <span class="icon">
@@ -66,12 +62,6 @@
         </th>
       </tr>
     </table>
-    <div class="buttons">
-      <button class="button is-primary" v-on:click="showSignup = true">
-        <strong>Add order</strong>
-      </button>
-    </div>
-    <Signup v-if="showSignup" v-on:success="signupSuccess" v-on:cancel="showSignup = false"/>
     <Modal
       v-bind:is-showing="showConfirm"
       title="Confirmation"
@@ -89,31 +79,22 @@ import Vue from "vue";
 import axios, { AxiosResponse } from "axios";
 import { APIConfig } from "../utils/api.utils";
 import { Component } from "vue-property-decorator";
+import { iOrder } from "@/models/order.interface";
 import Modal from "../components/Modal.vue";
-import Signup from "../components/Signup.vue";
 
 @Component({
   components: {
-    Signup,
     Modal
   }
 })
 export default class Orders extends Vue {
-  filter: OrderFilter = {
+  filter: iOrderFilter = {
     id: undefined,
-    firstName: "",
-    lastName: "",
-    emailAddress: ""
+    name: "",
+    address: "",
+    creditCard: "",
   };
-  order: Order = {
-    id: undefined,
-    firstName: "",
-    lastName: "",
-    emailAddress: "",
-    isAdmin: false
-  };
-  myOrders: Order[] = [];
-  public showSignup: boolean = false;
+  myOrders: iOrder[] = [];
   public showConfirm: boolean = false;
   pendingDeleteOrderId: number = -1;
   error: string = "";
@@ -125,12 +106,12 @@ export default class Orders extends Vue {
 
   loadOrders() {
     axios
-      .get(APIConfig.buildUrl("/users"), {
+      .get(APIConfig.buildUrl("/orders"), {
         headers: { token: this.$store.state.userToken },
         params: this.filter
       })
       .then((response: AxiosResponse) => {
-        this.myOrders = response.data.users;
+        this.myOrders = response.data.orders;
       })
       .catch((error: any) => {
         console.log(error.response.data);
@@ -139,14 +120,9 @@ export default class Orders extends Vue {
   }
 
   mounted() {
-    if (!this.$store.state.isAdmin) {
+    if (!this.$store.state.user) {
       this.$router.push({ name: "home" });
     }
-    this.loadOrders();
-  }
-
-  signupSuccess() {
-    this.showSignup = false;
     this.loadOrders();
   }
 
@@ -156,17 +132,14 @@ export default class Orders extends Vue {
   }
 
   confirmDelete() {
-    this.showConfirm = false;
-    if (this.pendingDeleteOrderId === this.$store.state.user.id) {
-      alert("Trying to delete yourself? Probably not a good idea.");
-      return;
-    }
     axios
-      .delete(APIConfig.buildUrl(`/users/${this.pendingDeleteOrderId}`), {
+      .delete(APIConfig.buildUrl(`/orders/${this.pendingDeleteOrderId}`), {
         headers: { token: this.$store.state.userToken }
       })
       .then((response: AxiosResponse) => {
         this.loadOrders();
+        this.showConfirm = false;
+        this.pendingDeleteOrderId = -1;
       })
       .catch((error: any) => {
         console.log(error.response.data);
@@ -181,26 +154,22 @@ export default class Orders extends Vue {
 
   editOrder(event: any) {
     event.preventDefault();
-    if (parseInt(event.target.id, 10) === this.$store.state.user.id) {
-      alert("Trying to demote yourself? Probably not a good idea.");
-      return;
-    }
     const order = this.myOrders.find(
-      (order: Order) => order.id == event.target.id
+      (order: iOrder) => order.id == event.target.id
     );
     if (!order) return;
     axios
       .patch(
-        APIConfig.buildUrl(`/users/${event.target.id}`),
+        APIConfig.buildUrl(`/orders/${event.target.id}`),
         {
-          isAdmin: !order.isAdmin
+          status: "dispatched"
         },
         {
           headers: { token: this.$store.state.userToken }
         }
       )
       .then((response: AxiosResponse) => {
-        order.isAdmin = response.data.user.isAdmin;
+        // order.isAdmin = response.data.user.isAdmin;
       })
       .catch((error: any) => {
         console.log(error.response.data);
@@ -209,20 +178,12 @@ export default class Orders extends Vue {
   }
 }
 
-interface Order {
-  id: number | undefined;
-  firstName: string;
-  lastName: string;
-  emailAddress: string;
-  isAdmin: boolean;
-}
-
-interface OrderFilter {
+interface iOrderFilter {
   [key: string]: any;
   id: number | undefined;
-  firstName: string;
-  lastName: string;
-  emailAddress: string;
+  name: string;
+  address: string;
+  creditCard: string;
 }
 </script>
 

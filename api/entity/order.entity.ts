@@ -7,9 +7,6 @@ export class Order {
   @PrimaryGeneratedColumn()
   public id!: number;
 
-  @Column()
-  public status!: string;
-
   @OneToMany(type => ProductOrder, productOrder => productOrder.order)
   public productOrders!: ProductOrder[];
 
@@ -27,6 +24,9 @@ export class Order {
 
   @Column()
   public creditCard!: string;
+
+  @Column()
+  public status!: string;
 
   @ManyToOne(type => User, user => user.orders)
   public user!: User;

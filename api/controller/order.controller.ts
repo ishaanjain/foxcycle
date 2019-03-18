@@ -13,9 +13,23 @@ export class OrderController extends DefaultController {
     router.route("/orders")
       .get(isAuthenticated(false, false), (req: Request, res: Response) => {
         const orderRepo = getRepository(Order);
-        orderRepo.find({
-          relations: ["productOrders", "user"]
-        }).then((orders: Order[]) => {
+        const queryString = `
+          CAST(order.id AS CHAR) LIKE :id AND
+          order.name LIKE :name AND
+          order.address LIKE :address AND
+          order.creditCard LIKE :creditCard`;
+        const queryVars = {
+          id: `%${req.query.id || ''}%`,
+          name: `%${req.query.name}%`,
+          address: `%${req.query.address}%`,
+          creditCard: `%${req.query.creditCard}%`,
+        };
+
+        orderRepo.createQueryBuilder('order').where(queryString, queryVars).getMany()
+        // orderRepo.find({
+        //   relations: ["productOrders", "user"]
+        // })
+        .then((orders: Order[]) => {
           res.status(200).send({ orders });
         }).catch((error: any) => {
           res.status(500).send({ reason: error.message });
@@ -37,12 +51,12 @@ export class OrderController extends DefaultController {
             await productOrderRepo.save(productOrder);
             order.productOrders.push(productOrder);
           }
-          order.status = "processing"; // can be processing, dispatched, or complete
           order.totalPrice = req.body.totalPrice;
           order.storePickup = req.body.storePickup;
           order.name = req.body.name;
           order.address = req.body.address;
           order.creditCard = req.body.creditCard;
+          order.status = "processing"; // can be processing, dispatched, or complete
           const createdOrder = await orderRepo.save(order);
           res.status(200).send({ createdOrder });
         } catch (error) {
@@ -84,7 +98,7 @@ export class OrderController extends DefaultController {
           orderRepo.save(order).then((updatedOrder: Order) => {
             res.status(200).send({ order: updatedOrder });
           });
-        } catch(error) {
+        } catch (error) {
           res.status(500).send({ reason: error.message });
         }
       })

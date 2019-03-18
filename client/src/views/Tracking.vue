@@ -17,7 +17,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in order.products" v-bind:key="index">
+            <tr v-for="(item, index) in order.productOrders" v-bind:key="index">
               <td><p class="is-size-2">{{item.productCount}}</p></td>
               <td>
                 {{item.product.name}}
@@ -62,7 +62,7 @@ export default class Tracking extends Vue {
         this.order.name = response.data.order.name;
         this.order.storePickup = response.data.order.storePickup;
         this.order.address = response.data.order.address;
-        this.order.products = response.data.order.productOrders;
+        this.order.productOrders = response.data.order.productOrders;
       })
       .catch(() => {
         this.errorwarning();
@@ -85,7 +85,8 @@ export default class Tracking extends Vue {
     storePickup: false,
     address: "",
     name: "",
-    products:[]
+    creditCard: "",
+    productOrders:[]
   };
 }
 </script>
