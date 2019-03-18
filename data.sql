@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.24)
 # Database: dev
-# Generation Time: 2019-03-18 21:08:33 +0000
+# Generation Time: 2019-03-18 22:31:42 +0000
 # ************************************************************
 
 
@@ -40,7 +40,7 @@ LOCK TABLES `about` WRITE;
 
 INSERT INTO `about` (`id`, `description`, `address`, `phone`, `title`, `imageurl`)
 VALUES
-	(15,'THIS PROJECT NEVER ENDS!!','12512 Fire Street','321 123 4321','Did it work?','https://media1.tenor.com/images/c9cb4422596fdaa9798415eb04bd9c7b/tenor.gif?itemid=8009273');
+	(15,'This bike shop was aquired by Stark Industries in 2046. We only use the best parts and materials. We only use machine labor and no animals or small humans were harmed in the making of our products. Please enjoy our products!','307 CSC Drive, San Luis Obispo, CA, 93407','444 912 9201','Our Story','https://i.pinimg.com/originals/13/60/7c/13607c1dd5682967f5e3733f717d6ce7.jpg');
 
 /*!40000 ALTER TABLE `about` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -64,7 +64,7 @@ LOCK TABLES `announce` WRITE;
 
 INSERT INTO `announce` (`id`, `description`, `imageurl`, `title`)
 VALUES
-	(18,'RUN THE WOLVES ARE AFTER YOU','https://www.wuwm.com/sites/wuwm/files/styles/x_large/public/201811/Fotolia_51699465_Subscription_Monthly_M.jpg','HELP, FINALS IS KILLING ME AND THERE\'S NO ESCAPE');
+	(18,'All items are 50% off!! We\'re closing soon for Spring Break and may not open next year so come get your bikes fast!','http://files.constantcontact.com/d300f02c001/136fc3ba-7d02-476c-990b-cd0fb68f7fe5.jpg?a=1127069507831','END OF QUARTER SALE');
 
 /*!40000 ALTER TABLE `announce` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -95,7 +95,8 @@ LOCK TABLES `order` WRITE;
 INSERT INTO `order` (`id`, `status`, `totalPrice`, `storePickup`, `name`, `address`, `creditCard`, `userId`)
 VALUES
 	(1,'processing',99,1,'Adam Smith','111 Black Road, India','12345',NULL),
-	(2,'Done',1231,0,'Bored','MOther f','12532',NULL);
+	(2,'done',1231,0,'Mike','643 Dead Street, Moroco','12532',NULL),
+	(4,'processing',5000,0,'Daniel','12415 FIre Road','12341',NULL);
 
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -160,7 +161,8 @@ LOCK TABLES `product_order` WRITE;
 INSERT INTO `product_order` (`id`, `productCount`, `productId`, `orderId`)
 VALUES
 	(1,2,25,1),
-	(2,6,26,1);
+	(2,6,26,1),
+	(3,1,25,4);
 
 /*!40000 ALTER TABLE `product_order` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -244,8 +246,8 @@ LOCK TABLES `service` WRITE;
 
 INSERT INTO `service` (`id`, `name`, `price`, `description`)
 VALUES
-	(3,'',230,'2r'),
-	(5,'',0,'');
+	(1,'Chain Repair',10,'Fix your chains'),
+	(2,'Tire Replacement',12,'Replace your bike tires');
 
 /*!40000 ALTER TABLE `service` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -409,12 +411,13 @@ LOCK TABLES `time` WRITE;
 
 INSERT INTO `time` (`id`, `name`, `start`, `end`, `startam`, `endam`, `smin`, `emin`)
 VALUES
-	(45,'Monday',12,15,'am','pm',0,0),
-	(46,'Friday',1,2,'am','pm',0,0),
-	(47,'Saturday',7,16,'am','pm',0,0),
-	(48,'Wednesday',1,2,'am','pm',0,0),
-	(49,'Thursday',12,21,'am','pm',0,0),
-	(50,'Sunday',12,12,'am','pm',0,0);
+	(45,'Monday',9,15,'am','pm',0,30),
+	(46,'Tuesday',9,15,'am','pm',0,30),
+	(47,'Wednesday',9,15,'am','pm',0,30),
+	(48,'Thursday',9,15,'am','pm',0,0),
+	(49,'Friday',9,15,'am','pm',0,0),
+	(50,'Saturday',10,17,'am','pm',0,45),
+	(52,'Sunday',10,17,'am','pm',0,45);
 
 /*!40000 ALTER TABLE `time` ENABLE KEYS */;
 UNLOCK TABLES;
