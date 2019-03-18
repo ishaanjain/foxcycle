@@ -45,19 +45,19 @@ const mutations: MutationTree<iRootState> = {
   cart(state, id) {
     state.items.push(id);
   },
-  updateCart(state, update) {
-    state.items.forEach( function (i: iProductOrder){
-      if (update.id == i.id) {
-        var q = parseInt(update.newQuantity);
-        i.quantity += q;
-        i.price += (i.price / i.quantity) * q;
+  updateCart(state, payload) {
+    state.items.forEach( function (order: iProductOrder){
+      if (payload.id === order.id) {
+        const additionalQuantity = parseInt(payload.additionalQuantity);
+        order.quantity += additionalQuantity;
+        order.price += (order.price / order.quantity) * additionalQuantity;
       }
     });
   }
 };
 
 const actions: ActionTree<iRootState, iRootState> = {
-  fetchUser({ commit }, payload) {
+  async fetchUser({ commit }, payload) {
     const { userid, token } = payload;
     return axios.get(APIConfig.buildUrl(`/users/${userid}`), {
       headers: { token }
@@ -65,7 +65,7 @@ const actions: ActionTree<iRootState, iRootState> = {
       commit("setUser", { user: res.data.user });
     });
   },
-  login({ commit, dispatch }, payload) {
+  async login({ commit, dispatch }, payload) {
     const { userid, token, isAdmin } = payload;
     return axios.get(APIConfig.buildUrl(`/users/${userid}`), {
       headers: { token }

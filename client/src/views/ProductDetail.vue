@@ -208,7 +208,7 @@ export default class ProductDetail extends Vue {
         } else {
           this.$store.commit("updateCart", {
             id: items[i].id,
-            newQuantity: this.itemQuantity
+            additionalQuantity: this.itemQuantity
           });
           this.$toast.open({
             message: `${this.itemQuantity} items successfully added to the cart!`,

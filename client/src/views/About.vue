@@ -2,7 +2,7 @@
   <div class="about">
     <div class="container is-fullhd">
       <div class="columns">
-        <div class="column">
+        <div class="about-image">
           <img :src="this.about.imageurl">
         </div>
         <div class="column">
@@ -123,3 +123,10 @@ export default class Something extends Vue {
   }
 }
 </script>
+
+<style lang="scss">
+.about-image {
+  margin-top: 20px;
+  width: 500px;
+}
+</style>
