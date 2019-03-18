@@ -200,6 +200,7 @@ export default class ProductDetail extends Vue {
       var orderItem: iProductOrder = {
         productId: this.item.id,
         productCount: this.itemQuantity,
+        inStoreOnly: this.item.inStoreOnly,
         name: this.item.name,
         price: this.item.price * this.itemQuantity,
         image: this.item.imageUrls
