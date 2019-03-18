@@ -9,7 +9,7 @@ import Products from "./views/Products.vue";
 import Services from "./views/Services.vue";
 import Checkout from "./views/Checkout.vue";
 import Tracking from "./views/Tracking.vue";
-
+import Success from "./views/Success.vue";
 import ServiceDetail from "./views/ServiceDetail.vue";
 import Cart from "./views/Services.vue";
 
@@ -79,6 +79,11 @@ export default new Router({
       path: "/checkout",
       name: "checkout",
       component: Checkout
-    }
+    },
+    {
+      path: "/success",
+      name: "success",
+      component: Success
+    },
   ]
 });
