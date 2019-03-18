@@ -7,7 +7,7 @@ import MyProfile from "./views/MyProfile.vue";
 import ProductDetail from "./views/ProductDetail.vue"
 import Products from "./views/Products.vue";
 import Services from "./views/Services.vue";
-
+import Checkout from "./views/Checkout.vue";
 import Tracking from "./views/Tracking.vue";
 
 import ServiceDetail from "./views/ServiceDetail.vue";
@@ -74,6 +74,11 @@ export default new Router({
       path: "/tracking",
       name: "tracking",
       component: Tracking
+    },
+    {
+      path: "/checkout",
+      name: "checkout",
+      component: Checkout
     }
   ]
 });

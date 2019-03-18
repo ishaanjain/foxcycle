@@ -17,7 +17,7 @@
             Home
           </router-link> 
           <router-link class="navbar-item is-tab" to="/products" exact-active-class="is-active">
-            Products
+            Shop
           </router-link>
           <router-link class="navbar-item is-tab" to="/services" exact-active-class="is-active">
             Services

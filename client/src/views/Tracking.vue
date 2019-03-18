@@ -67,7 +67,9 @@ export default class Tracking extends Vue {
 
 <style scoped lang="scss">
 
-  .services {
+  *{
+    max-width: unset;
+    width: unset;
     margin: 2%;
   }
 </style>
