@@ -33,10 +33,10 @@
                         <option value="Sunday">Sunday</option>
                       </b-select>
                     </b-field>
-                    <b-field label="Open">
+                    <b-field label="Open (24 hr)">
                       <b-input type="number" v-model="time.start" min="1" max="24" step="1"></b-input>
                     </b-field>
-                    <b-field label="Close">
+                    <b-field label="Close (24 hr)">
                       <b-input type="number" v-model="time.end" min="1" max="24" step="1"></b-input>
                     </b-field>
 
@@ -145,14 +145,11 @@ export default class Home extends Vue {
 
   public time: iTime = {
     id: 0,
-    start: 0,
-    end: 0,
-    name: ""
+    start: 1,
+    end: 2,
+    name: "Monday"
   };
 
-  wait() {
-    this.$toast.open("wait...");
-  }
 
   toast() {
     this.$toast.open({
