@@ -6,6 +6,7 @@ import {
   ProductController, 
   AnnounceController, 
   AboutController, 
+  ServiceController,
   TimeController,
   OrderController
 } from "./controller";
@@ -32,6 +33,7 @@ export class Server {
       app.use("/", new LoginController().router);
       app.use("/", new ProductController().router);
       app.use("/", new AnnounceController().router);
+      app.use("/", new ServiceController().router);
       app.use("/", new TimeController().router);
       app.use("/", new AboutController().router);
       app.use("/", new OrderController().router);

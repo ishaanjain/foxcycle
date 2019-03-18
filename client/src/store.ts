@@ -5,6 +5,7 @@ import { APIConfig } from "./utils/api.utils";
 import axios, { AxiosResponse } from "axios";
 
 import { iUser } from "@/models/user.interface";
+import { iProductOrder } from './models/productOrder.interface';
 
 Vue.use(Vuex);
 
@@ -12,6 +13,7 @@ interface iRootState {
   userToken: string | null;
   user: iUser | null;
   isAdmin: boolean;
+  items: iProductOrder[];
 }
 
 interface iLoginPayload {
@@ -22,7 +24,8 @@ interface iLoginPayload {
 const state: iRootState = {
   userToken: null,
   user: null,
-  isAdmin: false
+  isAdmin: false,
+  items: []
 };
 
 const mutations: MutationTree<iRootState> = {
@@ -38,6 +41,18 @@ const mutations: MutationTree<iRootState> = {
     state.userToken = null;
     state.user = null;
     state.isAdmin = false;
+  },
+  cart(state, id) {
+    state.items.push(id);
+  },
+  updateCart(state, update) {
+    state.items.forEach( function (i: iProductOrder){
+      if (update.id == i.id) {
+        var q = parseInt(update.newQuantity);
+        i.quantity += q;
+        i.price += (i.price / i.quantity) * q;
+      }
+    });
   }
 };
 
