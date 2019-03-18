@@ -16,7 +16,7 @@
       </thead>
       <tbody>
         <tr v-for="(p, index) in items" v-bind:key="index">
-          <td>{{ p.name }}</td>
+          <td>{{ p.name }}<img style="height:15%" :src="p.image"></td>
           <td>${{ p.price }}</td>
           <td>{{ p.quantity }}</td>
         </tr>
