@@ -3,19 +3,19 @@
     <div class="tile is-ancestor">
       <div class="hours tile is-vertical is-parent is-3">
         <div class="tile is-child box">
-          <div class="tile is-child">
+          <div class="tile">
             <figure class="image" v-bind:class="{ 'is-hidden': this.open}">
-              <img src="../../public/close.gif"><br>
+              <img src="../../public/close.gif">
             </figure>
             <figure class="image" v-bind:class="{ 'is-hidden': !this.open}">
-              <img src="../../public/open.png"><br>
+              <img src="../../public/open.png">
             </figure>
           </div>
           <div class="tile is-child">
             <section>
               <b-collapse :open="false" aria-id="contentIdForA11y1">
                 <button
-                  class="button is-primary"
+                  class="button is-primary edit-hours-button"
                   slot="trigger"
                   aria-controls="contentIdForA11y1"
                   v-bind:class="{'is-hidden': !this.$store.state.user}"
@@ -327,6 +327,10 @@ export default class Home extends Vue {
   max-width: unset;
   width: unset;
   margin: 2%;
+}
+
+.edit-hours-button {
+  margin-top: 10px;
 }
 
 .edit-announcement {
