@@ -1,5 +1,5 @@
 import DefaultController from "./default.controller";
-import { Order, Product, ProductOrder } from "../entity";
+import { Order, Product, ProductOrder, Session } from "../entity";
 
 import isAuthenticated from "./auth";
 
@@ -11,8 +11,7 @@ export class OrderController extends DefaultController {
     const router = Router();
 
     router.route("/orders")
-      // .get(isAuthenticated(false, true), (req: Request, res: Response) => {
-      .get((req: Request, res: Response) => {
+      .get(isAuthenticated(false, false), (req: Request, res: Response) => {
         const orderRepo = getRepository(Order);
         orderRepo.find({
           relations: ["productOrders", "user"]
@@ -22,7 +21,6 @@ export class OrderController extends DefaultController {
           res.status(500).send({ reason: error.message });
         });
       })
-      // .post(isAuthenticated(false, true), (req: Request, res: Response) => {
       .post(async (req: Request, res: Response) => {
         try {
           const productRepo = getRepository(Product);
@@ -68,24 +66,29 @@ export class OrderController extends DefaultController {
           res.status(500).send({ reason: error.message });
         });
       })
-      .patch((req: Request, res: Response) => {
-        // .patch(isAuthenticated(false, true), (req: Request, res: Response) => {
-        const orderRepo = getRepository(Order);
-        orderRepo.findOne({ id: req.params.id }).then((order: Order | undefined) => {
+      .patch(isAuthenticated(false, false), async (req: Request, res: Response) => {
+        try {
+          const token = req.get("token");
+          const orderRepo = getRepository(Order);
+          const order = await orderRepo.findOne({ id: req.params.id });
           if (!order) {
             res.status(400).send(`order with id ${req.params.id} not found.`);
             return;
           }
           order.status = req.body.status || order.status;
+          if (req.body.assignOrder) {
+            const sessionRepo = getRepository(Session);
+            const foundSession = await sessionRepo.findOneOrFail(token);
+            order.user = foundSession.user;
+          }
           orderRepo.save(order).then((updatedOrder: Order) => {
             res.status(200).send({ order: updatedOrder });
           });
-        }).catch((error: any) => {
+        } catch(error) {
           res.status(500).send({ reason: error.message });
-        });
+        }
       })
-      .delete(async (req: Request, res: Response) => {
-        // .delete(isAuthenticated(false, true), (req: Request, res: Response) => {
+      .delete(isAuthenticated(false, true), async (req: Request, res: Response) => {
         try {
           const orderRepo = getRepository(Order);
           const productOrderRepo = getRepository(ProductOrder);
