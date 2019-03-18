@@ -1,9 +1,9 @@
 <template>
   <div class="checkout">
-    <h1 v-if="productOrders.length == 0">You have no items to checkout with, please return to the store</h1>
+    <p class="title is-3" v-if="productOrders.length != 0">Complete Order</p>
+    <h1 class="title is-3 has-text-centered" v-if="productOrders.length == 0">You have no items to checkout with.</h1>
     <div v-if="productOrders.length > 0" class="columns">
       <div class="column is-half">
-        <p class="title is-3">Complete Order</p>
         <table class="table">
           <thead>
             <tr>
@@ -16,7 +16,6 @@
             <tr v-for="(item, index) in productOrders" v-bind:key="index">
               <td>
                 {{item.name}}
-                
                 <img style="height:15%" :src="item.image">
               </td>
            
