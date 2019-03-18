@@ -35,12 +35,13 @@
         </div>
         <div class="navbar-end">
           <div class="navbar-item">
-            <span class="icon">
+            <!-- <span class="icon"> -->
               <!-- <router-link to="/cart" exact-active-class="is-active" > -->
 
-                <i class="fas fa-shopping-cart"  v-on:click="showCartModal()"></i>
+            <a class="fas fa-shopping-cart"  v-on:click="showCartModal()"></a>
+            <Cart v-if="showCart" v-on:success="hideCartModal()" v-on:cancel="hideCartModal()"/>
               <!-- </router-link> -->
-            </span>
+            <!-- </span> -->
             <div class="buttons">
               <router-link
                 class="button is-text"
@@ -91,21 +92,26 @@ import Signup from "@/components/Signup.vue";
 import Login from "@/components/Login.vue";
 import { APIConfig } from "@/utils/api.utils";
 import { About } from "../../api/entity";
+import Cart from "@/components/Cart.vue";
 
 Vue.use(Buefy);
 
 @Component({
   components: {
-    Login
-    //Cart 
+    Login,
+    Cart 
   }
 })
 export default class App extends Vue {
   public showLogin: boolean = false;
   public showCart: boolean = false; 
 
-  showCartModal(){
+  showCartModal() {
     this.showCart = true; 
+  }
+
+  hideCartModal() {
+    this.showCart = false;
   }
 
   public about: About = {
