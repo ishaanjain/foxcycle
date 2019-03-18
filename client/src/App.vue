@@ -173,7 +173,7 @@ export default class App extends Vue {
 }
 
 #footer {
-  padding: 3rem 1.5rem 3rem;
+  padding: 3rem 1.5rem;
   margin-top: 1.5rem;
 }
 
