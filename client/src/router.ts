@@ -12,7 +12,7 @@ import Tracking from "./views/Tracking.vue";
 import Success from "./views/Success.vue";
 import ServiceDetail from "./views/ServiceDetail.vue";
 import Cart from "./views/Services.vue";
-
+import Orders from "./views/Orders.vue";
 
 Vue.use(Router);
 
@@ -51,6 +51,11 @@ export default new Router({
       name: "service detail",
       component: ServiceDetail,
       props: true
+    },
+    {
+      path: "/orders",
+      name: "orders",
+      component: Orders
     },
     {
       path: "/employees",
