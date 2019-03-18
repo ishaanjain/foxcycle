@@ -46,6 +46,7 @@
                     <a class="button is-primary"
                        v-on:click="success" slot="trigger"
                 aria-controls="contentIdForA11y1"
+                @click="wait"
                     >Save
                    </a>
                   </p>
@@ -138,6 +139,10 @@ export default class Home extends Vue {
     start: 0,
     end: 0,
     name: ""
+  }
+
+  wait(){
+    this.$toast.open("wait...");
   }
 
   toast(){
