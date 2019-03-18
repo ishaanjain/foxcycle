@@ -6,8 +6,8 @@
     v-on:success="success"
     v-on:cancel="cancel"
   >
-    <p v-if="items.length == 0">Your cart is empty, please add some items to the cart</p>
-    <table class="table is-striped is-fullwidth" v-show="items.length">
+    <p v-if="productsOrders.length == 0">Your cart is empty, please add some items to the cart</p>
+    <table class="table is-striped is-fullwidth" v-show="productOrders.length">
       <thead>
         <tr>
           <td>Name</td>
@@ -16,7 +16,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(p, index) in items" v-bind:key="index">
+        <tr v-for="(p, index) in productOrders" v-bind:key="index">
           <td>{{ p.name }}<img style="height:15%" :src="p.image"></td>
           <td>${{ p.price }}</td>
           <td>{{ p.quantity }}</td>
@@ -49,12 +49,12 @@ export default class Cart extends Vue {
   error: string | boolean = false;
   public total: number = 0;
 
-  get items(): iProductOrder[] {
-    return this.$store.state.items;
+  get productOrders(): iProductOrder[] {
+    return this.$store.state.productOrders;
   }
 
   mounted() {
-    this.$store.state.items.forEach((i: iProductOrder) => {
+    this.$store.state.productOrders.forEach((i: iProductOrder) => {
       this.total += i.price;
     });
   }

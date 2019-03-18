@@ -196,10 +196,10 @@ export default class ProductDetail extends Vue {
   }
 
   addProductToCart() {
-    var items: iProductOrder[] = this.$store.state.items;
-    for (var i in items) {
-      if (items[i].id == this.item.id) {
-        if (this.itemQuantity > this.item.stockCount - items[i].quantity) {
+    var productOrders: iProductOrder[] = this.$store.state.productOrders;
+    for (var i in productOrders) {
+      if (productOrders[i].id == this.item.id) {
+        if (this.itemQuantity > this.item.stockCount - productOrders[i].quantity) {
           this.$toast.open({
             message: "Not enough stock for quantity being added",
             position: "is-bottom",
@@ -211,7 +211,7 @@ export default class ProductDetail extends Vue {
           return false;
         } else {
           this.$store.commit("updateCart", {
-            id: items[i].id,
+            id: productOrders[i].id,
             additionalQuantity: this.itemQuantity
           });
           this.$toast.open({
@@ -243,7 +243,7 @@ export default class ProductDetail extends Vue {
         quantity: this.itemQuantity,
         description: this.item.description
       };
-      this.$store.commit("cart", { orderItem });
+      this.$store.commit("addToCart", { orderItem });
       this.$toast.open({
         message: `${this.itemQuantity} items successfully added to the cart!`,
         position: "is-bottom",

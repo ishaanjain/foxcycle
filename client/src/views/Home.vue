@@ -92,7 +92,7 @@
           <p class="title">Featured</p>
           <div class="container products-container">
             <div class="p-parent">
-              <div v-for="(item, index) in items" v-bind:key="index">
+              <div v-for="(item, index) in products" v-bind:key="index">
                 <router-link :to="{name: 'product detail', params: { id: item.id.toString() }}">
                   <div class="box product">
                     <h1 class="product-title title is-5">{{item.name}}</h1>
@@ -174,7 +174,7 @@ export default class Home extends Vue {
 
   error: string | boolean = false;
 
-  public items: iProduct[] = [];
+  public products: iProduct[] = [];
   get isLoggedIn(): boolean {
     return !!this.$store.state.user;
   }
@@ -272,7 +272,7 @@ export default class Home extends Vue {
         }
       })
       .then(response => {
-        this.items = response.data.products.slice(0, 3);
+        this.products = response.data.products.slice(0, 3);
       });
   }
 

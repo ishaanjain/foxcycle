@@ -37,7 +37,7 @@
         <h4 class="title is-4">Products</h4>
         <div class="container products-container">
           <div class="p-parent">
-            <div v-for="(item, index) in items" v-bind:key="index">
+            <div v-for="(item, index) in products" v-bind:key="index">
               <router-link :to="{name: 'product detail', params: { id: item.id.toString() }}">
                 <div class="box product">
                   <h1 class="product-title title is-5">{{item.name}}</h1>
@@ -71,7 +71,7 @@ import { iTag } from "../models/tag.interface";
 })
 export default class Products extends Vue {
   public showAddProduct: boolean = false;
-  public items: iProduct[] = [];
+  public products: iProduct[] = [];
   public tags: TagType[] = [];
   public tagList: String[] = [];
   public tagNameList: String[] = [];
@@ -92,7 +92,7 @@ export default class Products extends Vue {
         }
       })
       .then(response => {
-        this.items = response.data.products;
+        this.products = response.data.products;
         this.generateTagList();
       });
   }
@@ -105,7 +105,7 @@ export default class Products extends Vue {
         }
       })
       .then(response => {
-        this.items = response.data.products;
+        this.products = response.data.products;
       });
   }
 
@@ -129,8 +129,8 @@ export default class Products extends Vue {
     this.tags = [];
     this.tagList = [];
     this.tagNameList = [];
-    for (var i = 0; i < this.items.length; i++) {
-      var tags: iTag[] = this.items[i].tags;
+    for (var i = 0; i < this.products.length; i++) {
+      var tags: iTag[] = this.products[i].tags;
       for (var j = 0; j < tags.length; j++) {
         if (!this.tagList.includes(tags[j].name)) {
           this.tagList.push(tags[j].name);

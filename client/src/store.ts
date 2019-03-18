@@ -13,7 +13,7 @@ interface iRootState {
   userToken: string | null;
   user: iUser | null;
   isAdmin: boolean;
-  items: iProductOrder[];
+  productOrders: iProductOrder[];
 }
 
 interface iLoginPayload {
@@ -25,7 +25,7 @@ const state: iRootState = {
   userToken: null,
   user: null,
   isAdmin: false,
-  items: []
+  productOrders: []
 };
 
 const mutations: MutationTree<iRootState> = {
@@ -42,11 +42,11 @@ const mutations: MutationTree<iRootState> = {
     state.user = null;
     state.isAdmin = false;
   },
-  cart(state, payload) {
-    state.items.push(payload.orderItem);
+  addToCart(state, payload) {
+    state.productOrders.push(payload.orderItem);
   },
   updateCart(state, payload) {
-    state.items.forEach( function (order: iProductOrder){
+    state.productOrders.forEach( function (order: iProductOrder){
       if (payload.id === order.id) {
         const additionalQuantity = parseInt(payload.additionalQuantity);
         order.quantity += additionalQuantity;

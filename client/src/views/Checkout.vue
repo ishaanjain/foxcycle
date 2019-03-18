@@ -1,7 +1,7 @@
 <template>
   <div class="checkout">
-    <h1 v-if="cart.length == 0">You have no items to checkout with, please return to the store</h1>
-    <div v-if="cart.length > 0" class="columns">
+    <h1 v-if="productOrders.length == 0">You have no items to checkout with, please return to the store</h1>
+    <div v-if="productOrders.length > 0" class="columns">
       <div class="column is-half">
         <p class="title is-3">Complete Order</p>
         <table class="table">
@@ -13,7 +13,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in cart" v-bind:key="index">
+            <tr v-for="(item, index) in productOrders" v-bind:key="index">
               <td>
                 {{item.name}}
                 
@@ -57,7 +57,7 @@ import { iProductOrder } from "../models/productOrder.interface";
 
 @Component
 export default class Checkout extends Vue {
-  public cart = this.$store.state.items;
+  public productOrders = this.$store.state.productOrders;
   public total = 0;
 
   mounted() {
@@ -65,7 +65,7 @@ export default class Checkout extends Vue {
   }
 
   orderTotal() {
-    this.$store.state.items.forEach((i: iProductOrder) => {
+    this.$store.state.productOrders.forEach((i: iProductOrder) => {
       this.total += i.price;
     });
   }

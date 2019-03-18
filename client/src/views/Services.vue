@@ -11,7 +11,7 @@
       </div>
       <div class="service-container">
         <div class="p-parent">
-          <div v-for="(item, index) in items" v-bind:key="index">
+          <div v-for="(item, index) in services" v-bind:key="index">
             <router-link :to="{name: 'service detail', params: { id: item.id.toString() }}">
               <div class="box service-box">
                 <h1 class="service-title title is-3">{{item.name.substr(0, 32)}}</h1>
@@ -49,7 +49,7 @@ import { debug } from "util";
   }
 })
 export default class Services extends Vue {
-  public items: iService[] = [];
+  public services: iService[] = [];
   public showAddService: boolean = false;
 
   @Prop(String) id!: string;
@@ -66,7 +66,7 @@ export default class Services extends Vue {
         }
       })
       .then(response => {
-        this.items = response.data.services;
+        this.services = response.data.services;
       });
   }
 
