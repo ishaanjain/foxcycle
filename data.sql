@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.24)
 # Database: dev
-# Generation Time: 2019-03-18 07:20:22 +0000
+# Generation Time: 2019-03-18 10:41:41 +0000
 # ************************************************************
 
 
@@ -40,7 +40,7 @@ LOCK TABLES `about` WRITE;
 
 INSERT INTO `about` (`id`, `description`, `address`, `phone`, `title`, `imageurl`)
 VALUES
-	(2,'Hi there! Welcome to FoxCycle. We are a local bike shop stationed in the beautiful city of San Luis Obispo, California. Please come into the store or check out our cool new website built by some CSC 307 students at Cal Poly! Thank you!','10243 CSC307 Drive','654 134 1235','Our Story','https://www.hindustantimes.com/rf/image_size_960x540/HT/p2/2018/04/03/Pictures/_56db43e2-3722-11e8-8aa5-05fdb8d0ae52.jpg');
+	(15,'THIS PROJECT NEVER ENDS!!','12512 Fire Street','321 123 4321','Did it work?','https://media1.tenor.com/images/c9cb4422596fdaa9798415eb04bd9c7b/tenor.gif?itemid=8009273');
 
 /*!40000 ALTER TABLE `about` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -64,7 +64,7 @@ LOCK TABLES `announce` WRITE;
 
 INSERT INTO `announce` (`id`, `description`, `imageurl`, `title`)
 VALUES
-	(19,'On 3/11/19 we shall bike people! LETS GOOOOOOOOO','https://i.ytimg.com/vi/2lhfMhIoxwc/maxresdefault.jpg','There is a Ride Coming up Soon!!!!!!!!!!');
+	(18,'RUN THE WOLVES ARE AFTER YOU','https://www.wuwm.com/sites/wuwm/files/styles/x_large/public/201811/Fotolia_51699465_Subscription_Monthly_M.jpg','HELP, FINALS IS KILLING ME AND THERE\'S NO ESCAPE');
 
 /*!40000 ALTER TABLE `announce` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -221,10 +221,8 @@ LOCK TABLES `service` WRITE;
 
 INSERT INTO `service` (`id`, `name`, `price`, `description`)
 VALUES
-	(2,'Tire Change',49,'A common Tire Change for your ride, includes all labor, tubing, and new tires for your sweet bike, hope you enjoy!'),
-	(3,'Brake Pads',39,'A common repair job for your bike, bring it in and we will repair your brake pads and install new ones for this price'),
-	(5,'Chain Replacement',0,'Your typical Chain replacement repair, we grease and oil your new chain so that it works so amazingly well over your bike, keeping you on the road, because that is most important'),
-	(6,'Handlebar Alignment',10,'Handlebar Alignment, This is a great service for you, we align your handlebars and make it so that you can steer your new and cool bike really straight without worrying about crashing');
+	(3,'',230,'2r'),
+	(5,'',0,'');
 
 /*!40000 ALTER TABLE `service` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -250,8 +248,7 @@ LOCK TABLES `session` WRITE;
 INSERT INTO `session` (`id`, `expiresAt`, `userId`)
 VALUES
 	(5,'2019-03-06 18:12:44',1),
-	(9,'2019-03-06 18:35:48',9),
-	(12,'2019-03-18 00:46:43',8);
+	(24,'2019-03-18 03:50:54',8);
 
 /*!40000 ALTER TABLE `session` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -384,45 +381,30 @@ DROP TABLE IF EXISTS `time`;
 
 CREATE TABLE `time` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
   `start` int(11) NOT NULL,
   `end` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `startam` varchar(255) NOT NULL,
+  `endam` varchar(255) NOT NULL,
+  `smin` int(11) NOT NULL,
+  `emin` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 LOCK TABLES `time` WRITE;
 /*!40000 ALTER TABLE `time` DISABLE KEYS */;
 
-INSERT INTO `time` (`id`, `start`, `end`, `name`)
+INSERT INTO `time` (`id`, `name`, `start`, `end`, `startam`, `endam`, `smin`, `emin`)
 VALUES
-	(1,9,17,'Monday'),
-	(2,9,17,'Tuesday'),
-	(3,9,17,'Wednesday'),
-	(4,9,17,'Thursday'),
-	(5,9,17,'Friday'),
-	(6,1,1,'Saturday'),
-	(7,1,1,'Sunday');
+	(45,'Monday',12,15,'am','pm',0,0),
+	(46,'Friday',1,2,'am','pm',0,0),
+	(47,'Saturday',7,16,'am','pm',0,0),
+	(48,'Wednesday',1,2,'am','pm',0,0),
+	(49,'Thursday',12,21,'am','pm',0,0),
+	(50,'Sunday',12,12,'am','pm',0,0);
 
 /*!40000 ALTER TABLE `time` ENABLE KEYS */;
 UNLOCK TABLES;
-
-
-# Dump of table to_do
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `to_do`;
-
-CREATE TABLE `to_do` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `complete` tinyint(4) NOT NULL,
-  `dueDate` datetime NOT NULL,
-  `userId` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `REL_dc00b4c082848833754e5ed9a3` (`userId`),
-  CONSTRAINT `FK_dc00b4c082848833754e5ed9a30` FOREIGN KEY (`userId`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 
 
 # Dump of table user
@@ -447,7 +429,7 @@ LOCK TABLES `user` WRITE;
 
 INSERT INTO `user` (`id`, `firstName`, `lastName`, `password`, `profileUrl`, `emailAddress`, `isAdmin`)
 VALUES
-	(1,'a','a','a','a','asdf',0),
+	(1,'a','a','a','a','asdf',1),
 	(8,'admin','admin','hi',NULL,'admin@email.com',1);
 
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
