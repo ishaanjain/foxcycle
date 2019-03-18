@@ -14,9 +14,9 @@
           <div v-for="(item, index) in items" v-bind:key="index">
             <router-link :to="{name: 'service detail', params: { id: item.id.toString() }}">
               <div class="box service">
-                <h1 class="service-title title is-3">{{item.name}}</h1>
+                <h1 class="service-title title is-3">{{item.name.substr(0, 32)}}</h1>
                 <p class="service-title item-price is-5">${{item.price}}</p>
-                <p class="service-description title is-5">{{item.description}}</p>
+                <p class="service-description title is-5">{{item.description.substr(0, 220)}}</p>
               </div>
             </router-link>
           </div>
