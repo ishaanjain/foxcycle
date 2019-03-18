@@ -36,9 +36,10 @@
         <div class="navbar-end">
           <div class="navbar-item">
             <span class="icon">
-              <router-link to="/cart" exact-active-class="is-active">
-                <i class="fas fa-shopping-cart"></i>
-              </router-link>
+              <!-- <router-link to="/cart" exact-active-class="is-active" > -->
+
+                <i class="fas fa-shopping-cart"  v-on:click="showCartModal()"></i>
+              <!-- </router-link> -->
             </span>
             <div class="buttons">
               <router-link
@@ -96,10 +97,16 @@ Vue.use(Buefy);
 @Component({
   components: {
     Login
+    //Cart 
   }
 })
 export default class App extends Vue {
   public showLogin: boolean = false;
+  public showCart: boolean = false; 
+
+  showCartModal(){
+    this.showCart = true; 
+  }
 
   public about: About = {
     id: 0,
