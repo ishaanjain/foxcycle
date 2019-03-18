@@ -12,5 +12,11 @@ export class Time {
   public end!: number;
 
   @Column()
+  public startam!: string;
+
+  @Column()
+  public endam!: string;
+
+  @Column()
   public name!: string;
 }

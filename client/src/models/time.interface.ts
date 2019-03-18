@@ -3,4 +3,6 @@ export interface iTime {
     start: number;
     end: number;
     name: string;
+    startam: string;
+    endam: string;
 }

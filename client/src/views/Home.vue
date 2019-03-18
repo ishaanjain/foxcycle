@@ -57,7 +57,7 @@
               <tbody>
                 <tr v-for="(t, index) in hours" v-bind:key="index">
                   <td>{{t.name}}</td>
-                  <td>{{t.start}} - {{t.end}}</td>
+                  <td>{{t.start}} {{t.startam}} - {{t.end % 12}} {{t.endam}}</td>
                 </tr>
               </tbody>
             </table>
@@ -147,7 +147,9 @@ export default class Home extends Vue {
     id: 0,
     start: 1,
     end: 2,
-    name: "Monday"
+    name: "Monday",
+    startam: "am",
+    endam: "pm"
   };
 
 
@@ -256,6 +258,17 @@ export default class Home extends Vue {
 
   success() {
     this.error = false;
+    if(this.time.start > 12){
+      this.time.startam = "pm";
+    } else{
+      this.time.startam = "am";
+    }
+
+    if(this.time.end > 12){
+      this.time.endam = "pm";
+    }else{
+      this.time.startam = "am";
+    }
     axios
       .put(APIConfig.buildUrl("/time"), this.time, {})
       .then(response => {
