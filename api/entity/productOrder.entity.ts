@@ -14,6 +14,6 @@ export class ProductOrder {
   @Column()
   public productCount!: number;
   
-  @ManyToOne(type => Product, product => product.productOrders)
+  @ManyToOne(type => Order, order => order.productOrders)
   public order!: Order;
 }

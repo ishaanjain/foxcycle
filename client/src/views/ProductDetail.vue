@@ -2,7 +2,7 @@
   <div class="product-detail">
     <div class="columns">
       <div class="column is-two-fifths">
-        <h3 class="title is-3">Product Details:</h3>
+        <h3 class="title is-3">Product Details</h3>
       </div>
       <div class="column is-three-fifths">
         <a
@@ -256,6 +256,10 @@ export default class ProductDetail extends Vue {
 </script>
 
 <style lang="scss">
+.product-detail {
+  margin-top: 20px;
+}
+
 img.product {
   height: 200px;
 }
@@ -266,10 +270,6 @@ img.product {
 
 .product-field {
   margin-bottom: 40px;
-}
-
-.product-detail {
-  margin-top: 20px;
 }
 
 input.product-quantity {

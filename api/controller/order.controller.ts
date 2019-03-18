@@ -1,5 +1,5 @@
 import DefaultController from "./default.controller";
-import { Order } from "../entity";
+import { Order, Product, ProductOrder } from "../entity";
 
 import isAuthenticated from "./auth";
 
@@ -11,76 +11,99 @@ export class OrderController extends DefaultController {
     const router = Router();
 
     router.route("/orders")
-    // .get(isAuthenticated(false, true), (req: Request, res: Response) => {
-    .get((req: Request, res: Response) => {
-      const orderRepo = getRepository(Order);
-      orderRepo.find({relations: ["productOrders"]}).then((orders: Order[]) => {
-        res.status(200).send({ orders });
-      }).catch((error: any) => {
-        res.status(500).send({ reason: error.message });
-      });
-    })
-    // .post(isAuthenticated(false, true), (req: Request, res: Response) => {
-    .post(async (req: Request, res: Response) => {
-      try {
+      // .get(isAuthenticated(false, true), (req: Request, res: Response) => {
+      .get((req: Request, res: Response) => {
         const orderRepo = getRepository(Order);
-        const order = new Order();
-        // an order status can be processing, dispatched, or complete
-        order.status = "processing";
-        // order.productCount = ;
-        order.totalPrice = req.body.totalPrice;
-        order.storePickup = req.body.storePickup;
-        order.name = req.body.name;
-        order.address = req.body.address;
-        order.creditCard = req.body.creditCard;
-        const createdOrder = await orderRepo.save(order);
-        res.status(200).send({ createdOrder });
-      } catch(error) {
-        res.status(500).send({ reason: error.message });
-      }
-    });
+        orderRepo.find({
+          relations: ["productOrders", "user"]
+        }).then((orders: Order[]) => {
+          res.status(200).send({ orders });
+        }).catch((error: any) => {
+          res.status(500).send({ reason: error.message });
+        });
+      })
+      // .post(isAuthenticated(false, true), (req: Request, res: Response) => {
+      .post(async (req: Request, res: Response) => {
+        try {
+          const productRepo = getRepository(Product);
+          const productOrderRepo = getRepository(ProductOrder);
+          const orderRepo = getRepository(Order);
+          const order = new Order();
+          order.productOrders = [];
+          for (let i = 0; i < req.body.productOrders.length; i++) {
+            const reqProductOrder = req.body.productOrders[i];
+            const product = await productRepo.findOneOrFail(reqProductOrder.productId);
+            const productOrder = new ProductOrder();
+            productOrder.product = product;
+            productOrder.productCount = reqProductOrder.productCount;
+            await productOrderRepo.save(productOrder);
+            order.productOrders.push(productOrder);
+          }
+          order.status = "processing"; // can be processing, dispatched, or complete
+          order.totalPrice = req.body.totalPrice;
+          order.storePickup = req.body.storePickup;
+          order.name = req.body.name;
+          order.address = req.body.address;
+          order.creditCard = req.body.creditCard;
+          const createdOrder = await orderRepo.save(order);
+          res.status(200).send({ createdOrder });
+        } catch (error) {
+          res.status(500).send({ reason: error.message });
+        }
+      });
 
     router.route("/orders/:id")
-    .get(isAuthenticated(true, false), (req: Request, res: Response) => {
-      const orderRepo = getRepository(Order);
-      orderRepo.findOne(req.params.id).then((order: Order | undefined) => {
-        if (!order) {
-          res.sendStatus(404);
-          return;
-        }
-        res.send({ order });
-      }).catch((error: any) => {
-        res.status(500).send({ reason: error.message });
-      });
-    })
-    .patch(isAuthenticated(false, true), (req: Request, res: Response) => {
-      const orderRepo = getRepository(Order);
-      orderRepo.findOne({ id: req.params.id }).then((order: Order | undefined) => {
-        if (!order) {
-          res.status(400).send(`order with id ${req.params.id} not found.`);
-          return;
-        }
-        // order.productCount = req.body.productCount;
-        // etc
-        orderRepo.save(order).then((updatedOrder: Order) => {
-          res.status(200).send({order: updatedOrder});
+      .get((req: Request, res: Response) => {
+        const orderRepo = getRepository(Order);
+        orderRepo.findOne({
+          where: { id: req.params.id },
+          relations: ["productOrders", "productOrders.product", "user"]
+        }).then((order: Order | undefined) => {
+          if (!order) {
+            res.sendStatus(404);
+            return;
+          }
+          res.send({ order });
+        }).catch((error: any) => {
+          res.status(500).send({ reason: error.message });
         });
-      }).catch((error: any) => {
-        res.status(500).send({ reason: error.message });
-      });
-    })
-    .delete(isAuthenticated(false, true), (req: Request, res: Response) => {
-      const orderRepo = getRepository(Order);
-      orderRepo.delete({ id: req.params.id }).then((deleteResult: any) => {
-        if (deleteResult.raw.affectedRows == 0) {
-          res.status(400).send(`order with id ${req.params.id} not found`);
-          return;
+      })
+      .patch((req: Request, res: Response) => {
+        // .patch(isAuthenticated(false, true), (req: Request, res: Response) => {
+        const orderRepo = getRepository(Order);
+        orderRepo.findOne({ id: req.params.id }).then((order: Order | undefined) => {
+          if (!order) {
+            res.status(400).send(`order with id ${req.params.id} not found.`);
+            return;
+          }
+          order.status = req.body.status || order.status;
+          orderRepo.save(order).then((updatedOrder: Order) => {
+            res.status(200).send({ order: updatedOrder });
+          });
+        }).catch((error: any) => {
+          res.status(500).send({ reason: error.message });
+        });
+      })
+      .delete(async (req: Request, res: Response) => {
+        // .delete(isAuthenticated(false, true), (req: Request, res: Response) => {
+        try {
+          const orderRepo = getRepository(Order);
+          const productOrderRepo = getRepository(ProductOrder);
+          const order = await orderRepo.findOneOrFail({
+            where: { id: req.params.id },
+            relations: ["productOrders"]
+          });
+          await productOrderRepo.delete(order.productOrders);
+          const deleteResult = await orderRepo.delete({ id: req.params.id })
+          if (deleteResult.raw.affectedRows == 0) {
+            res.status(400).send(`order with id ${req.params.id} not found`);
+            return;
+          }
+          res.status(200).send(`order with id ${req.params.id} deleted`);
+        } catch (error) {
+          res.status(500).send({ reason: error.message });
         }
-        res.status(200).send(`order with id ${req.params.id} deleted`);
-      }).catch((error: any) => {
-        res.status(500).send({ reason: error.message });
       });
-    });
 
     return router;
   }

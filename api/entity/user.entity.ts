@@ -1,4 +1,5 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Order } from "./order.entity";
 
 @Entity()
 export class User {
@@ -23,4 +24,7 @@ export class User {
 
   @Column({default: null})
   public profileUrl!: string;
+
+  @OneToMany(type => Order, Order => Order.user)
+  public orders!: Order[];
 }
