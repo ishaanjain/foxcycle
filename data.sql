@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.24)
 # Database: dev
-# Generation Time: 2019-03-12 00:48:57 +0000
+# Generation Time: 2019-03-18 06:30:11 +0000
 # ************************************************************
 
 
@@ -119,6 +119,25 @@ VALUES
 UNLOCK TABLES;
 
 
+# Dump of table product_order
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `product_order`;
+
+CREATE TABLE `product_order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `productCount` int(11) NOT NULL,
+  `productId` int(11) DEFAULT NULL,
+  `orderId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_717057f3f11a007030181422152` (`productId`),
+  KEY `FK_42291ebe165058deecb017e652b` (`orderId`),
+  CONSTRAINT `FK_42291ebe165058deecb017e652b` FOREIGN KEY (`orderId`) REFERENCES `product` (`id`),
+  CONSTRAINT `FK_717057f3f11a007030181422152` FOREIGN KEY (`productId`) REFERENCES `product` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
 # Dump of table product_tags_tag
 # ------------------------------------------------------------
 
@@ -197,7 +216,10 @@ LOCK TABLES `service` WRITE;
 
 INSERT INTO `service` (`id`, `name`, `description`, `price`)
 VALUES
-	(1,'chain','chain',10);
+	(2,'Tire Change','A common Tire Change for your ride, includes all labor, tubing, and new tires for your sweet bike, hope you enjoy!',49),
+	(3,'Brake Pads','A common repair job for your bike, bring it in and we will repair your brake pads and install new ones for this price',39),
+	(5,'Chain Replacement','Your typical Chain replacement repair, we grease and oil your new chain so that it works so amazingly well over your bike, keeping you on the road, because that is most important',0),
+	(6,'Handlebar Alignment','This is a great service for you, we align your handlebars and make it so that you can steer your new and cool bike really straight without worrying about crashing',10);
 
 /*!40000 ALTER TABLE `service` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -224,7 +246,7 @@ INSERT INTO `session` (`id`, `expiresAt`, `userId`)
 VALUES
 	(5,'2019-03-06 18:12:44',1),
 	(9,'2019-03-06 18:35:48',9),
-	(11,'2019-03-06 20:27:31',8);
+	(11,'2019-03-17 23:14:32',8);
 
 /*!40000 ALTER TABLE `session` ENABLE KEYS */;
 UNLOCK TABLES;
