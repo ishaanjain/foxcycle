@@ -53,10 +53,6 @@ export default class Cart extends Vue {
   }
 
   mounted() {
-    this.orderTotal();
-  }
-
-  orderTotal(): void {
     this.$store.state.items.forEach((i: iProductOrder) => {
       this.total += i.price;
     });
