@@ -56,18 +56,20 @@
       </div>
     </div>
     <router-view class="container"/>
-    <Login v-bind:is-showing="showLogin" v-on:success="hideLoginModal" v-on:cancel="hideLoginModal"/>
+    <Login
+      v-bind:is-showing="showLogin"
+      v-on:success="hideLoginModal"
+      v-on:cancel="hideLoginModal"
+    />
     <Cart v-if="showCart" v-on:success="goToCheckout" v-on:cancel="hideCartModal"/>
-    <footer class="footer">
-      <div class="content has-text-centered">
-        <p>
-          Phone Number: {{this.about.phone}}
-          <br>
-          Address: {{this.about.address}}
-          <br>
-          <strong>WhiteSky</strong> 2019
-        </p>
-      </div>
+    <footer class="footer has-text-centered">
+      <p>
+        Phone Number: {{this.about.phone}}
+        <br>
+        Address: {{this.about.address}}
+        <br>
+        <strong>WhiteSky</strong> 2019
+      </p>
     </footer>
   </div>
 </template>
