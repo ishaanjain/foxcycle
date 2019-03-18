@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.24)
 # Database: dev
-# Generation Time: 2019-03-18 06:30:11 +0000
+# Generation Time: 2019-03-18 06:37:50 +0000
 # ************************************************************
 
 
@@ -77,7 +77,12 @@ DROP TABLE IF EXISTS `order`;
 
 CREATE TABLE `order` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `password` varchar(255) NOT NULL,
+  `status` varchar(255) NOT NULL,
+  `totalPrice` int(11) NOT NULL,
+  `storePickup` tinyint(4) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `creditCard` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -206,20 +211,20 @@ DROP TABLE IF EXISTS `service`;
 CREATE TABLE `service` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL,
   `price` int(11) NOT NULL DEFAULT '10',
+  `description` varchar(1020) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 LOCK TABLES `service` WRITE;
 /*!40000 ALTER TABLE `service` DISABLE KEYS */;
 
-INSERT INTO `service` (`id`, `name`, `description`, `price`)
+INSERT INTO `service` (`id`, `name`, `price`, `description`)
 VALUES
-	(2,'Tire Change','A common Tire Change for your ride, includes all labor, tubing, and new tires for your sweet bike, hope you enjoy!',49),
-	(3,'Brake Pads','A common repair job for your bike, bring it in and we will repair your brake pads and install new ones for this price',39),
-	(5,'Chain Replacement','Your typical Chain replacement repair, we grease and oil your new chain so that it works so amazingly well over your bike, keeping you on the road, because that is most important',0),
-	(6,'Handlebar Alignment','This is a great service for you, we align your handlebars and make it so that you can steer your new and cool bike really straight without worrying about crashing',10);
+	(2,'Tire Change',49,'A common Tire Change for your ride, includes all labor, tubing, and new tires for your sweet bike, hope you enjoy!'),
+	(3,'Brake Pads',39,'A common repair job for your bike, bring it in and we will repair your brake pads and install new ones for this price'),
+	(5,'Chain Replacement',0,'Your typical Chain replacement repair, we grease and oil your new chain so that it works so amazingly well over your bike, keeping you on the road, because that is most important'),
+	(6,'Handlebar Alignment',10,'Handlebar Alignment, This is a great service for you, we align your handlebars and make it so that you can steer your new and cool bike really straight without worrying about crashing');
 
 /*!40000 ALTER TABLE `service` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -246,7 +251,7 @@ INSERT INTO `session` (`id`, `expiresAt`, `userId`)
 VALUES
 	(5,'2019-03-06 18:12:44',1),
 	(9,'2019-03-06 18:35:48',9),
-	(11,'2019-03-17 23:14:32',8);
+	(11,'2019-03-18 00:06:16',8);
 
 /*!40000 ALTER TABLE `session` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -379,21 +384,9 @@ DROP TABLE IF EXISTS `time`;
 
 CREATE TABLE `time` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `monstart` datetime NOT NULL,
-  `monend` datetime NOT NULL,
-  `tuestart` datetime NOT NULL,
-  `tuesend` datetime NOT NULL,
-  `wedstart` datetime NOT NULL,
-  `wedend` datetime NOT NULL,
-  `thursstart` datetime NOT NULL,
-  `thursend` datetime NOT NULL,
-  `fristart` datetime NOT NULL,
-  `friend` datetime NOT NULL,
-  `satstart` datetime NOT NULL,
-  `satend` datetime NOT NULL,
-  `sunstart` datetime NOT NULL,
-  `sunend` datetime NOT NULL,
-  `description` varchar(255) NOT NULL,
+  `start` int(11) NOT NULL,
+  `end` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
